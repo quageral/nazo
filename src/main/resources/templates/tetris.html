@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>俄罗斯方块 - Nazo</title>
+    <link rel="stylesheet" href="/css/tetris.css">
+</head>
+<body>
+    <div class="game-container">
+        <h1>俄罗斯方块</h1>
+        
+        <div class="game-wrapper">
+            <div class="game-board-container">
+                <canvas id="gameBoard" width="300" height="600"></canvas>
+                <div id="gameOver" class="game-over hidden">
+                    <h2>游戏结束</h2>
+                    <p>最终得分: <span id="finalScore">0</span></p>
+                    <button id="restartBtn">重新开始</button>
+                </div>
+            </div>
+            
+            <div class="game-info">
+                <div class="score-section">
+                    <h3>得分</h3>
+                    <div id="score">0</div>
+                </div>
+                
+                <div class="level-section">
+                    <h3>等级</h3>
+                    <div id="level">1</div>
+                </div>
+                
+                <div class="lines-section">
+                    <h3>消除行数</h3>
+                    <div id="lines">0</div>
+                </div>
+                
+                <div class="next-piece-section">
+                    <h3>下一个</h3>
+                    <canvas id="nextPiece" width="120" height="120"></canvas>
+                </div>
+                
+                <div class="controls-section">
+                    <h3>操作说明</h3>
+                    <p>← → 移动</p>
+                    <p>↓ 快速下降</p>
+                    <p>空格 旋转</p>
+                    <p>P 暂停</p>
+                </div>
+                
+                <button id="startBtn" class="start-btn">开始游戏</button>
+                <button id="pauseBtn" class="pause-btn hidden">暂停</button>
+            </div>
+        </div>
+    </div>
+    
+    <script src="/js/tetris.js"></script>
+</body>
+</html> 
