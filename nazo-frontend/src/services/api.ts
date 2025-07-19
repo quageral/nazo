@@ -1,6 +1,18 @@
 // API服务模块 - 与Java后端通信
 const API_BASE_URL = "http://localhost:8080/api";
 
+// 辅助函数：从cookie获取用户名
+function getUsernameFromCookie(): string {
+  const cookies = document.cookie.split(";");
+  for (let cookie of cookies) {
+    const [name, value] = cookie.trim().split("=");
+    if (name === "nazo_user") {
+      return decodeURIComponent(value);
+    }
+  }
+  return localStorage.getItem("nazo_user") || "";
+}
+
 export interface LoginRequest {
   username: string;
   password: string;
@@ -96,6 +108,68 @@ export const apiService = {
       };
     }
   },
+
+  // 开始游戏
+  async startGame(
+    levelUuid: string
+  ): Promise<{ success: boolean; sessionId?: string; message: string }> {
+    try {
+      const username = getUsernameFromCookie();
+      const response = await fetch(`${API_BASE_URL}/game/start`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ levelUuid, username }),
+      });
+
+      return await response.json();
+    } catch (error) {
+      console.error("开始游戏失败:", error);
+      return {
+        success: false,
+        message: "网络连接失败，请检查后端服务是否启动",
+      };
+    }
+  },
+
+  // 完成游戏
+  async completeGame(
+    levelUuid: string,
+    sessionId: string,
+    score: number
+  ): Promise<{ success: boolean; message: string; nextLevel?: string }> {
+    try {
+      const username = getUsernameFromCookie();
+      const response = await fetch(`${API_BASE_URL}/game/complete`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username,
+          levelUuid,
+          sessionId,
+          data: { score },
+        }),
+      });
+
+      return await response.json();
+    } catch (error) {
+      console.error("完成游戏失败:", error);
+      return {
+        success: false,
+        message: "网络连接失败，请检查后端服务是否启动",
+      };
+    }
+  },
 };
+
+// 便捷函数导出
+export const login = apiService.login;
+export const getLevel = apiService.getLevel;
+export const completeLevel = apiService.completeLevel;
+export const startGame = apiService.startGame;
+export const completeGame = apiService.completeGame;
 
 export default apiService;

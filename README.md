@@ -5,12 +5,14 @@
 ## 技术栈
 
 ### 后端
+
 - **Java 17** + **Spring Boot 3.2.0**
 - REST API 架构
 - Maven 项目管理
 - 内置 Tomcat 服务器
 
 ### 前端
+
 - **Vue 3** + **TypeScript**
 - **Tailwind CSS** 样式框架
 - **Vite** 构建工具
@@ -38,17 +40,20 @@ nazo/
 ## 功能特性
 
 ### 🎯 核心功能
+
 - **登录系统**：用户名/密码认证
 - **关卡系统**：基于 UUID 的关卡访问
 - **解谜机制**：答案验证和关卡解锁
 - **错误处理**：无效 UUID 重定向到错误页面
 
 ### 🎨 用户界面
+
 - **登录页面**：简洁的登录表单
 - **闯关页面**：关卡信息 + 谜题内容 + 提示按钮
 - **错误页面**：友好的错误提示
 
 ### 🔒 安全特性
+
 - JWT Token 认证（模拟）
 - CORS 跨域支持
 - 输入验证和错误处理
@@ -85,6 +90,7 @@ npm run dev
 ## API 接口
 
 ### 登录接口
+
 ```http
 POST /api/login
 Content-Type: application/json
@@ -96,11 +102,13 @@ Content-Type: application/json
 ```
 
 ### 获取关卡信息
+
 ```http
 GET /api/level/{uuid}
 ```
 
 ### 提交关卡答案
+
 ```http
 POST /api/level/{uuid}/complete
 Content-Type: application/json
@@ -109,11 +117,6 @@ Content-Type: application/json
   "answer": "用户答案"
 }
 ```
-
-## 测试账户
-
-- 用户名: `admin`, 密码: `password`
-- 用户名: `player1`, 密码: `123456`
 
 ## 关卡演示
 
