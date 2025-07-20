@@ -125,7 +125,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from "vue";
+import { ref, computed, watch } from "vue";
 import { useRouter } from "vue-router";
 import { getLevel } from "@/services/api";
 import type { LevelInfo } from "@/services/api";
@@ -133,6 +133,12 @@ import TetrisLevel from "@/components/TetrisLevel.vue";
 import CorrelationGame from "@/components/CorrelationGame.vue";
 import MinesweeperGame from "@/components/MinesweeperGame.vue";
 import WordleGame from "@/components/WordleGame.vue";
+import {
+  LEVEL_1_UUID,
+  LEVEL_2_UUID,
+  LEVEL_3_UUID,
+  LEVEL_4_UUID,
+} from "@/constants/levels";
 
 interface Props {
   uuid: string;
@@ -154,13 +160,13 @@ const currentUser = ref(localStorage.getItem("nazo_user") || "");
 // 根据UUID确定当前关卡组件
 const currentLevelComponent = computed(() => {
   switch (props.uuid) {
-    case "tetris-level-1":
+    case LEVEL_1_UUID:
       return TetrisLevel;
-    case "correlation-level-2":
+    case LEVEL_2_UUID:
       return CorrelationGame;
-    case "minesweeper-level-3":
+    case LEVEL_3_UUID:
       return MinesweeperGame;
-    case "wordle-level-4":
+    case LEVEL_4_UUID:
       return WordleGame;
     default:
       return null;
@@ -217,7 +223,12 @@ const logout = () => {
   router.push("/login");
 };
 
-onMounted(() => {
-  loadLevel();
-});
+// 监听UUID变化，重新加载关卡信息
+watch(
+  () => props.uuid,
+  () => {
+    loadLevel();
+  },
+  { immediate: true }
+);
 </script>

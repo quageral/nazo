@@ -3,6 +3,7 @@ import LoginView from "@/views/LoginView.vue";
 import LevelView from "@/views/LevelView.vue";
 import ErrorView from "@/views/ErrorView.vue";
 import CorrelationGameView from "@/views/CorrelationGameView.vue";
+import { LEVEL_1_UUID } from "@/constants/levels";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -56,7 +57,7 @@ router.beforeEach((to, from, next) => {
   } else if (to.name === "Login" && isLoggedIn) {
     // fixme: 已登录用户访问登录页时重定向到第一关
     console.log("已登录用户重定向到第一关");
-    next("/level/tetris-level-1");
+    next(`/level/${LEVEL_1_UUID}`);
   } else {
     console.log("正常通过路由守卫");
     next();

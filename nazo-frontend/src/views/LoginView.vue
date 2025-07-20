@@ -109,6 +109,7 @@
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { login } from "@/services/api";
+import { LEVEL_1_UUID } from "@/constants/levels";
 
 const router = useRouter();
 
@@ -149,7 +150,7 @@ const handleLogin = async () => {
       console.log("准备跳转到第一关");
 
       // 跳转到第一关
-      router.push("/level/tetris-level-1");
+      router.push(`/level/${LEVEL_1_UUID}`);
 
       console.log("router.push调用完成");
     } else {

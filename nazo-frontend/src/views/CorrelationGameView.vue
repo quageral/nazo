@@ -1,6 +1,6 @@
 <template>
   <CorrelationGame
-    level-uuid="correlation-level-2"
+    :level-uuid="LEVEL_2_UUID"
     @game-complete="handleGameComplete"
   />
 </template>
@@ -8,6 +8,7 @@
 <script setup lang="ts">
 import CorrelationGame from "@/components/CorrelationGame.vue";
 import { useRouter } from "vue-router";
+import { LEVEL_2_UUID } from "@/constants/levels";
 
 const router = useRouter();
 

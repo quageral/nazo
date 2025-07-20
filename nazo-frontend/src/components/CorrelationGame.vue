@@ -90,7 +90,7 @@
                   min="0"
                   max="1"
                   placeholder="0.000"
-                  class="w-full px-4 py-3 text-lg border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none text-center"
+                  class="w-full px-6 py-6 text-4xl border-4 border-gray-300 rounded-xl focus:border-blue-500 focus:outline-none text-center font-bold"
                   @keyup.enter="submitGuess"
                 />
                 <button
@@ -207,10 +207,10 @@
                   30分
                 </button>
                 <button
-                  @click="setScore(50)"
+                  @click="setScore(COMPLETION_THRESHOLD)"
                   class="px-3 py-2 bg-green-600 hover:bg-green-700 text-white rounded text-sm"
                 >
-                  50分(通关)
+                  {{ COMPLETION_THRESHOLD }}分(通关)
                 </button>
                 <button
                   @click="setScore(100)"
@@ -327,6 +327,9 @@ const emit = defineEmits<{
 const username = ref(localStorage.getItem("nazo_user") || "");
 const sessionId = ref("");
 
+// 游戏常量
+const COMPLETION_THRESHOLD = 80; // 通关阈值
+
 // 游戏状态
 const gameState = ref<"waiting" | "correct" | "wrong" | "gameOver">("waiting");
 const lives = ref(3);
@@ -367,7 +370,7 @@ const isValidGuess = computed(() => {
 // 实时监听分数变化，达到阈值自动通关
 watch(score, (newScore) => {
   if (
-    newScore >= 50 &&
+    newScore >= COMPLETION_THRESHOLD &&
     sessionId.value &&
     username.value &&
     gameState.value !== "gameOver"
@@ -383,6 +386,8 @@ watch(score, (newScore) => {
 onMounted(async () => {
   loadBestScore();
   generateNewScatterPlot();
+  // 自动填充"0."方便用户输入
+  guessInput.value = "0.";
 
   // 如果是通过关卡系统进入，初始化游戏会话
   if (props.levelUuid && username.value) {
@@ -402,16 +407,14 @@ function generateNewScatterPlot() {
   const points: { x: number; y: number }[] = [];
   const numPoints = 30 + Math.floor(Math.random() * 20); // 30-50个点
 
-  // 随机生成相关性强度
-  const correlationStrength = Math.random() * 2 - 1; // -1 to 1
+  // 随机生成相关性强度（仅正相关，0到1之间）
+  const correlationStrength = Math.random(); // 0 to 1
   const noise = 0.1 + Math.random() * 0.4; // 噪声水平
 
   for (let i = 0; i < numPoints; i++) {
     const x = Math.random();
     // 基于相关性生成y值，加上噪声
-    let y =
-      correlationStrength * x +
-      (1 - Math.abs(correlationStrength)) * Math.random();
+    let y = correlationStrength * x + (1 - correlationStrength) * Math.random();
     y += (Math.random() - 0.5) * noise;
 
     // 确保y在0-1范围内
@@ -421,7 +424,7 @@ function generateNewScatterPlot() {
   }
 
   scatterData.value = points;
-  trueR.value = calculateCorrelation(points);
+  trueR.value = Math.abs(calculateCorrelation(points)); // 确保结果为正数
 
   nextTick(() => {
     drawScatterPlot();
@@ -542,7 +545,7 @@ function submitGuess() {
     }
   }
 
-  guessInput.value = "";
+  guessInput.value = "0.";
 }
 
 // 下一轮
@@ -554,6 +557,8 @@ function nextRound() {
 
   generateNewScatterPlot();
   gameState.value = "waiting";
+  // 自动填充"0."方便用户输入
+  guessInput.value = "0.";
 }
 
 // 自动完成游戏（达到阈值时调用）
@@ -605,8 +610,12 @@ async function checkNewHighScore() {
     isNewHighScore.value = false;
   }
 
-  // 检查是否达到通关条件（50分）并且有有效会话
-  if (score.value >= 50 && sessionId.value && username.value) {
+  // 检查是否达到通关条件并且有有效会话
+  if (
+    score.value >= COMPLETION_THRESHOLD &&
+    sessionId.value &&
+    username.value
+  ) {
     autoCompleteGame();
   }
 }
@@ -623,6 +632,8 @@ function playAgain() {
   isNewHighScore.value = false;
   generateNewScatterPlot();
   gameState.value = "waiting";
+  // 自动填充"0."方便用户输入
+  guessInput.value = "0.";
 }
 
 // 返回主菜单
@@ -670,9 +681,11 @@ function setLives(newLives: number) {
 function testGameComplete() {
   if (isDevelopment.value) {
     console.log(
-      `当前分数: ${score.value}, 通关条件: 50, 是否通关: ${score.value >= 50}`
+      `当前分数: ${score.value}, 通关条件: ${COMPLETION_THRESHOLD}, 是否通关: ${
+        score.value >= COMPLETION_THRESHOLD
+      }`
     );
-    if (score.value >= 50) {
+    if (score.value >= COMPLETION_THRESHOLD) {
       console.log("满足通关条件！");
       autoCompleteGame();
     } else {

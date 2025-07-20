@@ -190,7 +190,7 @@ public class GameController {
             gameScore = 0;
           }
         }
-        return gameScore >= 50; // 看图猜相关率要求得分超过50分
+        return gameScore >= 80; // 看图猜相关率要求得分超过80分
       case Const.LEVEL_3_UUID:
         // 扫雷游戏通关条件
         Object minesweeperResultObj = request.getData().get("gameWon");
@@ -238,7 +238,7 @@ public class GameController {
       case Const.LEVEL_1_UUID:
         return "未达到通关条件：需要得分超过600分";
       case Const.LEVEL_2_UUID:
-        return "未达到通关条件：需要得分超过50分";
+        return "未达到通关条件：需要得分超过80分";
       case Const.LEVEL_3_UUID:
         return "未达到通关条件：需要成功完成扫雷游戏";
       case Const.LEVEL_4_UUID:
