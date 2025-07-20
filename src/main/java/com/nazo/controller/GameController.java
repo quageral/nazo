@@ -28,7 +28,8 @@ public class GameController {
     // 模拟关卡数据
     private final Map<String, LevelInfo> levels = Map.of(
         Const.LEVEL_1_UUID, new LevelInfo("1", "俄罗斯方块", "达到600分即可通关！", Const.LEVEL_2_UUID),
-        Const.LEVEL_2_UUID, new LevelInfo("2", "数据相关系数", "观察散点图，猜测数据的相关系数！", Const.LEVEL_3_UUID)
+        Const.LEVEL_2_UUID, new LevelInfo("2", "数据相关系数", "观察散点图，猜测数据的相关系数。\nPS: 怎么这么难！我要报警了", Const.LEVEL_3_UUID),
+        Const.LEVEL_3_UUID, new LevelInfo("3", "扫雷游戏", "完全遵循经典扫雷规则，成功完成游戏即可通关！", null)
     );
 
     // 游戏会话数据（实际项目中应使用数据库或Redis）
@@ -196,6 +197,16 @@ public class GameController {
                     }
                 }
                 return gameScore >= 50; // 看图猜相关率要求得分超过50分
+            case Const.LEVEL_3_UUID:
+                // 扫雷游戏通关条件
+                Object minesweeperResultObj = request.getData().get("gameWon");
+                boolean gameWon = false;
+                if (minesweeperResultObj instanceof Boolean) {
+                    gameWon = (Boolean) minesweeperResultObj;
+                } else if (minesweeperResultObj instanceof String) {
+                    gameWon = "true".equals(minesweeperResultObj);
+                }
+                return gameWon; // 扫雷游戏要求成功完成游戏
             default:
                 return false;
         }
@@ -208,6 +219,8 @@ public class GameController {
                 return Const.LEVEL_2_UUID;
             case Const.LEVEL_2_UUID:
                 return Const.LEVEL_3_UUID;
+            case Const.LEVEL_3_UUID:
+                return null; // 最后一关
             default:
                 return null;
         }
@@ -220,6 +233,8 @@ public class GameController {
                 return "未达到通关条件：需要得分超过600分";
             case Const.LEVEL_2_UUID:
                 return "未达到通关条件：需要得分超过50分";
+            case Const.LEVEL_3_UUID:
+                return "未达到通关条件：需要成功完成扫雷游戏";
             default:
                 return "未达到通关条件";
         }

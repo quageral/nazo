@@ -131,6 +131,7 @@ import { getLevel } from "@/services/api";
 import type { LevelInfo } from "@/services/api";
 import TetrisLevel from "@/components/TetrisLevel.vue";
 import CorrelationGame from "@/components/CorrelationGame.vue";
+import MinesweeperGame from "@/components/MinesweeperGame.vue";
 
 interface Props {
   uuid: string;
@@ -156,6 +157,8 @@ const currentLevelComponent = computed(() => {
       return TetrisLevel;
     case "correlation-level-2":
       return CorrelationGame;
+    case "minesweeper-level-3":
+      return MinesweeperGame;
     default:
       return null;
   }

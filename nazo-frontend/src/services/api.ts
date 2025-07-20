@@ -134,22 +134,22 @@ export const apiService = {
   },
 
   // 完成游戏
+  // fixme:
   async completeGame(
     levelUuid: string,
     sessionId: string,
-    score: number
+    gameData: any
   ): Promise<{ success: boolean; message: string; nextLevel?: string }> {
     try {
       const username = getUsernameFromCookie();
 
-      // 根据关卡类型使用不同的数据字段
-      let gameData: any;
-      if (levelUuid === "tetris-level-1") {
-        gameData = { score };
-      } else if (levelUuid === "correlation-level-2") {
-        gameData = { score };
+      // 处理不同类型的游戏数据
+      let finalGameData: any;
+      if (typeof gameData === "number") {
+        // 兼容之前只传分数的情况
+        finalGameData = { score: gameData };
       } else {
-        gameData = { score }; // 默认使用 score
+        finalGameData = gameData;
       }
 
       const response = await fetch(`${API_BASE_URL}/game/complete`, {
@@ -161,7 +161,7 @@ export const apiService = {
           username,
           levelUuid,
           sessionId,
-          data: gameData,
+          data: finalGameData,
         }),
       });
 
