@@ -132,6 +132,7 @@ import type { LevelInfo } from "@/services/api";
 import TetrisLevel from "@/components/TetrisLevel.vue";
 import CorrelationGame from "@/components/CorrelationGame.vue";
 import MinesweeperGame from "@/components/MinesweeperGame.vue";
+import WordleGame from "@/components/WordleGame.vue";
 
 interface Props {
   uuid: string;
@@ -159,6 +160,8 @@ const currentLevelComponent = computed(() => {
       return CorrelationGame;
     case "minesweeper-level-3":
       return MinesweeperGame;
+    case "wordle-level-4":
+      return WordleGame;
     default:
       return null;
   }

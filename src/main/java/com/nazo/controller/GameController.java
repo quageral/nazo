@@ -201,6 +201,16 @@ public class GameController {
           gameWon = "true".equals(minesweeperResultObj);
         }
         return gameWon; // 扫雷游戏要求成功完成游戏
+      case Const.LEVEL_4_UUID:
+        // Wordle游戏通关条件
+        Object wordleResultObj = request.getData().get("gameWon");
+        boolean wordleWon = false;
+        if (wordleResultObj instanceof Boolean) {
+          wordleWon = (Boolean) wordleResultObj;
+        } else if (wordleResultObj instanceof String) {
+          wordleWon = "true".equals(wordleResultObj);
+        }
+        return wordleWon; // Wordle游戏要求猜对单词
       default:
         return false;
     }
@@ -214,6 +224,8 @@ public class GameController {
       case Const.LEVEL_2_UUID:
         return Const.LEVEL_3_UUID;
       case Const.LEVEL_3_UUID:
+        return Const.LEVEL_4_UUID;
+      case Const.LEVEL_4_UUID:
         return null; // 最后一关
       default:
         return null;
@@ -229,6 +241,8 @@ public class GameController {
         return "未达到通关条件：需要得分超过50分";
       case Const.LEVEL_3_UUID:
         return "未达到通关条件：需要成功完成扫雷游戏";
+      case Const.LEVEL_4_UUID:
+        return "未达到通关条件：需要猜对单词";
       default:
         return "未达到通关条件";
     }

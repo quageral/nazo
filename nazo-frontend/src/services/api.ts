@@ -183,4 +183,80 @@ export const completeLevel = apiService.completeLevel;
 export const startGame = apiService.startGame;
 export const completeGame = apiService.completeGame;
 
+// Wordle game API functions
+export interface WordleStartRequest {
+  username: string;
+}
+
+export interface WordleStartResponse {
+  success: boolean;
+  sessionId?: string;
+  message: string;
+}
+
+export interface WordleGuessRequest {
+  sessionId: string;
+  guess: string;
+}
+
+export interface WordleGuessResponse {
+  success: boolean;
+  result?: string;
+  guessCount?: number;
+  answer?: string;
+  message?: string;
+}
+
+// Wordle specific functions
+export const wordleService = {
+  // Start a new Wordle game
+  async startWordle(username: string): Promise<WordleStartResponse> {
+    try {
+      const response = await fetch(`${API_BASE_URL}/wordle/start`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username }),
+      });
+
+      return await response.json();
+    } catch (error) {
+      console.error("启动Wordle游戏失败:", error);
+      return {
+        success: false,
+        message: "网络连接失败，请检查后端服务是否启动",
+      };
+    }
+  },
+
+  // Make a guess in Wordle
+  async guessWordle(
+    sessionId: string,
+    guess: string
+  ): Promise<WordleGuessResponse> {
+    try {
+      const response = await fetch(`${API_BASE_URL}/wordle/guess`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ sessionId, guess }),
+      });
+
+      return await response.json();
+    } catch (error) {
+      console.error("Wordle猜测失败:", error);
+      return {
+        success: false,
+        message: "网络连接失败，请检查后端服务是否启动",
+      };
+    }
+  },
+};
+
+// Export Wordle functions
+export const startWordle = wordleService.startWordle;
+export const guessWordle = wordleService.guessWordle;
+
 export default apiService;
