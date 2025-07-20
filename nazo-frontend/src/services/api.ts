@@ -141,6 +141,17 @@ export const apiService = {
   ): Promise<{ success: boolean; message: string; nextLevel?: string }> {
     try {
       const username = getUsernameFromCookie();
+
+      // 根据关卡类型使用不同的数据字段
+      let gameData: any;
+      if (levelUuid === "tetris-level-1") {
+        gameData = { score };
+      } else if (levelUuid === "correlation-level-2") {
+        gameData = { score };
+      } else {
+        gameData = { score }; // 默认使用 score
+      }
+
       const response = await fetch(`${API_BASE_URL}/game/complete`, {
         method: "POST",
         headers: {
@@ -150,7 +161,7 @@ export const apiService = {
           username,
           levelUuid,
           sessionId,
-          data: { score },
+          data: gameData,
         }),
       });
 

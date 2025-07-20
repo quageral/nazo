@@ -130,6 +130,7 @@ import { useRouter } from "vue-router";
 import { getLevel } from "@/services/api";
 import type { LevelInfo } from "@/services/api";
 import TetrisLevel from "@/components/TetrisLevel.vue";
+import CorrelationGame from "@/components/CorrelationGame.vue";
 
 interface Props {
   uuid: string;
@@ -153,6 +154,8 @@ const currentLevelComponent = computed(() => {
   switch (props.uuid) {
     case "tetris-level-1":
       return TetrisLevel;
+    case "correlation-level-2":
+      return CorrelationGame;
     default:
       return null;
   }
@@ -192,6 +195,7 @@ const handleGameComplete = (data: {
 
 // 前往下一关
 const goToNextLevel = () => {
+  showSuccessModal.value = false; // 隐藏通关成功弹窗
   if (nextLevelUuid.value) {
     router.push(`/level/${nextLevelUuid.value}`);
   } else {

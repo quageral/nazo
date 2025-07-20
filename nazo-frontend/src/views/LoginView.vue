@@ -124,13 +124,19 @@ const handleLogin = async () => {
   isLoading.value = true;
   errorMessage.value = "";
 
+  console.log("开始登录流程，用户名:", loginForm.value.username);
+
   try {
     const response = await login({
       username: loginForm.value.username,
       password: loginForm.value.password,
     });
 
+    console.log("登录API响应:", response);
+
     if (response.success) {
+      console.log("登录成功，保存token:", response.token);
+
       // 保存登录状态到localStorage和cookie
       localStorage.setItem("nazo_token", response.token || "");
       localStorage.setItem("nazo_user", loginForm.value.username);
@@ -140,9 +146,14 @@ const handleLogin = async () => {
         loginForm.value.username
       )}; path=/; max-age=86400`; // 24小时过期
 
+      console.log("准备跳转到第一关");
+
       // 跳转到第一关
       router.push("/level/tetris-level-1");
+
+      console.log("router.push调用完成");
     } else {
+      console.log("登录失败:", response.message);
       errorMessage.value = response.message || "登录失败";
     }
   } catch (error) {

@@ -196,6 +196,73 @@
               <span>{{ gamePaused ? "继续游戏" : "暂停游戏" }}</span>
             </button>
           </div>
+
+          <!-- 调试面板 (仅开发环境) -->
+          <div
+            v-if="isDevelopment"
+            class="glass-card p-6 border-2 border-red-500/30"
+          >
+            <h3
+              class="text-lg font-bold text-red-300 mb-4 flex items-center space-x-2"
+            >
+              <span>🐛</span>
+              <span>调试面板</span>
+            </h3>
+
+            <div class="space-y-3">
+              <!-- 快速设置分数按钮 -->
+              <div class="grid grid-cols-2 gap-2">
+                <button
+                  @click="setScore(100)"
+                  class="px-3 py-2 bg-yellow-600 hover:bg-yellow-700 text-white rounded text-sm"
+                >
+                  100分
+                </button>
+                <button
+                  @click="setScore(500)"
+                  class="px-3 py-2 bg-yellow-600 hover:bg-yellow-700 text-white rounded text-sm"
+                >
+                  500分
+                </button>
+                <button
+                  @click="setScore(600)"
+                  class="px-3 py-2 bg-green-600 hover:bg-green-700 text-white rounded text-sm"
+                >
+                  600分(通关)
+                </button>
+                <button
+                  @click="setScore(1000)"
+                  class="px-3 py-2 bg-green-600 hover:bg-green-700 text-white rounded text-sm"
+                >
+                  1000分
+                </button>
+              </div>
+
+              <!-- 直接输入分数 -->
+              <div class="flex space-x-2">
+                <input
+                  v-model.number="debugScore"
+                  type="number"
+                  placeholder="输入分数"
+                  class="flex-1 px-3 py-2 bg-gray-700 border border-gray-600 rounded text-white text-sm"
+                />
+                <button
+                  @click="setScore(debugScore)"
+                  class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded text-sm"
+                >
+                  设置
+                </button>
+              </div>
+
+              <!-- 测试通关 -->
+              <button
+                @click="testWinCondition"
+                class="w-full px-3 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded text-sm"
+              >
+                测试通关检测
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -204,6 +271,7 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted, watch } from "vue";
+import { completeGame, startGame as startGameAPI } from "../services/api";
 
 interface Props {
   levelUuid: string;
@@ -226,6 +294,10 @@ const gameRunning = ref(false);
 const gamePaused = ref(false);
 const gameOver = ref(false);
 const isSubmitting = ref(false);
+
+// 调试相关变量
+const isDevelopment = ref(import.meta.env.DEV);
+const debugScore = ref(0);
 
 // 通关条件：得分超过600
 const winCondition = 600;
@@ -369,12 +441,20 @@ watch(score, (newScore) => {
   }
 });
 
-// 生成会话ID（简单版本，实际应由后端生成）
-const generateSessionId = () => {
-  return (
-    Math.random().toString(36).substring(2, 15) +
-    Math.random().toString(36).substring(2, 15)
-  );
+// 初始化游戏会话
+const initializeGameSession = async () => {
+  try {
+    const result = await startGameAPI(props.levelUuid);
+    if (result.success && result.sessionId) {
+      sessionId = result.sessionId;
+      console.log("Game session initialized with sessionId:", sessionId);
+    } else {
+      console.error("Failed to initialize game session:", result.message);
+      throw new Error(result.message);
+    }
+  } catch (error) {
+    console.error("Failed to initialize game session:", error);
+  }
 };
 
 // 初始化游戏板
@@ -405,26 +485,10 @@ const startGame = async () => {
   board = createBoard();
   score.value = 0;
   dropInterval = 1000;
-  sessionId = generateSessionId();
 
-  // 调用后端开始游戏
-  try {
-    const response = await fetch(`http://localhost:8080/api/game/start`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        levelUuid: props.levelUuid,
-      }),
-    });
-
-    const result = await response.json();
-    if (result.success) {
-      sessionId = result.sessionId;
-    }
-  } catch (error) {
-    console.error("Failed to start game session:", error);
+  // 如果还没有sessionId，尝试初始化
+  if (!sessionId) {
+    await initializeGameSession();
   }
 
   currentPiece = createPiece();
@@ -465,19 +529,7 @@ const autoCompleteLevel = async () => {
   isSubmitting.value = true;
 
   try {
-    const response = await fetch(`http://localhost:8080/api/game/complete`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        levelUuid: props.levelUuid,
-        sessionId: sessionId,
-        score: score.value,
-      }),
-    });
-
-    const result = await response.json();
+    const result = await completeGame(props.levelUuid, sessionId, score.value);
 
     if (result.success) {
       stopGame();
@@ -501,19 +553,7 @@ const completeLevel = async () => {
   isSubmitting.value = true;
 
   try {
-    const response = await fetch(`http://localhost:8080/api/game/complete`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        levelUuid: props.levelUuid,
-        sessionId: sessionId,
-        score: score.value,
-      }),
-    });
-
-    const result = await response.json();
+    const result = await completeGame(props.levelUuid, sessionId, score.value);
 
     if (result.success) {
       emit("gameComplete", {
@@ -529,6 +569,28 @@ const completeLevel = async () => {
     alert("网络错误，请重试");
   } finally {
     isSubmitting.value = false;
+  }
+};
+
+// 调试函数：设置分数
+const setScore = (newScore: number) => {
+  if (isDevelopment.value && typeof newScore === "number" && newScore >= 0) {
+    score.value = newScore;
+    console.log(`调试：分数已设置为 ${newScore}`);
+  }
+};
+
+// 调试函数：测试通关条件
+const testWinCondition = () => {
+  if (isDevelopment.value) {
+    console.log(
+      `当前分数: ${score.value}, 通关条件: ${winCondition}, 是否通关: ${hasWon.value}`
+    );
+    if (hasWon.value) {
+      console.log("满足通关条件！");
+    } else {
+      console.log("未满足通关条件");
+    }
   }
 };
 
@@ -809,7 +871,7 @@ const handleKeyPress = (e: KeyboardEvent) => {
 };
 
 // 组件挂载时初始化
-onMounted(() => {
+onMounted(async () => {
   if (gameBoard.value) {
     ctx = gameBoard.value.getContext("2d");
   }
@@ -819,6 +881,9 @@ onMounted(() => {
 
   board = createBoard();
   document.addEventListener("keydown", handleKeyPress);
+
+  // 自动初始化游戏会话
+  await initializeGameSession();
 });
 
 // 组件卸载时清理

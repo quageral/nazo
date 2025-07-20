@@ -3,6 +3,7 @@ package com.nazo.controller;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.*;
+import com.nazo.model.Const;
 
 @RestController
 @RequestMapping("/api")
@@ -26,8 +27,8 @@ public class GameController {
 
     // 模拟关卡数据
     private final Map<String, LevelInfo> levels = Map.of(
-        "tetris-level-1", new LevelInfo("1", "俄罗斯方块", "消除10行即可通关！移动方块，填满行以消除。", "level-2-uuid-67890"),
-        "level-2-uuid-67890", new LevelInfo("2", "逻辑推理", "如果所有的A都是B，所有的B都是C，那么所有的A都是？", "level-3-uuid-abcde")
+        Const.LEVEL_1_UUID, new LevelInfo("1", "俄罗斯方块", "达到600分即可通关！", Const.LEVEL_2_UUID),
+        Const.LEVEL_2_UUID, new LevelInfo("2", "数据相关系数", "观察散点图，猜测数据的相关系数！", Const.LEVEL_3_UUID)
     );
 
     // 游戏会话数据（实际项目中应使用数据库或Redis）
@@ -42,7 +43,7 @@ public class GameController {
             response.put("success", true);
             response.put("message", "登录成功");
             response.put("token", "nazo_token_" + request.getUsername() + "_" + System.currentTimeMillis()); // 生成简单的token
-            response.put("nextLevel", "start");
+            response.put("nextLevel", Const.LEVEL_1_UUID);
             
             return ResponseEntity.ok(response);
         } else {
@@ -117,6 +118,11 @@ public class GameController {
 
     @PostMapping("/game/complete")
     public ResponseEntity<Map<String, Object>> completeGame(@RequestBody GameCompleteRequest request) {
+        System.out.println("Received game complete request:");
+        System.out.println("Username: " + request.getUsername());
+        System.out.println("LevelUuid: " + request.getLevelUuid());
+        System.out.println("SessionId: " + request.getSessionId());
+        System.out.println("Data: " + request.getData());
         TetrisSession session = tetrisSessions.get(request.getUsername()+"_"+request.getSessionId());
         
         Map<String, Object> response = new HashMap<>();
@@ -155,8 +161,14 @@ public class GameController {
     
     // 验证游戏完成条件
     private boolean validateGameCompletion(String levelUuid, GameCompleteRequest request) {
+        // 检查data是否为空
+        if (request.getData() == null) {
+            System.out.println("Error: request.getData() is null");
+            return false;
+        }
+        
         switch (levelUuid) {
-            case "tetris-level-1":
+            case Const.LEVEL_1_UUID:
                 // 获取得分，如果不存在或不是数字则返回0
                 Object scoreObj = request.getData().get("score");
                 int score = 0;
@@ -170,6 +182,20 @@ public class GameController {
                     }
                 }
                 return score >= 600; // 俄罗斯方块要求得分超过600
+            case Const.LEVEL_2_UUID:
+                // 看图猜相关率游戏通关条件
+                Object gameScoreObj = request.getData().get("score");
+                int gameScore = 0;
+                if (gameScoreObj instanceof Integer) {
+                    gameScore = (Integer) gameScoreObj;
+                } else if (gameScoreObj instanceof String) {
+                    try {
+                        gameScore = Integer.parseInt((String) gameScoreObj);
+                    } catch (NumberFormatException e) {
+                        gameScore = 0;
+                    }
+                }
+                return gameScore >= 50; // 看图猜相关率要求得分超过50分
             default:
                 return false;
         }
@@ -178,8 +204,10 @@ public class GameController {
     // 获取下一关
     private String getNextLevel(String currentLevelUuid) {
         switch (currentLevelUuid) {
-            case "tetris-level-1":
-                return "level-2-uuid-67890";
+            case Const.LEVEL_1_UUID:
+                return Const.LEVEL_2_UUID;
+            case Const.LEVEL_2_UUID:
+                return Const.LEVEL_3_UUID;
             default:
                 return null;
         }
@@ -188,8 +216,10 @@ public class GameController {
     // 获取失败消息
     private String getFailureMessage(String levelUuid) {
         switch (levelUuid) {
-            case "tetris-level-1":
+            case Const.LEVEL_1_UUID:
                 return "未达到通关条件：需要得分超过600分";
+            case Const.LEVEL_2_UUID:
+                return "未达到通关条件：需要得分超过50分";
             default:
                 return "未达到通关条件";
         }
@@ -198,10 +228,6 @@ public class GameController {
     private boolean validateAnswer(String levelUuid, String answer) {
         // 简单的答案验证逻辑
         switch (levelUuid) {
-            case "level-1-uuid-12345":
-                return "8".equals(answer); // 斐波那契数列
-            case "level-2-uuid-67890":
-                return "C".equals(answer) || "c".equals(answer);
             default:
                 return false;
         }

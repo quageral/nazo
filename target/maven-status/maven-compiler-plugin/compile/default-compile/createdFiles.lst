@@ -1,2 +1,6 @@
 com\nazo\controller\GameController.class
+com\nazo\controller\GameController$LoginRequest.class
+com\nazo\controller\GameController$GameCompleteRequest.class
 com\nazo\NazoApplication.class
+com\nazo\controller\GameController$TetrisSession.class
+com\nazo\controller\GameController$LevelInfo.class
