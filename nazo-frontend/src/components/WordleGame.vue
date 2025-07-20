@@ -136,6 +136,10 @@
           <div v-else-if="gameState === 'playing'" class="text-gray-600">
             猜一个5字母的英文单词
           </div>
+          <!-- 提示信息 -->
+          <div v-if="messageText" class="mt-2 text-orange-600 font-medium">
+            {{ messageText }}
+          </div>
         </div>
 
         <!-- 重新开始按钮 -->
@@ -147,38 +151,6 @@
           >
             重新开始
           </button>
-        </div>
-
-        <!-- 调试面板 (仅开发环境) -->
-        <div
-          v-if="isDevelopment"
-          class="mt-6 p-4 bg-yellow-50 rounded-lg border border-yellow-200 w-full max-w-md"
-        >
-          <h3 class="text-lg font-semibold text-yellow-800 mb-3">
-            🔧 调试面板
-          </h3>
-          <div class="space-y-2">
-            <div class="flex items-center justify-between text-sm">
-              <span class="text-yellow-700">游戏状态:</span>
-              <span class="font-mono text-yellow-900">{{ gameState }}</span>
-            </div>
-            <div class="flex items-center justify-between text-sm">
-              <span class="text-yellow-700">会话ID:</span>
-              <span class="font-mono text-yellow-900 text-xs">{{
-                sessionId
-              }}</span>
-            </div>
-            <div class="flex items-center justify-between text-sm">
-              <span class="text-yellow-700">答案:</span>
-              <span class="font-mono text-yellow-900">{{ answer }}</span>
-            </div>
-            <button
-              @click="debugWin"
-              class="w-full px-3 py-2 bg-yellow-600 hover:bg-yellow-700 text-white rounded text-sm"
-            >
-              调试胜利
-            </button>
-          </div>
         </div>
       </div>
     </div>
@@ -207,16 +179,15 @@ const emit = defineEmits<{
 
 // 游戏状态
 const gameState = ref<"waiting" | "playing" | "won" | "lost">("waiting");
-const sessionId = ref("");
+const wordleSessionId = ref(""); // Wordle游戏的sessionId
+const levelSessionId = ref(""); // 关卡系统的sessionId
 const currentGuess = ref("");
 const guessHistory = ref<string[]>([]);
 const guessResults = ref<string[]>([]); // 存储每次猜测的结果（+ x -）
 const currentGuessCount = ref(0);
 const answer = ref("");
 const isSubmitting = ref(false);
-
-// 开发环境标识
-const isDevelopment = ref(import.meta.env.DEV);
+const messageText = ref(""); // 用于显示提示信息
 
 // 获取用户信息
 const username = ref(localStorage.getItem("nazo_user") || "");
@@ -256,7 +227,13 @@ const initializeGame = async () => {
     // 首先初始化游戏会话（用于关卡系统）
     if (props.levelUuid && username.value) {
       const levelResponse = await startGame(props.levelUuid);
-      if (!levelResponse.success) {
+      if (levelResponse.success && levelResponse.sessionId) {
+        levelSessionId.value = levelResponse.sessionId;
+        console.log(
+          "Level session started with sessionId:",
+          levelSessionId.value
+        );
+      } else {
         console.error("Failed to start level session:", levelResponse.message);
       }
     }
@@ -264,7 +241,7 @@ const initializeGame = async () => {
     // 然后启动Wordle游戏
     const response = await startWordle(username.value);
     if (response.success && response.sessionId) {
-      sessionId.value = response.sessionId;
+      wordleSessionId.value = response.sessionId;
       gameState.value = "playing";
 
       // 重置游戏状态
@@ -275,7 +252,7 @@ const initializeGame = async () => {
       answer.value = "";
       letterStates.value = {};
 
-      console.log("Wordle game started with sessionId:", sessionId.value);
+      console.log("Wordle game started with sessionId:", wordleSessionId.value);
     } else {
       console.error("Failed to start Wordle game:", response.message);
       alert("启动游戏失败：" + response.message);
@@ -313,9 +290,13 @@ const submitGuess = async () => {
   if (!canSubmitGuess.value) return;
 
   isSubmitting.value = true;
+  messageText.value = ""; // 清空之前的提示信息
 
   try {
-    const response = await guessWordle(sessionId.value, currentGuess.value);
+    const response = await guessWordle(
+      wordleSessionId.value,
+      currentGuess.value
+    );
 
     if (response.success && response.result) {
       // 保存猜测历史和结果
@@ -342,7 +323,22 @@ const submitGuess = async () => {
       // 清空当前猜测
       currentGuess.value = "";
     } else {
-      alert("猜测失败：" + (response.message || "未知错误"));
+      // 处理猜测失败的情况
+      if (
+        response.message === "猜测的单词必须为5个字母" ||
+        response.message === "单词不在词库中" ||
+        response.message?.includes("词库")
+      ) {
+        // 单词无效，显示提示但不消耗猜测次数
+        messageText.value = response.message || "单词不在词库中";
+        // 3秒后清除提示信息
+        setTimeout(() => {
+          messageText.value = "";
+        }, 3000);
+      } else {
+        // 其他错误用弹窗显示
+        alert("猜测失败：" + (response.message || "未知错误"));
+      }
     }
   } catch (error) {
     console.error("Guess submission failed:", error);
@@ -372,8 +368,10 @@ const updateLetterStates = (guess: string, result: string) => {
 const handleGameComplete = async (won: boolean) => {
   if (!won || !props.levelUuid) return;
 
+  isSubmitting.value = true;
+
   try {
-    const result = await completeGame(props.levelUuid, sessionId.value, {
+    const result = await completeGame(props.levelUuid, levelSessionId.value, {
       gameWon: won,
       guessCount: currentGuessCount.value,
       answer: answer.value,
@@ -385,9 +383,14 @@ const handleGameComplete = async (won: boolean) => {
         message: `恭喜！您用 ${currentGuessCount.value} 次猜测完成了Wordle游戏！`,
         nextLevel: result.nextLevel,
       });
+    } else {
+      alert("通关验证失败，请重试：" + (result.message || "未知错误"));
     }
   } catch (error) {
     console.error("Failed to complete game:", error);
+    alert("网络错误，请重试");
+  } finally {
+    isSubmitting.value = false;
   }
 };
 
@@ -445,15 +448,6 @@ const getKeyboardKeyClasses = (letter: string) => {
       return "bg-gray-500 text-white border-gray-500";
     default:
       return "bg-gray-200 hover:bg-gray-300 text-gray-800 border-gray-300";
-  }
-};
-
-// 调试函数
-const debugWin = () => {
-  if (isDevelopment.value) {
-    gameState.value = "won";
-    answer.value = "DEBUG";
-    handleGameComplete(true);
   }
 };
 </script>

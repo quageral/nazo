@@ -73,6 +73,9 @@ public class WordleController {
     if (session.getGuessCount() >= 6) {
       return ResponseEntity.badRequest().body(Map.of("success", false, "message", "猜测次数已用完"));
     }
+    if (!wordleWords.contains(guess.toLowerCase())) {
+      return ResponseEntity.badRequest().body(Map.of("success", false, "message", "猜测的单词不在词库中"));
+    }
     session.setGuessCount(session.getGuessCount() + 1);
     String result = checkGuess(guess, session.getAnswer());
     return ResponseEntity.ok(Map.of("success", true, "result", result, "guessCount", session.getGuessCount(), "answer",
