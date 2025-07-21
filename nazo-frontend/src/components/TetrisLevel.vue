@@ -1,25 +1,17 @@
 <template>
-  <div class="h-full flex items-center justify-center p-4">
-    <div class="game-card w-full max-w-7xl h-full">
-      <div
-        class="flex flex-col xl:flex-row gap-12 h-full items-center justify-center"
-      >
+  <div class="h-full flex items-center justify-center p-2 sm:p-4">
+    <div class="game-card w-full max-w-7xl h-full overflow-hidden">
+      <div class="flex flex-col lg:flex-row gap-4 sm:gap-6 lg:gap-12 h-full items-center justify-center">
         <!-- 游戏区域 -->
-        <div class="flex items-center justify-center">
+        <div class="flex items-center justify-center flex-shrink-0">
           <div class="relative">
-            <canvas
-              ref="gameBoard"
-              width="450"
-              height="900"
-              class="border-4 border-primary rounded-2xl bg-gray-900 shadow-2xl mx-auto"
-              style="image-rendering: pixelated"
-            ></canvas>
+            <canvas ref="gameBoard" :width="canvasWidth" :height="canvasHeight"
+              class="border-2 sm:border-4 border-primary rounded-lg sm:rounded-2xl bg-gray-900 shadow-2xl mx-auto"
+              style="image-rendering: pixelated"></canvas>
 
             <!-- 游戏结束弹窗 -->
-            <div
-              v-if="gameOver"
-              class="absolute inset-0 flex items-center justify-center bg-black/80 rounded-2xl backdrop-blur-sm z-10"
-            >
+            <div v-if="gameOver"
+              class="absolute inset-0 flex items-center justify-center bg-black/80 rounded-2xl backdrop-blur-sm z-10">
               <div class="game-card text-center max-w-md">
                 <div class="text-6xl mb-6">{{ hasWon ? "🎉" : "💥" }}</div>
                 <h2 class="text-4xl font-black text-white mb-6">
@@ -35,27 +27,16 @@
                   </div>
                   <div class="flex justify-between items-center text-xl">
                     <span class="text-gray-300">通关条件:</span>
-                    <span class="text-yellow-400 font-bold"
-                      >{{ winCondition }} 分</span
-                    >
+                    <span class="text-yellow-400 font-bold">{{ winCondition }} 分</span>
                   </div>
                 </div>
 
                 <!-- 根据通关条件显示不同按钮 -->
                 <div class="space-y-4">
-                  <button
-                    v-if="hasWon"
-                    @click="completeLevel"
-                    :disabled="isSubmitting"
-                    class="w-full game-button bg-gradient-to-r from-green-500 to-green-600 text-white disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center space-x-3"
-                  >
-                    <span
-                      v-if="isSubmitting"
-                      class="flex items-center space-x-2"
-                    >
-                      <div
-                        class="animate-spin rounded-full h-5 w-5 border-b-2 border-white"
-                      ></div>
+                  <button v-if="hasWon" @click="completeLevel" :disabled="isSubmitting"
+                    class="w-full game-button bg-gradient-to-r from-green-500 to-green-600 text-white disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center space-x-3">
+                    <span v-if="isSubmitting" class="flex items-center space-x-2">
+                      <div class="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
                       <span>提交中...</span>
                     </span>
                     <span v-else class="flex items-center space-x-2">
@@ -64,10 +45,8 @@
                     </span>
                   </button>
 
-                  <button
-                    @click="restartGame"
-                    class="w-full game-button bg-gradient-to-r from-blue-500 to-blue-600 text-white flex items-center justify-center space-x-3"
-                  >
+                  <button @click="restartGame"
+                    class="w-full game-button bg-gradient-to-r from-blue-500 to-blue-600 text-white flex items-center justify-center space-x-3">
                     <span>🔄</span>
                     <span>重新开始</span>
                   </button>
@@ -78,16 +57,14 @@
         </div>
 
         <!-- 信息面板 -->
-        <div class="xl:w-96 space-y-6">
+        <div class="lg:w-80 xl:w-96 space-y-4 lg:space-y-6 w-full">
           <!-- 通关条件说明 -->
-          <div class="glass-card p-6 border-2 border-yellow-500/30">
-            <h3
-              class="text-xl font-bold text-yellow-300 mb-3 flex items-center space-x-2"
-            >
-              <span class="text-2xl">🎯</span>
+          <div class="glass-card p-4 sm:p-6 border-2 border-yellow-500/30">
+            <h3 class="text-lg sm:text-xl font-bold text-yellow-300 mb-2 sm:mb-3 flex items-center gap-2">
+              <span class="text-xl sm:text-2xl">🎯</span>
               <span>通关条件</span>
             </h3>
-            <p class="text-yellow-200 text-lg">
+            <p class="text-yellow-200 text-base sm:text-lg">
               达到
               <span class="font-bold text-yellow-100">{{ winCondition }}</span>
               分即可通关
@@ -97,27 +74,16 @@
           <!-- 游戏状态面板 -->
           <div class="grid grid-cols-1 gap-4">
             <!-- 得分 -->
-            <div
-              class="glass-card p-6 text-center"
-              :class="hasWon ? 'border-2 border-green-400 animate-glow' : ''"
-            >
-              <h3
-                class="text-lg font-bold mb-2 flex items-center justify-center space-x-2"
-                :class="hasWon ? 'text-green-300' : 'text-blue-300'"
-              >
+            <div class="glass-card p-6 text-center" :class="hasWon ? 'border-2 border-green-400 animate-glow' : ''">
+              <h3 class="text-lg font-bold mb-2 flex items-center justify-center space-x-2"
+                :class="hasWon ? 'text-green-300' : 'text-blue-300'">
                 <span>{{ hasWon ? "✅" : "🏆" }}</span>
                 <span>得分</span>
               </h3>
-              <div
-                class="text-4xl font-black"
-                :class="hasWon ? 'text-green-400' : 'text-white'"
-              >
+              <div class="text-4xl font-black" :class="hasWon ? 'text-green-400' : 'text-white'">
                 {{ score.toLocaleString() }}
               </div>
-              <div
-                v-if="hasWon"
-                class="mt-2 text-green-300 font-semibold animate-pulse"
-              >
+              <div v-if="hasWon" class="mt-2 text-green-300 font-semibold animate-pulse">
                 🎉 可以通关了！
               </div>
             </div>
@@ -125,52 +91,38 @@
 
           <!-- 下一个方块 -->
           <div class="glass-card p-6">
-            <h3
-              class="text-lg font-bold text-cyan-300 mb-4 flex items-center justify-center space-x-2"
-            >
+            <h3 class="text-lg font-bold text-cyan-300 mb-4 flex items-center justify-center space-x-2">
               <span>👀</span>
               <span>下一个方块</span>
             </h3>
-            <canvas
-              ref="nextPiece"
-              width="180"
-              height="180"
-              class="border-2 border-cyan-500/30 rounded-xl bg-gray-900 mx-auto block"
-              style="image-rendering: pixelated"
-            ></canvas>
+            <div class="flex justify-center">
+              <canvas ref="nextPiece" width="180" height="180"
+                class="border-2 border-cyan-500/30 rounded-xl bg-gray-900 mx-auto block"
+                style="image-rendering: pixelated"></canvas>
+            </div>
           </div>
 
           <!-- 操作说明 -->
           <div class="glass-card p-6">
-            <h3
-              class="text-lg font-bold text-gray-300 mb-4 flex items-center space-x-2"
-            >
+            <h3 class="text-lg font-bold text-gray-300 mb-4 flex items-center space-x-2">
               <span>🎮</span>
               <span>操作说明</span>
             </h3>
             <div class="grid grid-cols-2 gap-3 text-gray-300">
               <div class="flex items-center space-x-2">
-                <span class="bg-gray-700 px-3 py-2 rounded text-lg font-mono"
-                  >←→</span
-                >
+                <span class="bg-gray-700 px-3 py-2 rounded text-lg font-mono">←→</span>
                 <span>移动</span>
               </div>
               <div class="flex items-center space-x-2">
-                <span class="bg-gray-700 px-3 py-2 rounded text-lg font-mono"
-                  >↓</span
-                >
+                <span class="bg-gray-700 px-3 py-2 rounded text-lg font-mono">↓</span>
                 <span>快降</span>
               </div>
               <div class="flex items-center space-x-2">
-                <span class="bg-gray-700 px-3 py-2 rounded text-base font-mono"
-                  >空格</span
-                >
+                <span class="bg-gray-700 px-3 py-2 rounded text-base font-mono">空格</span>
                 <span>旋转</span>
               </div>
               <div class="flex items-center space-x-2">
-                <span class="bg-gray-700 px-3 py-2 rounded text-lg font-mono"
-                  >P</span
-                >
+                <span class="bg-gray-700 px-3 py-2 rounded text-lg font-mono">P</span>
                 <span>暂停</span>
               </div>
             </div>
@@ -178,33 +130,22 @@
 
           <!-- 控制按钮 -->
           <div class="space-y-4">
-            <button
-              v-if="!gameRunning"
-              @click="startGame"
-              class="w-full game-button bg-gradient-to-r from-green-500 to-green-600 text-white flex items-center justify-center space-x-3"
-            >
+            <button v-if="!gameRunning" @click="startGame"
+              class="w-full game-button bg-gradient-to-r from-green-500 to-green-600 text-white flex items-center justify-center space-x-3">
               <span class="text-xl">🚀</span>
               <span>开始游戏</span>
             </button>
 
-            <button
-              v-if="gameRunning"
-              @click="togglePause"
-              class="w-full game-button bg-gradient-to-r from-orange-500 to-orange-600 text-white flex items-center justify-center space-x-3"
-            >
+            <button v-if="gameRunning" @click="togglePause"
+              class="w-full game-button bg-gradient-to-r from-orange-500 to-orange-600 text-white flex items-center justify-center space-x-3">
               <span class="text-xl">{{ gamePaused ? "▶️" : "⏸️" }}</span>
               <span>{{ gamePaused ? "继续游戏" : "暂停游戏" }}</span>
             </button>
           </div>
 
           <!-- 调试面板 (仅开发环境) -->
-          <div
-            v-if="isDevelopment"
-            class="glass-card p-6 border-2 border-red-500/30"
-          >
-            <h3
-              class="text-lg font-bold text-red-300 mb-4 flex items-center space-x-2"
-            >
+          <div v-if="isDevelopment" class="glass-card p-6 border-2 border-red-500/30">
+            <h3 class="text-lg font-bold text-red-300 mb-4 flex items-center space-x-2">
               <span>🐛</span>
               <span>调试面板</span>
             </h3>
@@ -212,53 +153,37 @@
             <div class="space-y-3">
               <!-- 快速设置分数按钮 -->
               <div class="grid grid-cols-2 gap-2">
-                <button
-                  @click="setScore(100)"
-                  class="px-3 py-2 bg-yellow-600 hover:bg-yellow-700 text-white rounded text-sm"
-                >
+                <button @click="setScore(100)"
+                  class="px-3 py-2 bg-yellow-600 hover:bg-yellow-700 text-white rounded text-sm">
                   100分
                 </button>
-                <button
-                  @click="setScore(500)"
-                  class="px-3 py-2 bg-yellow-600 hover:bg-yellow-700 text-white rounded text-sm"
-                >
+                <button @click="setScore(500)"
+                  class="px-3 py-2 bg-yellow-600 hover:bg-yellow-700 text-white rounded text-sm">
                   500分
                 </button>
-                <button
-                  @click="setScore(600)"
-                  class="px-3 py-2 bg-green-600 hover:bg-green-700 text-white rounded text-sm"
-                >
+                <button @click="setScore(600)"
+                  class="px-3 py-2 bg-green-600 hover:bg-green-700 text-white rounded text-sm">
                   600分(通关)
                 </button>
-                <button
-                  @click="setScore(1000)"
-                  class="px-3 py-2 bg-green-600 hover:bg-green-700 text-white rounded text-sm"
-                >
+                <button @click="setScore(1000)"
+                  class="px-3 py-2 bg-green-600 hover:bg-green-700 text-white rounded text-sm">
                   1000分
                 </button>
               </div>
 
               <!-- 直接输入分数 -->
               <div class="flex space-x-2">
-                <input
-                  v-model.number="debugScore"
-                  type="number"
-                  placeholder="输入分数"
-                  class="flex-1 px-3 py-2 bg-gray-700 border border-gray-600 rounded text-white text-sm"
-                />
-                <button
-                  @click="setScore(debugScore)"
-                  class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded text-sm"
-                >
+                <input v-model.number="debugScore" type="number" placeholder="输入分数"
+                  class="flex-1 px-3 py-2 bg-gray-700 border border-gray-600 rounded text-white text-sm" />
+                <button @click="setScore(debugScore)"
+                  class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded text-sm">
                   设置
                 </button>
               </div>
 
               <!-- 测试通关 -->
-              <button
-                @click="testWinCondition"
-                class="w-full px-3 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded text-sm"
-              >
+              <button @click="testWinCondition"
+                class="w-full px-3 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded text-sm">
                 测试通关检测
               </button>
             </div>
@@ -309,6 +234,17 @@ const hasWon = computed(() => score.value >= winCondition);
 const BOARD_WIDTH = 10;
 const BOARD_HEIGHT = 20;
 const BLOCK_SIZE = 45; // 增大方块尺寸以适应更大的canvas
+
+// 响应式canvas尺寸
+const canvasWidth = computed(() => {
+  // 移动端使用较小的canvas
+  return window.innerWidth < 640 ? 300 : 450;
+});
+
+const canvasHeight = computed(() => {
+  // 移动端使用较小的canvas
+  return window.innerWidth < 640 ? 600 : 900;
+});
 
 // 游戏变量
 let ctx: CanvasRenderingContext2D | null = null;
@@ -870,6 +806,17 @@ const handleKeyPress = (e: KeyboardEvent) => {
   }
 };
 
+// 窗口大小变化处理
+const handleResize = () => {
+  // 强制重新渲染canvas
+  if (ctx && gameBoard.value) {
+    gameBoard.value.width = canvasWidth.value;
+    gameBoard.value.height = canvasHeight.value;
+    ctx = gameBoard.value.getContext("2d");
+    draw();
+  }
+};
+
 // 组件挂载时初始化
 onMounted(async () => {
   if (gameBoard.value) {
@@ -881,6 +828,7 @@ onMounted(async () => {
 
   board = createBoard();
   document.addEventListener("keydown", handleKeyPress);
+  window.addEventListener("resize", handleResize);
 
   // 自动初始化游戏会话
   await initializeGameSession();
@@ -892,5 +840,6 @@ onUnmounted(() => {
     clearInterval(gameLoop);
   }
   document.removeEventListener("keydown", handleKeyPress);
+  window.removeEventListener("resize", handleResize);
 });
 </script>

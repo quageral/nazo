@@ -5,7 +5,7 @@
       <div class="flex flex-col items-center gap-4">
         <!-- 游戏标题和当前关卡信息 -->
         <div class="text-center">
-          <h1 class="text-3xl font-bold text-gray-800 mb-4">Color 色块识别</h1>
+          <h1 class="text-3xl font-bold text-gray-800 mb-4">Color</h1>
           <div class="flex items-center justify-center gap-6 text-lg">
             <div class="bg-blue-100 px-4 py-2 rounded-xl">
               <span class="text-blue-700 text-lg">当前关卡:</span>
@@ -19,7 +19,7 @@
         </div>
 
         <!-- 游戏区域 -->
-        <div class="relative w-full max-w-2xl mx-auto">
+        <div class="relative w-full max-w-2xl mx-auto flex items-center justify-center">
           <!-- 色块网格 - 固定大小的容器 -->
           <div v-if="gameState === 'playing' || gameState === 'correct'"
             class="grid gap-1 p-4 bg-gray-100 rounded-md shadow-inner mx-auto" :style="gridStyle"

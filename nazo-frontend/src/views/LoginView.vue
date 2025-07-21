@@ -1,73 +1,56 @@
 <template>
-  <div
-    class="min-h-screen bg-gradient-game-dark flex items-center justify-center p-8"
-  >
+  <div class="min-h-screen bg-gradient-game-dark flex items-center justify-center p-8">
+    <!-- 蛋糕雨背景效果 -->
+    <div class="cake-rain">
+      <div v-for="cake in cakeRain" :key="cake.id" class="cake" :style="{
+        left: cake.x + '%',
+        animationDuration: cake.duration + 's',
+        animationDelay: cake.delay + 's',
+        fontSize: cake.size + 'px'
+      }">
+        {{ cake.emoji }}
+      </div>
+    </div>
+
     <div class="w-full max-w-2xl">
       <!-- 主登录卡片 -->
       <div class="game-card">
         <!-- 游戏标题区域 -->
         <div class="text-center mb-12">
           <h1
-            class="text-7xl font-black text-transparent bg-clip-text bg-gradient-game mb-6 text-shadow-lg animate-float"
-          >
+            class="text-7xl font-black text-transparent bg-clip-text bg-gradient-game mb-6 text-shadow-lg animate-float">
             NAZO
           </h1>
           <p class="text-2xl text-gray-300 font-medium tracking-wide">
-            to game or not to game?
+            一次全是特性的冒险
           </p>
-          <div
-            class="mt-6 h-1 w-32 bg-gradient-game mx-auto rounded-full"
-          ></div>
+          <div class="mt-6 h-1 w-32 bg-gradient-game mx-auto rounded-full"></div>
         </div>
 
         <!-- 登录表单区域 -->
         <form @submit.prevent="handleLogin" class="space-y-8">
           <div class="space-y-2">
-            <label
-              for="username"
-              class="block text-lg font-semibold text-gray-200 mb-3"
-            >
+            <label for="username" class="block text-lg font-semibold text-gray-200 mb-3">
               🎮 用户名
             </label>
-            <input
-              id="username"
-              v-model="loginForm.username"
-              type="text"
-              required
+            <input id="username" v-model="loginForm.username" type="text" required
               class="w-full px-6 py-4 text-lg bg-white/10 border-2 border-white/20 rounded-xl text-white placeholder-gray-400 focus:border-primary focus:ring-4 focus:ring-primary/30 focus:outline-none transition-all duration-300 backdrop-blur-sm"
-              placeholder="请输入你的名字"
-            />
+              placeholder="请输入你的名字" />
           </div>
 
           <div class="space-y-2">
-            <label
-              for="password"
-              class="block text-lg font-semibold text-gray-200 mb-3"
-            >
+            <label for="password" class="block text-lg font-semibold text-gray-200 mb-3">
               🔐 密码
             </label>
-            <input
-              id="password"
-              v-model="loginForm.password"
-              type="password"
-              required
+            <input id="password" v-model="loginForm.password" type="password" required
               class="w-full px-6 py-4 text-lg bg-white/10 border-2 border-white/20 rounded-xl text-white placeholder-gray-400 focus:border-primary focus:ring-4 focus:ring-primary/30 focus:outline-none transition-all duration-300 backdrop-blur-sm"
-              placeholder="提示：Ctrl-A"
-            />
+              placeholder="提示：Ctrl-A" />
           </div>
 
-          <button
-            type="submit"
-            :disabled="isLoading"
-            class="w-full game-button bg-gradient-game text-white font-bold disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
-          >
-            <span
-              v-if="isLoading"
-              class="flex items-center justify-center space-x-3"
-            >
-              <div
-                class="animate-spin rounded-full h-6 w-6 border-b-2 border-white"
-              ></div>
+          <button type="submit" :disabled="isLoading"
+            class="w-full game-button bg-gradient-game text-white font-bold disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none">
+            <span v-if="isLoading" class="flex items-center justify-center space-x-3">
+              <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-white"></div>
               <span>登录中...</span>
             </span>
             <span v-else class="flex items-center justify-center space-x-2">
@@ -78,10 +61,8 @@
         </form>
 
         <!-- 错误提示 -->
-        <div
-          v-if="errorMessage"
-          class="mt-6 p-4 bg-red-500/20 border-2 border-red-500/50 text-red-200 rounded-xl backdrop-blur-sm"
-        >
+        <div v-if="errorMessage"
+          class="mt-6 p-4 bg-red-500/20 border-2 border-red-500/50 text-red-200 rounded-xl backdrop-blur-sm">
           <div class="flex items-center space-x-2">
             <span class="text-xl">⚠️</span>
             <span class="font-medium">{{ errorMessage }}</span>
@@ -89,14 +70,9 @@
         </div>
 
         <!-- 测试账号信息 -->
-        <div
-          class="mt-10 p-6 bg-yellow-500/10 border-2 border-yellow-500/30 rounded-xl backdrop-blur-sm relative"
-        >
-          <h3
-            class="text-lg font-semibold mb-3 flex items-center space-x-2 absolute z-0"
-            style="color: transparent"
-          >
-            <span>💡</span>
+        <div class="mt-10 p-6 bg-yellow-500/10 border-2 border-yellow-500/30 rounded-xl backdrop-blur-sm relative">
+          <h3 class="text-lg font-semibold mb-3 flex items-center space-x-2 absolute z-0" style="color: transparent">
+
             <span class="text-xs">U1RBUlRUSEVHQU1F</span>
           </h3>
         </div>
@@ -106,7 +82,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { login } from "@/services/api";
 import { LEVEL_1_UUID } from "@/constants/levels";
@@ -120,6 +96,39 @@ const loginForm = ref({
 
 const isLoading = ref(false);
 const errorMessage = ref("");
+
+// 蛋糕雨效果数据
+const cakeRain = ref<Array<{
+  id: number;
+  x: number;
+  duration: number;
+  delay: number;
+  size: number;
+  emoji: string;
+}>>([]);
+
+// 蛋糕雨的表情符号
+const cakeEmojis = ['🍰', '🧁', '🎂'];
+
+// 生成蛋糕雨
+const generateCakeRain = () => {
+  const cakes = [];
+  for (let i = 0; i < 30; i++) {
+    cakes.push({
+      id: i,
+      x: Math.random() * 100,
+      duration: 3 + Math.random() * 4, // 3-7秒
+      delay: Math.random() * 8, // 0-8秒延迟
+      size: 20 + Math.random() * 12, // 16-28px
+      emoji: cakeEmojis[Math.floor(Math.random() * cakeEmojis.length)]
+    });
+  }
+  cakeRain.value = cakes;
+};
+
+onMounted(() => {
+  generateCakeRain();
+});
 
 const handleLogin = async () => {
   isLoading.value = true;

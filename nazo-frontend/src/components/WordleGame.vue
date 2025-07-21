@@ -1,41 +1,15 @@
 <template>
-  <div
-    class="h-full flex items-center justify-center p-4 bg-gradient-to-br from-green-50 to-emerald-100"
-  >
-    <div class="max-w-4xl w-full bg-white rounded-xl shadow-xl p-6">
-      <h1 class="text-3xl font-bold text-center mb-6 text-gray-800">
-        Wordle 猜词游戏
-      </h1>
+  <div class="h-full flex items-center justify-center p-4 bg-gradient-to-br from-green-50 to-emerald-100">
+    <div class="max-w-4xl w-full bg-white rounded-xl shadow-xl p-6 m-10">
 
-      <div class="flex flex-col items-center">
-        <!-- 游戏状态信息 -->
-        <div class="mb-6 text-center">
-          <div class="flex justify-center items-center gap-6 mb-4">
-            <div class="bg-blue-100 px-4 py-2 rounded-md">
-              <span class="text-sm text-blue-700">剩余次数:</span>
-              <span class="text-lg font-bold text-blue-900 ml-1">{{
-                remainingGuesses
-              }}</span>
-            </div>
-            <div class="bg-purple-100 px-4 py-2 rounded-md">
-              <span class="text-sm text-purple-700">当前回合:</span>
-              <span class="text-lg font-bold text-purple-900 ml-1"
-                >{{ currentGuessCount }}/6</span
-              >
-            </div>
-          </div>
-        </div>
+      <div class="flex flex-col items-center mt-10 mb-10">
 
         <!-- 游戏网格 5x6 -->
         <div class="mb-8">
           <div class="grid grid-rows-6 gap-2 p-4 bg-gray-50 rounded-md">
             <div v-for="row in 6" :key="row" class="flex gap-2">
-              <div
-                v-for="col in 5"
-                :key="`${row}-${col}`"
-                :class="getCellClasses(row - 1, col - 1)"
-                class="w-12 h-12 border-2 rounded-md flex items-center justify-center font-bold text-lg uppercase transition-all duration-300"
-              >
+              <div v-for="col in 5" :key="`${row}-${col}`" :class="getCellClasses(row - 1, col - 1)"
+                class="w-12 h-12 border-2 rounded-md flex items-center justify-center font-bold text-lg uppercase transition-all duration-300">
                 {{ getCellContent(row - 1, col - 1) }}
               </div>
             </div>
@@ -44,21 +18,12 @@
 
         <!-- 当前输入框 -->
         <div class="mb-6 w-full max-w-md">
-          <div class="flex gap-2 justify-center mb-4">
-            <input
-              v-model="currentGuess"
-              @keyup.enter="submitGuess"
-              @input="handleInput"
-              :disabled="gameState !== 'playing'"
-              placeholder="输入5个字母"
-              maxlength="5"
-              class="flex-1 px-4 py-3 border-2 border-gray-300 rounded-md text-center text-lg font-semibold uppercase focus:border-blue-500 focus:outline-none disabled:bg-gray-100"
-            />
-            <button
-              @click="submitGuess"
-              :disabled="!canSubmitGuess"
-              class="px-6 py-3 bg-green-500 hover:bg-green-600 disabled:bg-gray-400 text-white rounded-md font-semibold transition-colors"
-            >
+          <div class="flex gap-2 justify-center mb-20">
+            <input v-model="currentGuess" @keyup.enter="submitGuess" @input="handleInput"
+              :disabled="gameState !== 'playing'" placeholder="输入5个字母" maxlength="5"
+              class="flex-1 px-4 py-3 border-2 border-gray-300 rounded-md text-center text-lg font-semibold uppercase focus:border-blue-500 focus:outline-none disabled:bg-gray-100" />
+            <button @click="submitGuess" :disabled="!canSubmitGuess"
+              class="px-6 py-3 bg-green-500 hover:bg-green-600 disabled:bg-gray-400 text-white rounded-md font-semibold transition-colors">
               提交
             </button>
           </div>
@@ -68,51 +33,34 @@
         <div class="w-full max-w-2xl">
           <div class="space-y-2">
             <!-- 第一行 -->
-            <div class="flex justify-center gap-1">
-              <button
-                v-for="letter in keyboardRows[0]"
-                :key="letter"
-                @click="addLetter(letter)"
+            <div class="flex justify-center gap-1 mt-10 mb-10">
+              <button v-for="letter in keyboardRows[0]" :key="letter" @click="addLetter(letter)"
                 :class="getKeyboardKeyClasses(letter)"
-                class="w-10 h-12 rounded font-semibold text-sm transition-all duration-200 hover:scale-105"
-              >
+                class="w-10 h-12 rounded font-semibold text-sm transition-all duration-200 hover:scale-105">
                 {{ letter }}
               </button>
             </div>
             <!-- 第二行 -->
-            <div class="flex justify-center gap-1">
-              <button
-                v-for="letter in keyboardRows[1]"
-                :key="letter"
-                @click="addLetter(letter)"
+            <div class="flex justify-center gap-1 mt-10 mb-10">
+              <button v-for="letter in keyboardRows[1]" :key="letter" @click="addLetter(letter)"
                 :class="getKeyboardKeyClasses(letter)"
-                class="w-10 h-12 rounded font-semibold text-sm transition-all duration-200 hover:scale-105"
-              >
+                class="w-10 h-12 rounded font-semibold text-sm transition-all duration-200 hover:scale-105 mt-10 mb-10">
                 {{ letter }}
               </button>
             </div>
             <!-- 第三行 -->
-            <div class="flex justify-center gap-1">
-              <button
-                @click="deleteLetter"
-                class="w-16 h-12 bg-gray-300 hover:bg-gray-400 text-gray-700 rounded font-semibold text-xs transition-all duration-200 hover:scale-105"
-              >
+            <div class="flex justify-center gap-1 mt-10 mb-10">
+              <button @click="deleteLetter"
+                class="w-16 h-12 bg-gray-300 hover:bg-gray-400 text-gray-700 rounded font-semibold text-xs transition-all duration-200 hover:scale-105">
                 删除
               </button>
-              <button
-                v-for="letter in keyboardRows[2]"
-                :key="letter"
-                @click="addLetter(letter)"
+              <button v-for="letter in keyboardRows[2]" :key="letter" @click="addLetter(letter)"
                 :class="getKeyboardKeyClasses(letter)"
-                class="w-10 h-12 rounded font-semibold text-sm transition-all duration-200 hover:scale-105"
-              >
+                class="w-10 h-12 rounded font-semibold text-sm transition-all duration-200 hover:scale-105">
                 {{ letter }}
               </button>
-              <button
-                @click="submitGuess"
-                :disabled="!canSubmitGuess"
-                class="w-16 h-12 bg-blue-500 hover:bg-blue-600 disabled:bg-gray-400 text-white rounded font-semibold text-xs transition-all duration-200 hover:scale-105"
-              >
+              <button @click="submitGuess" :disabled="!canSubmitGuess"
+                class="w-16 h-12 bg-blue-500 hover:bg-blue-600 disabled:bg-gray-400 text-white rounded font-semibold text-xs transition-all duration-200 hover:scale-105">
                 回车
               </button>
             </div>
@@ -121,34 +69,22 @@
 
         <!-- 游戏状态提示 -->
         <div class="mt-6 text-center">
-          <div
-            v-if="gameState === 'won'"
-            class="text-green-600 font-bold text-xl"
-          >
+          <div v-if="gameState === 'won'" class="text-green-600 font-bold text-2xl">
             🎉 恭喜！你猜对了单词：{{ answer }}
           </div>
-          <div
-            v-else-if="gameState === 'lost'"
-            class="text-red-600 font-bold text-xl"
-          >
+          <div v-else-if="gameState === 'lost'" class="text-red-600 font-bold text-2xl">
             😢 游戏结束！正确答案是：{{ answer }}
           </div>
-          <div v-else-if="gameState === 'playing'" class="text-gray-600">
-            猜一个5字母的英文单词
-          </div>
           <!-- 提示信息 -->
-          <div v-if="messageText" class="mt-2 text-orange-600 font-medium">
+          <div v-if="messageText" class="mt-2 text-orange-600 font-semibold text-2xl">
             {{ messageText }}
           </div>
         </div>
 
         <!-- 重新开始按钮 -->
         <div class="mt-6 space-y-3">
-          <button
-            v-if="gameState !== 'playing'"
-            @click="restartGame"
-            class="px-8 py-3 bg-purple-500 hover:bg-purple-600 text-white rounded-md font-semibold transition-colors"
-          >
+          <button v-if="gameState !== 'playing'" @click="restartGame"
+            class="px-8 py-3 bg-purple-500 hover:bg-purple-600 text-white rounded-md font-semibold transition-colors">
             重新开始
           </button>
         </div>

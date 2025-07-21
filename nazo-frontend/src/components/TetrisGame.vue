@@ -1,10 +1,7 @@
 <template>
   <div
-    class="min-h-screen bg-gradient-to-br from-indigo-500 via-purple-600 to-purple-800 flex items-center justify-center p-4"
-  >
-    <div
-      class="bg-white/95 rounded-2xl p-6 shadow-2xl backdrop-blur-lg max-w-6xl w-full"
-    >
+    class="min-h-screen bg-gradient-to-br from-indigo-500 via-purple-600 to-purple-800 flex items-center justify-center p-4">
+    <div class="bg-white/95 rounded-2xl p-6 shadow-2xl backdrop-blur-lg max-w-6xl w-full">
       <h1 class="text-4xl font-bold text-center text-gray-700 mb-6 shadow-sm">
         俄罗斯方块
       </h1>
@@ -12,25 +9,17 @@
       <div class="flex flex-col lg:flex-row gap-8 items-center justify-center">
         <!-- 游戏区域 -->
         <div class="relative flex justify-center">
-          <canvas
-            ref="gameBoard"
-            width="300"
-            height="600"
-            class="border-4 border-gray-600 rounded-md bg-gray-900 shadow-inner"
-          ></canvas>
+          <canvas ref="gameBoard" width="300" height="600"
+            class="border-4 border-gray-600 rounded-md bg-gray-900 shadow-inner"></canvas>
 
           <!-- 游戏结束弹窗 -->
-          <div
-            v-if="gameOver"
-            class="absolute inset-0 flex items-center justify-center bg-white/95 rounded-md backdrop-blur-sm"
-          >
+          <div v-if="gameOver"
+            class="absolute inset-0 flex items-center justify-center bg-white/95 rounded-md backdrop-blur-sm">
             <div class="text-center p-8 bg-white rounded-xl shadow-lg">
               <h2 class="text-2xl font-bold text-red-600 mb-4">游戏结束</h2>
               <p class="text-lg text-gray-600 mb-6">最终得分: {{ score }}</p>
-              <button
-                @click="restartGame"
-                class="px-6 py-3 bg-blue-500 text-white rounded-md hover:bg-blue-600 transform hover:-translate-y-1 transition-all duration-300 font-bold uppercase tracking-wide shadow-lg hover:shadow-blue-500/40"
-              >
+              <button @click="restartGame"
+                class="px-6 py-3 bg-blue-500 text-white rounded-md hover:bg-blue-600 transform hover:-translate-y-1 transition-all duration-300 font-bold uppercase tracking-wide shadow-lg hover:shadow-blue-500/40">
                 重新开始
               </button>
             </div>
@@ -41,9 +30,7 @@
         <div class="min-w-[200px] space-y-4">
           <!-- 得分 -->
           <div class="bg-white/80 p-4 rounded-md shadow-md">
-            <h3
-              class="text-sm font-bold text-gray-600 mb-2 uppercase tracking-wide"
-            >
+            <h3 class="text-sm font-bold text-gray-600 mb-2 uppercase tracking-wide">
               得分
             </h3>
             <div class="text-2xl font-bold text-gray-800 text-center">
@@ -53,9 +40,7 @@
 
           <!-- 等级 -->
           <div class="bg-white/80 p-4 rounded-md shadow-md">
-            <h3
-              class="text-sm font-bold text-gray-600 mb-2 uppercase tracking-wide"
-            >
+            <h3 class="text-sm font-bold text-gray-600 mb-2 uppercase tracking-wide">
               等级
             </h3>
             <div class="text-2xl font-bold text-gray-800 text-center">
@@ -65,9 +50,7 @@
 
           <!-- 消除行数 -->
           <div class="bg-white/80 p-4 rounded-md shadow-md">
-            <h3
-              class="text-sm font-bold text-gray-600 mb-2 uppercase tracking-wide"
-            >
+            <h3 class="text-sm font-bold text-gray-600 mb-2 uppercase tracking-wide">
               消除行数
             </h3>
             <div class="text-2xl font-bold text-gray-800 text-center">
@@ -77,26 +60,18 @@
 
           <!-- 下一个方块 -->
           <div class="bg-white/80 p-4 rounded-md shadow-md">
-            <h3
-              class="text-sm font-bold text-gray-600 mb-2 uppercase tracking-wide text-center"
-            >
+            <h3 class="text-sm font-bold text-gray-600 mb-2 uppercase tracking-wide text-center">
               下一个
             </h3>
             <div class="flex justify-center">
-              <canvas
-                ref="nextPiece"
-                width="120"
-                height="120"
-                class="border-2 border-gray-300 rounded bg-gray-900"
-              ></canvas>
+              <canvas ref="nextPiece" width="120" height="120"
+                class="border-2 border-gray-300 rounded bg-gray-900"></canvas>
             </div>
           </div>
 
           <!-- 操作说明 -->
           <div class="bg-white/80 p-4 rounded-md shadow-md">
-            <h3
-              class="text-sm font-bold text-gray-600 mb-2 uppercase tracking-wide"
-            >
+            <h3 class="text-sm font-bold text-gray-600 mb-2 uppercase tracking-wide">
               操作说明
             </h3>
             <div class="space-y-1 text-sm text-gray-600">
@@ -108,19 +83,13 @@
           </div>
 
           <!-- 控制按钮 -->
-          <button
-            v-if="!gameRunning"
-            @click="startGame"
-            class="w-full py-3 bg-green-500 text-white rounded-md hover:bg-green-600 transform hover:-translate-y-1 transition-all duration-300 font-bold uppercase tracking-wide shadow-lg hover:shadow-green-500/40"
-          >
+          <button v-if="!gameRunning" @click="startGame"
+            class="w-full py-3 bg-green-500 text-white rounded-md hover:bg-green-600 transform hover:-translate-y-1 transition-all duration-300 font-bold uppercase tracking-wide shadow-lg hover:shadow-green-500/40">
             开始游戏
           </button>
 
-          <button
-            v-if="gameRunning"
-            @click="togglePause"
-            class="w-full py-3 bg-orange-500 text-white rounded-md hover:bg-orange-600 transform hover:-translate-y-1 transition-all duration-300 font-bold uppercase tracking-wide shadow-lg hover:shadow-orange-500/40"
-          >
+          <button v-if="gameRunning" @click="togglePause"
+            class="w-full py-3 bg-orange-500 text-white rounded-md hover:bg-orange-600 transform hover:-translate-y-1 transition-all duration-300 font-bold uppercase tracking-wide shadow-lg hover:shadow-orange-500/40">
             {{ gamePaused ? "继续" : "暂停" }}
           </button>
         </div>

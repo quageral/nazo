@@ -6,6 +6,9 @@ import java.util.*;
 import com.nazo.model.Const;
 import com.nazo.model.LevelInfo;
 
+import lombok.Data;
+import lombok.AllArgsConstructor;
+
 @RestController
 @RequestMapping("/api")
 @CrossOrigin(origins = "*")
@@ -77,32 +80,6 @@ public class GameController {
     return ResponseEntity.ok(response);
   }
 
-  @PostMapping("/level/{uuid}/complete")
-  public ResponseEntity<Map<String, Object>> completeLevel(
-      @PathVariable String uuid,
-      @RequestBody Map<String, String> answer) {
-
-    LevelInfo level = Const.levels.get(uuid);
-    if (level == null) {
-      return ResponseEntity.notFound().build();
-    }
-
-    // 简单的答案验证逻辑（实际项目中需要更复杂的验证）
-    boolean isCorrect = validateAnswer(uuid, answer.get("answer"));
-
-    Map<String, Object> response = new HashMap<>();
-    response.put("success", isCorrect);
-
-    if (isCorrect) {
-      response.put("message", "恭喜通关！");
-      response.put("nextLevel", level.getNextLevelUuid());
-    } else {
-      response.put("message", "答案错误，请重试");
-    }
-
-    return ResponseEntity.ok(response);
-  }
-
   @PostMapping("/game/start")
   public ResponseEntity<Map<String, Object>> startGame(@RequestBody Map<String, String> request) {
     String levelUuid = request.get("levelUuid");
@@ -158,7 +135,7 @@ public class GameController {
       response.put("nextLevel", getNextLevel(request.getLevelUuid()));
     } else {
       response.put("success", false);
-      response.put("message", getFailureMessage(request.getLevelUuid()));
+      response.put("message", "未达到通关条件");
     }
 
     return ResponseEntity.ok(response);
@@ -201,36 +178,19 @@ public class GameController {
           }
         }
         return gameScore >= 80; // 看图猜相关率要求得分超过80分
-      case Const.LEVEL_3_UUID:
-        // 扫雷游戏通关条件
-        Object minesweeperResultObj = request.getData().get("gameWon");
+      case Const.LEVEL_6_UUID: // Number Sequences游戏通关条件
+      case Const.LEVEL_3_UUID:// 扫雷游戏通关条件
+      case Const.LEVEL_4_UUID:// Wordle游戏通关条件
+      case Const.LEVEL_5_UUID:// Color游戏通关条件
+        Object resultObj = request.getData().get("gameWon");
         boolean gameWon = false;
-        if (minesweeperResultObj instanceof Boolean) {
-          gameWon = (Boolean) minesweeperResultObj;
-        } else if (minesweeperResultObj instanceof String) {
-          gameWon = "true".equals(minesweeperResultObj);
+        if (resultObj instanceof Boolean) {
+          gameWon = (Boolean) resultObj;
+        } else if (resultObj instanceof String) {
+          gameWon = "true".equals(resultObj);
         }
-        return gameWon; // 扫雷游戏要求成功完成游戏
-      case Const.LEVEL_4_UUID:
-        // Wordle游戏通关条件
-        Object wordleResultObj = request.getData().get("gameWon");
-        boolean wordleWon = false;
-        if (wordleResultObj instanceof Boolean) {
-          wordleWon = (Boolean) wordleResultObj;
-        } else if (wordleResultObj instanceof String) {
-          wordleWon = "true".equals(wordleResultObj);
-        }
-        return wordleWon; // Wordle游戏要求猜对单词
-      case Const.LEVEL_5_UUID:
-        // Color游戏通关条件
-        Object colorResultObj = request.getData().get("gameWon");
-        boolean colorWon = false;
-        if (colorResultObj instanceof Boolean) {
-          colorWon = (Boolean) colorResultObj;
-        } else if (colorResultObj instanceof String) {
-          colorWon = "true".equals(colorResultObj);
-        }
-        return colorWon;
+        return gameWon;
+
       default:
         return false;
     }
@@ -238,136 +198,32 @@ public class GameController {
 
   // 获取下一关
   private String getNextLevel(String currentLevelUuid) {
-    switch (currentLevelUuid) {
-      case Const.LEVEL_1_UUID:
-        return Const.LEVEL_2_UUID;
-      case Const.LEVEL_2_UUID:
-        return Const.LEVEL_3_UUID;
-      case Const.LEVEL_3_UUID:
-        return Const.LEVEL_4_UUID;
-      case Const.LEVEL_4_UUID:
-        return Const.LEVEL_5_UUID;
-      case Const.LEVEL_5_UUID:
-        return null;
-      default:
-        return null;
-    }
-  }
-
-  // 获取失败消息
-  private String getFailureMessage(String levelUuid) {
-    switch (levelUuid) {
-      case Const.LEVEL_1_UUID:
-        return "未达到通关条件：需要得分超过600分";
-      case Const.LEVEL_2_UUID:
-        return "未达到通关条件：需要得分超过80分";
-      case Const.LEVEL_3_UUID:
-        return "未达到通关条件：需要成功完成扫雷游戏";
-      case Const.LEVEL_4_UUID:
-        return "未达到通关条件：需要猜对单词";
-      case Const.LEVEL_5_UUID:
-        return "未达到通关条件：需要通关第10关";
-      default:
-        return "未达到通关条件";
-    }
-  }
-
-  private boolean validateAnswer(String levelUuid, String answer) {
-    // 简单的答案验证逻辑
-    switch (levelUuid) {
-      default:
-        return false;
-    }
+    return Const.levels.get(currentLevelUuid).getNextLevelUuid();
   }
 
   // 内部类
+  @Data
+  @AllArgsConstructor
   public static class LoginRequest {
     private String username;
     private String password;
-
-    public String getUsername() {
-      return username;
-    }
-
-    public void setUsername(String username) {
-      this.username = username;
-    }
-
-    public String getPassword() {
-      return password;
-    }
-
-    public void setPassword(String password) {
-      this.password = password;
-    }
   }
 
+  @Data
+  @AllArgsConstructor
   public static class GameSession {
     private String username;
     private String sessionId;
     private String levelUuid;
     private long startTime;
 
-    public GameSession(String username, String sessionId, String levelUuid, long startTime) {
-      this.username = username;
-      this.sessionId = sessionId;
-      this.levelUuid = levelUuid;
-      this.startTime = startTime;
-    }
-
-    public String getUsername() {
-      return username;
-    }
-
-    public String getSessionId() {
-      return sessionId;
-    }
-
-    public String getLevelUuid() {
-      return levelUuid;
-    }
-
-    public long getStartTime() {
-      return startTime;
-    }
   }
 
+  @Data
   public static class GameCompleteRequest {
     private String username;
     private String levelUuid;
     private String sessionId;
     private Map<String, Object> data;
-
-    public String getUsername() {
-      return username;
-    }
-
-    public void setUsername(String username) {
-      this.username = username;
-    }
-
-    public String getLevelUuid() {
-      return levelUuid;
-    }
-
-    public void setLevelUuid(String levelUuid) {
-      this.levelUuid = levelUuid;
-    }
-
-    public String getSessionId() {
-      return sessionId;
-    }
-
-    public void setSessionId(String sessionId) {
-      this.sessionId = sessionId;
-    }
-
-    public Map<String, Object> getData() {
-      return data;
-    }
-
-    public void setData(Map<String, Object> data) {
-      this.data = data;
-    }
   }
 }
