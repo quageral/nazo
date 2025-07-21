@@ -1,2 +1,9 @@
 com\nazo\controller\GameController.class
+com\nazo\controller\GameController$LoginRequest.class
+com\nazo\model\Const.class
+com\nazo\controller\WordleController.class
+com\nazo\controller\WordleController$WordleSession.class
+com\nazo\controller\GameController$GameCompleteRequest.class
 com\nazo\NazoApplication.class
+com\nazo\model\LevelInfo.class
+com\nazo\controller\GameController$GameSession.class

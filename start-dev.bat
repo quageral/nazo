@@ -1,0 +1,6 @@
+@echo off
+echo 启动 Nazo 解谜游戏开发环境...
+echo.
+
+echo [1/2] 启动后端服务器 (Spring Boot)...
+start "Nazo Backend" cmd /k "mvn spring-boot:run"
