@@ -6,7 +6,7 @@
 
 ### 后端
 
-- **Java 17** + **Spring Boot 3.2.0**
+- **Java 21** + **Spring Boot 3.2.0**
 - REST API 架构
 - Maven 项目管理
 - 内置 Tomcat 服务器

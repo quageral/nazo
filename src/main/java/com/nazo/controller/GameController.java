@@ -11,20 +11,31 @@ import com.nazo.model.LevelInfo;
 @CrossOrigin(origins = "*")
 public class GameController {
 
-  // 模拟用户数据（实际项目中应使用数据库）
-  private final Map<String, String> users = Map.of(
-      "gino", "U1RBUlRUSEVHQU1F",
-      "Gino", "U1RBUlRUSEVHQU1F",
-      "WJH", "U1RBUlRUSEVHQU1F",
-      "Gino Wang", "U1RBUlRUSEVHQU1F",
-      "Gino W", "U1RBUlRUSEVHQU1F",
-      "你的名字", "U1RBUlRUSEVHQU1F",
-      "gino wang", "U1RBUlRUSEVHQU1F",
-      "wangjinghong", "U1RBUlRUSEVHQU1F",
-      "Wang Jinghong", "U1RBUlRUSEVHQU1F",
-      "王景鸿", "U1RBUlRUSEVHQU1F"
+  private static final String PASSWORD = "U1RBUlRUSEVHQU1F";
 
-  );
+  // 模拟用户数据（实际项目中应使用数据库）
+  private static final Map<String, String> users = new HashMap<>();
+  static {
+    users.putAll(Map.of(
+        "gino", PASSWORD,
+        "Gino", PASSWORD,
+        "WJH", PASSWORD,
+        "wjh", PASSWORD,
+        "Gino Wang", PASSWORD,
+        "gino Wang", PASSWORD,
+        "gino wang", PASSWORD,
+        "Gino W", PASSWORD,
+        "ginowang", PASSWORD,
+        "gino wang", PASSWORD));
+    users.putAll(Map.of(
+        "gino w", PASSWORD,
+        "Gino wang", PASSWORD,
+        "wangjinghong", PASSWORD,
+        "Wang Jinghong", PASSWORD,
+        "Jinghong Wang", PASSWORD,
+        "你的名字", PASSWORD,
+        "王景鸿", PASSWORD));
+  }
 
   // 游戏会话数据（实际项目中应使用数据库或Redis）
   private final Map<String, GameSession> gameSessions = new HashMap<>();
@@ -211,6 +222,16 @@ public class GameController {
           wordleWon = "true".equals(wordleResultObj);
         }
         return wordleWon; // Wordle游戏要求猜对单词
+      case Const.LEVEL_5_UUID:
+        // Color游戏通关条件
+        Object colorResultObj = request.getData().get("gameWon");
+        boolean colorWon = false;
+        if (colorResultObj instanceof Boolean) {
+          colorWon = (Boolean) colorResultObj;
+        } else if (colorResultObj instanceof String) {
+          colorWon = "true".equals(colorResultObj);
+        }
+        return colorWon;
       default:
         return false;
     }
@@ -226,7 +247,9 @@ public class GameController {
       case Const.LEVEL_3_UUID:
         return Const.LEVEL_4_UUID;
       case Const.LEVEL_4_UUID:
-        return null; // 最后一关
+        return Const.LEVEL_5_UUID;
+      case Const.LEVEL_5_UUID:
+        return null;
       default:
         return null;
     }
@@ -243,6 +266,8 @@ public class GameController {
         return "未达到通关条件：需要成功完成扫雷游戏";
       case Const.LEVEL_4_UUID:
         return "未达到通关条件：需要猜对单词";
+      case Const.LEVEL_5_UUID:
+        return "未达到通关条件：需要通关第10关";
       default:
         return "未达到通关条件";
     }
