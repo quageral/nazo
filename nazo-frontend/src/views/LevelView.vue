@@ -133,11 +133,13 @@ import TetrisLevel from "@/components/TetrisLevel.vue";
 import CorrelationGame from "@/components/CorrelationGame.vue";
 import MinesweeperGame from "@/components/MinesweeperGame.vue";
 import WordleGame from "@/components/WordleGame.vue";
+import ColorGame from "@/components/ColorGame.vue";
 import {
   LEVEL_1_UUID,
   LEVEL_2_UUID,
   LEVEL_3_UUID,
   LEVEL_4_UUID,
+  LEVEL_5_UUID,
 } from "@/constants/levels";
 
 interface Props {
@@ -168,6 +170,8 @@ const currentLevelComponent = computed(() => {
       return MinesweeperGame;
     case LEVEL_4_UUID:
       return WordleGame;
+    case LEVEL_5_UUID:
+      return ColorGame;
     default:
       return null;
   }

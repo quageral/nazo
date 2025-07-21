@@ -14,7 +14,7 @@ public class GameController {
   private static final String PASSWORD = "U1RBUlRUSEVHQU1F";
 
   // 模拟用户数据（实际项目中应使用数据库）
-  private static final Map<String, String> users = new HashMap<>();
+  private static Map<String, String> users = new HashMap<>();
   static {
     users.putAll(Map.of(
         "gino", PASSWORD,
@@ -25,8 +25,7 @@ public class GameController {
         "gino Wang", PASSWORD,
         "gino wang", PASSWORD,
         "Gino W", PASSWORD,
-        "ginowang", PASSWORD,
-        "gino wang", PASSWORD));
+        "ginowang", PASSWORD));
     users.putAll(Map.of(
         "gino w", PASSWORD,
         "Gino wang", PASSWORD,
