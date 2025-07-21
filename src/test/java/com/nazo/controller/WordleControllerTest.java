@@ -270,8 +270,9 @@ public class WordleControllerTest {
     mockMvc.perform(post("/api/wordle/guess")
         .contentType(MediaType.APPLICATION_JSON)
         .content(objectMapper.writeValueAsString(guessRequest)))
-        .andExpect(status().isOk())
-        .andExpect(jsonPath("$.result").isString());
+        .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("$.success").value(false))
+        .andExpect(jsonPath("$.message").value("猜测的单词不在词库中"));
   }
 
   @Test
