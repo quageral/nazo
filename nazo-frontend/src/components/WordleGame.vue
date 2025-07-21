@@ -11,13 +11,13 @@
         <!-- 游戏状态信息 -->
         <div class="mb-6 text-center">
           <div class="flex justify-center items-center gap-6 mb-4">
-            <div class="bg-blue-100 px-4 py-2 rounded-lg">
+            <div class="bg-blue-100 px-4 py-2 rounded-md">
               <span class="text-sm text-blue-700">剩余次数:</span>
               <span class="text-lg font-bold text-blue-900 ml-1">{{
                 remainingGuesses
               }}</span>
             </div>
-            <div class="bg-purple-100 px-4 py-2 rounded-lg">
+            <div class="bg-purple-100 px-4 py-2 rounded-md">
               <span class="text-sm text-purple-700">当前回合:</span>
               <span class="text-lg font-bold text-purple-900 ml-1"
                 >{{ currentGuessCount }}/6</span
@@ -28,7 +28,7 @@
 
         <!-- 游戏网格 5x6 -->
         <div class="mb-8">
-          <div class="grid grid-rows-6 gap-2 p-4 bg-gray-50 rounded-lg">
+          <div class="grid grid-rows-6 gap-2 p-4 bg-gray-50 rounded-md">
             <div v-for="row in 6" :key="row" class="flex gap-2">
               <div
                 v-for="col in 5"
@@ -52,12 +52,12 @@
               :disabled="gameState !== 'playing'"
               placeholder="输入5个字母"
               maxlength="5"
-              class="flex-1 px-4 py-3 border-2 border-gray-300 rounded-lg text-center text-lg font-semibold uppercase focus:border-blue-500 focus:outline-none disabled:bg-gray-100"
+              class="flex-1 px-4 py-3 border-2 border-gray-300 rounded-md text-center text-lg font-semibold uppercase focus:border-blue-500 focus:outline-none disabled:bg-gray-100"
             />
             <button
               @click="submitGuess"
               :disabled="!canSubmitGuess"
-              class="px-6 py-3 bg-green-500 hover:bg-green-600 disabled:bg-gray-400 text-white rounded-lg font-semibold transition-colors"
+              class="px-6 py-3 bg-green-500 hover:bg-green-600 disabled:bg-gray-400 text-white rounded-md font-semibold transition-colors"
             >
               提交
             </button>
@@ -147,7 +147,7 @@
           <button
             v-if="gameState !== 'playing'"
             @click="restartGame"
-            class="px-8 py-3 bg-purple-500 hover:bg-purple-600 text-white rounded-lg font-semibold transition-colors"
+            class="px-8 py-3 bg-purple-500 hover:bg-purple-600 text-white rounded-md font-semibold transition-colors"
           >
             重新开始
           </button>

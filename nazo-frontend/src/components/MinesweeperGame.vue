@@ -10,7 +10,7 @@
       <div class="flex flex-col items-center">
         <!-- 游戏区域 -->
         <div class="flex-1 flex flex-col items-center">
-          <div class="board-width bg-gray-300 p-4 rounded-lg shadow-lg">
+          <div class="board-width bg-gray-300 p-4 rounded-md shadow-lg">
             <!-- 游戏状态栏 -->
             <div class="flex justify-between items-center mb-4 px-2">
               <!-- 剩余地雷计数器 -->
@@ -70,7 +70,7 @@
         </div>
 
         <!-- 游戏信息 -->
-        <div class="w-full max-w-4xl bg-gray-50 rounded-lg p-5 shadow-md mt-4">
+        <div class="w-full max-w-4xl bg-gray-50 rounded-md p-5 shadow-md mt-4">
           <div class="grid grid-cols-2 md:grid-cols-5 gap-4 text-center">
             <div class="flex flex-col">
               <span class="text-gray-600 text-sm">难度</span>
@@ -113,7 +113,7 @@
           <!-- 调试面板 (仅开发环境) -->
           <div
             v-if="isDevelopment"
-            class="mt-6 p-4 bg-yellow-50 rounded-lg border border-yellow-200"
+            class="mt-6 p-4 bg-yellow-50 rounded-md border border-yellow-200"
           >
             <h3 class="text-lg font-semibold text-yellow-800 mb-3">
               🔧 调试面板

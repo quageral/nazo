@@ -1,8 +1,14 @@
 package com.nazo.model;
 
+/**
+ * 关卡信息
+ * 
+ */
 public class LevelInfo {
   private final String id;
   private final String name;
+  // 在游戏关中，description是描述和彩蛋提示
+  // 在谜题关中，description是谜题描述
   private final String description;
   private final String nextLevelUuid;
 

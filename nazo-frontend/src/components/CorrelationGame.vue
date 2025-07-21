@@ -9,7 +9,7 @@
         <!-- 散点图区域 -->
         <div class="relative">
           <div
-            class="bg-white rounded-lg p-4 shadow-lg border-4 border-gray-300"
+            class="bg-white rounded-md p-4 shadow-lg border-4 border-gray-300"
           >
             <canvas
               ref="scatterPlot"
@@ -25,13 +25,13 @@
           <!-- 资源显示区 -->
           <div class="flex gap-4 mb-6">
             <div
-              class="bg-white/80 p-3 rounded-lg shadow-md flex items-center space-x-2"
+              class="bg-white/80 p-3 rounded-md shadow-md flex items-center space-x-2"
             >
               <span class="text-2xl">❤️</span>
               <span class="text-xl font-bold text-red-600">{{ lives }}</span>
             </div>
             <div
-              class="bg-white/80 p-3 rounded-lg shadow-md flex items-center space-x-2"
+              class="bg-white/80 p-3 rounded-md shadow-md flex items-center space-x-2"
             >
               <span class="text-2xl">💰</span>
               <span class="text-xl font-bold text-yellow-600">{{ coins }}</span>
@@ -39,7 +39,7 @@
           </div>
 
           <!-- 连击和平均误差 -->
-          <div class="bg-white/80 p-4 rounded-lg shadow-md">
+          <div class="bg-white/80 p-4 rounded-md shadow-md">
             <h3
               class="text-sm font-bold text-gray-600 mb-2 uppercase tracking-wide"
             >
@@ -50,7 +50,7 @@
             </div>
           </div>
 
-          <div class="bg-white/80 p-4 rounded-lg shadow-md">
+          <div class="bg-white/80 p-4 rounded-md shadow-md">
             <h3
               class="text-sm font-bold text-gray-600 mb-2 uppercase tracking-wide"
             >
@@ -61,7 +61,7 @@
             </div>
           </div>
 
-          <div class="bg-white/80 p-4 rounded-lg shadow-md">
+          <div class="bg-white/80 p-4 rounded-md shadow-md">
             <h3
               class="text-sm font-bold text-gray-600 mb-2 uppercase tracking-wide"
             >
@@ -73,7 +73,7 @@
           </div>
 
           <!-- 游戏状态区域 -->
-          <div class="bg-white/80 p-4 rounded-lg shadow-md min-h-[200px]">
+          <div class="bg-white/80 p-4 rounded-md shadow-md min-h-[200px]">
             <!-- 等待输入状态 -->
             <div v-if="gameState === 'waiting'" class="space-y-4">
               <h3 class="text-lg font-bold text-gray-700 text-center">
@@ -96,7 +96,7 @@
                 <button
                   @click="submitGuess"
                   :disabled="!isValidGuess"
-                  class="w-full py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:bg-gray-400 disabled:cursor-not-allowed transform hover:-translate-y-1 transition-all duration-300 font-bold uppercase tracking-wide shadow-lg"
+                  class="w-full py-3 bg-blue-500 text-white rounded-md hover:bg-blue-600 disabled:bg-gray-400 disabled:cursor-not-allowed transform hover:-translate-y-1 transition-all duration-300 font-bold uppercase tracking-wide shadow-lg"
                 >
                   SUBMIT GUESS
                 </button>
@@ -123,7 +123,7 @@
               </div>
               <button
                 @click="nextRound"
-                class="w-full py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 transform hover:-translate-y-1 transition-all duration-300 font-bold uppercase tracking-wide shadow-lg"
+                class="w-full py-3 bg-green-500 text-white rounded-md hover:bg-green-600 transform hover:-translate-y-1 transition-all duration-300 font-bold uppercase tracking-wide shadow-lg"
               >
                 NEXT
               </button>
@@ -148,7 +148,7 @@
               </div>
               <button
                 @click="nextRound"
-                class="w-full py-3 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transform hover:-translate-y-1 transition-all duration-300 font-bold uppercase tracking-wide shadow-lg"
+                class="w-full py-3 bg-orange-500 text-white rounded-md hover:bg-orange-600 transform hover:-translate-y-1 transition-all duration-300 font-bold uppercase tracking-wide shadow-lg"
               >
                 NEXT
               </button>
@@ -172,7 +172,7 @@
               </div>
               <button
                 @click="playAgain"
-                class="w-full py-3 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transform hover:-translate-y-1 transition-all duration-300 font-bold uppercase tracking-wide shadow-lg"
+                class="w-full py-3 bg-purple-500 text-white rounded-md hover:bg-purple-600 transform hover:-translate-y-1 transition-all duration-300 font-bold uppercase tracking-wide shadow-lg"
               >
                 PLAY AGAIN
               </button>
@@ -182,7 +182,7 @@
           <!-- 调试面板 (仅开发环境) -->
           <div
             v-if="isDevelopment"
-            class="bg-white/80 p-4 rounded-lg shadow-md border-2 border-red-500/30"
+            class="bg-white/80 p-4 rounded-md shadow-md border-2 border-red-500/30"
           >
             <h3
               class="text-lg font-bold text-red-600 mb-4 flex items-center space-x-2"
@@ -291,7 +291,7 @@
           <p class="text-gray-600 mb-6">{{ errorMessage }}</p>
           <button
             @click="closeErrorModal"
-            class="px-6 py-3 bg-red-500 text-white rounded-lg hover:bg-red-600 transform hover:-translate-y-1 transition-all duration-300 font-bold uppercase tracking-wide shadow-lg"
+            class="px-6 py-3 bg-red-500 text-white rounded-md hover:bg-red-600 transform hover:-translate-y-1 transition-all duration-300 font-bold uppercase tracking-wide shadow-lg"
           >
             确定
           </button>

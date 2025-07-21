@@ -25,7 +25,7 @@
           <!-- 用户名显示 -->
           <div
             v-if="currentUser"
-            class="flex items-center space-x-2 bg-white/10 px-4 py-2 rounded-lg backdrop-blur-sm"
+            class="flex items-center space-x-2 bg-white/10 px-4 py-2 rounded-md backdrop-blur-sm"
           >
             <span class="text-lg">👤</span>
             <span class="text-white font-medium">{{ currentUser }}</span>
@@ -78,7 +78,7 @@
         <div class="mt-6 flex justify-end">
           <button
             @click="showHint = false"
-            class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg font-semibold"
+            class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-md font-semibold"
           >
             知道了
           </button>
@@ -101,7 +101,7 @@
         <div class="space-y-3">
           <button
             @click="goToNextLevel"
-            class="w-full bg-green-500 hover:bg-green-600 text-white py-3 rounded-lg font-semibold"
+            class="w-full bg-green-500 hover:bg-green-600 text-white py-3 rounded-md font-semibold"
           >
             进入下一关
           </button>
@@ -114,7 +114,7 @@
       v-if="isLoading"
       class="fixed inset-0 bg-black/50 flex items-center justify-center z-40"
     >
-      <div class="bg-white rounded-lg p-6 text-center">
+      <div class="bg-white rounded-md p-6 text-center">
         <div
           class="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto mb-4"
         ></div>

@@ -116,7 +116,7 @@
         <div class="flex flex-col md:flex-row gap-6">
             <!-- 游戏区域 -->
             <div class="flex-1 flex flex-col items-center">
-                <div class="board-width bg-board p-4 rounded-lg shadow-lg">
+                <div class="board-width bg-board p-4 rounded-md shadow-lg">
                     <!-- 游戏状态栏 -->
                     <div class="flex justify-between items-center mb-4 px-2">
                         <!-- 剩余地雷计数器 -->
@@ -156,7 +156,7 @@
             </div>
             
             <!-- 游戏信息和设置 -->
-            <div class="w-full md:w-80 bg-gray-50 rounded-lg p-5 shadow-md">
+            <div class="w-full md:w-80 bg-gray-50 rounded-md p-5 shadow-md">
                 <h2 class="text-lg font-semibold text-gray-800 mb-4">游戏信息</h2>
                 
                 <div class="space-y-4">
@@ -234,7 +234,7 @@
         </div>
         
         <!-- 游戏规则说明 -->
-        <div class="mt-8 bg-gray-50 rounded-lg p-5 shadow-md">
+        <div class="mt-8 bg-gray-50 rounded-md p-5 shadow-md">
             <h2 class="text-lg font-semibold text-gray-800 mb-3">游戏规则</h2>
             <ul class="list-disc pl-5 text-gray-600 space-y-2 text-sm">
                 <li>游戏目标是打开所有不含地雷的格子，同时避免踩到地雷</li>

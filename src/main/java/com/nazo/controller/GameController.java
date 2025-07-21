@@ -139,12 +139,12 @@ public class GameController {
     }
 
     // 验证游戏时间（防止作弊）
-    long playTime = System.currentTimeMillis() - session.getStartTime();
-    if (playTime < 30000) { // 至少需要30秒
-      response.put("success", false);
-      response.put("message", "游戏时间过短，请认真完成游戏");
-      return ResponseEntity.badRequest().body(response);
-    }
+    // long playTime = System.currentTimeMillis() - session.getStartTime();
+    // if (playTime < 30000) { // 至少需要30秒
+    // response.put("success", false);
+    // response.put("message", "游戏时间过短，请认真完成游戏");
+    // return ResponseEntity.badRequest().body(response);
+    // }
 
     // 根据不同关卡验证通关条件
     boolean passCondition = validateGameCompletion(request.getLevelUuid(), request);

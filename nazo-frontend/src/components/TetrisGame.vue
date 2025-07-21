@@ -16,20 +16,20 @@
             ref="gameBoard"
             width="300"
             height="600"
-            class="border-4 border-gray-600 rounded-lg bg-gray-900 shadow-inner"
+            class="border-4 border-gray-600 rounded-md bg-gray-900 shadow-inner"
           ></canvas>
 
           <!-- 游戏结束弹窗 -->
           <div
             v-if="gameOver"
-            class="absolute inset-0 flex items-center justify-center bg-white/95 rounded-lg backdrop-blur-sm"
+            class="absolute inset-0 flex items-center justify-center bg-white/95 rounded-md backdrop-blur-sm"
           >
             <div class="text-center p-8 bg-white rounded-xl shadow-lg">
               <h2 class="text-2xl font-bold text-red-600 mb-4">游戏结束</h2>
               <p class="text-lg text-gray-600 mb-6">最终得分: {{ score }}</p>
               <button
                 @click="restartGame"
-                class="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transform hover:-translate-y-1 transition-all duration-300 font-bold uppercase tracking-wide shadow-lg hover:shadow-blue-500/40"
+                class="px-6 py-3 bg-blue-500 text-white rounded-md hover:bg-blue-600 transform hover:-translate-y-1 transition-all duration-300 font-bold uppercase tracking-wide shadow-lg hover:shadow-blue-500/40"
               >
                 重新开始
               </button>
@@ -40,7 +40,7 @@
         <!-- 信息面板 -->
         <div class="min-w-[200px] space-y-4">
           <!-- 得分 -->
-          <div class="bg-white/80 p-4 rounded-lg shadow-md">
+          <div class="bg-white/80 p-4 rounded-md shadow-md">
             <h3
               class="text-sm font-bold text-gray-600 mb-2 uppercase tracking-wide"
             >
@@ -52,7 +52,7 @@
           </div>
 
           <!-- 等级 -->
-          <div class="bg-white/80 p-4 rounded-lg shadow-md">
+          <div class="bg-white/80 p-4 rounded-md shadow-md">
             <h3
               class="text-sm font-bold text-gray-600 mb-2 uppercase tracking-wide"
             >
@@ -64,7 +64,7 @@
           </div>
 
           <!-- 消除行数 -->
-          <div class="bg-white/80 p-4 rounded-lg shadow-md">
+          <div class="bg-white/80 p-4 rounded-md shadow-md">
             <h3
               class="text-sm font-bold text-gray-600 mb-2 uppercase tracking-wide"
             >
@@ -76,7 +76,7 @@
           </div>
 
           <!-- 下一个方块 -->
-          <div class="bg-white/80 p-4 rounded-lg shadow-md">
+          <div class="bg-white/80 p-4 rounded-md shadow-md">
             <h3
               class="text-sm font-bold text-gray-600 mb-2 uppercase tracking-wide text-center"
             >
@@ -93,7 +93,7 @@
           </div>
 
           <!-- 操作说明 -->
-          <div class="bg-white/80 p-4 rounded-lg shadow-md">
+          <div class="bg-white/80 p-4 rounded-md shadow-md">
             <h3
               class="text-sm font-bold text-gray-600 mb-2 uppercase tracking-wide"
             >
@@ -111,7 +111,7 @@
           <button
             v-if="!gameRunning"
             @click="startGame"
-            class="w-full py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 transform hover:-translate-y-1 transition-all duration-300 font-bold uppercase tracking-wide shadow-lg hover:shadow-green-500/40"
+            class="w-full py-3 bg-green-500 text-white rounded-md hover:bg-green-600 transform hover:-translate-y-1 transition-all duration-300 font-bold uppercase tracking-wide shadow-lg hover:shadow-green-500/40"
           >
             开始游戏
           </button>
@@ -119,7 +119,7 @@
           <button
             v-if="gameRunning"
             @click="togglePause"
-            class="w-full py-3 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transform hover:-translate-y-1 transition-all duration-300 font-bold uppercase tracking-wide shadow-lg hover:shadow-orange-500/40"
+            class="w-full py-3 bg-orange-500 text-white rounded-md hover:bg-orange-600 transform hover:-translate-y-1 transition-all duration-300 font-bold uppercase tracking-wide shadow-lg hover:shadow-orange-500/40"
           >
             {{ gamePaused ? "继续" : "暂停" }}
           </button>
