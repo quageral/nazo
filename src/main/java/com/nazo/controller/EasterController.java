@@ -20,19 +20,20 @@ public class EasterController {
   private static final Map<String, List<CollectedEasterEgg>> userCollectedEggs = new HashMap<>();
 
   static {
-    easterEggs.put("color-easter-egg", new EasterEgg("2001", "这一关是2001年，因为0-1岁是婴儿的视觉发育期。（强行解释）"));
-    easterEggs.put("wordle-easter-egg", new EasterEgg("2020", "这一关是2020年？记得是纽约时报上的游戏，在扫雷之前，貌似这是摸鱼首选。笑死"));
+    easterEggs.put("color-easter-egg", new EasterEgg(2001, "color", "这一关是2001年，因为0-1岁是婴儿的视觉发育期。（强行解释）"));
+    easterEggs.put("wordle-easter-egg", new EasterEgg(2020, "wordle", "这一关是2020年？记得是纽约时报上的游戏，在扫雷之前，貌似这是摸鱼首选。笑死"));
     easterEggs.put("minesweeper-easter-egg",
-        new EasterEgg("2021", "这一关是2021年？大学期间摸鱼总是玩扫雷，无可置疑的摸鱼首选。神中神！（虽然我现在还没有通关过一次高级。。。）"));
-    easterEggs.put("tetris-easter-egg", new EasterEgg("2004", "这一关是2004年。3岁就开始玩俄罗斯方块？？？（只是因为刚好这是俄罗斯方块20周年。。。）"));
+        new EasterEgg(2021, "minesweeper", "这一关是2021年？大学期间摸鱼总是玩扫雷，无可置疑的摸鱼首选。神中神！（虽然我现在还没有通关过一次高级。。。）"));
+    easterEggs.put("tetris-easter-egg",
+        new EasterEgg(2004, "tetris", "这一关是2004年。3岁就开始玩俄罗斯方块？？？（只是因为刚好这是俄罗斯方块20周年。。。）"));
     easterEggs.put("number-sequences-easter-egg",
-        new EasterEgg("2007", "这一关是2007年。上小学了，要好好学数学。这样以后在高中，才可以和袁老师一起waaan数学"));
-    easterEggs.put("correlation-easter-egg", new EasterEgg("2019", "这一关是2019年。学经济的同学，需要培养较高的数据敏感性（???）"));
+        new EasterEgg(2007, "number-sequences", "这一关是2007年。上小学了，要好好学数学。这样以后在高中，才可以和袁老师一起waaan数学"));
+    easterEggs.put("correlation-easter-egg", new EasterEgg(2019, "correlation", "这一关是2019年。学经济的同学，需要培养较高的数据敏感性（???）"));
 
-    easterEggs.put("friends-easter-egg", new EasterEgg("2023", "这一关是2023年。十季到现在我还是只看了七季。。。"));
-    easterEggs.put("minecraft-easter-egg", new EasterEgg("2014", "这一关是2014年。梦回MineCraft时间！"));
-    easterEggs.put("cat-easter-egg", new EasterEgg("9999", "其实这里没有彩蛋，但是可以看看猫咪的图片，毕竟猫咪是人类的好朋友。"));
-    easterEggs.put("geography-easter-egg", new EasterEgg("2017", "这一关是2017年。文理分班！这不得拿满分？如果现在新高考，我估计会选地理"));
+    easterEggs.put("friends-easter-egg", new EasterEgg(2023, "friends", "这一关是2023年。十季到现在我还是只看了七季。。。"));
+    easterEggs.put("minecraft-easter-egg", new EasterEgg(2014, "minecraft", "这一关是2014年。梦回MineCraft时间！"));
+    easterEggs.put("cat-easter-egg", new EasterEgg(9999, "cat", "其实这里没有彩蛋，但是可以看看猫咪的图片，毕竟猫咪是人类的好朋友。"));
+    easterEggs.put("geography-easter-egg", new EasterEgg(2017, "geography", "这一关是2017年。文理分班！这不得拿满分？如果现在新高考，我估计会选地理"));
   }
 
   // 辅助函数：从cookie或请求头获取用户名
@@ -67,20 +68,34 @@ public class EasterController {
       EasterEgg easterEgg = easterEggs.get(easterEggId);
       String username = getUsernameFromRequest(request);
 
-      // 创建收集记录
-      CollectedEasterEgg collectedEgg = new CollectedEasterEgg(
-          easterEggId,
-          easterEgg.getTime(),
-          easterEgg.getMessage(),
-          System.currentTimeMillis());
+      // 获取用户的收集列表
+      List<CollectedEasterEgg> userEggs = userCollectedEggs.computeIfAbsent(username, k -> new ArrayList<>());
 
-      // 保存到用户的收集列表中
-      userCollectedEggs.computeIfAbsent(username, k -> new ArrayList<>()).add(collectedEgg);
+      // 检查彩蛋是否已经被收集过
+      boolean alreadyCollected = userEggs.stream()
+          .anyMatch(egg -> easterEggId.equals(egg.getEasterEggId()));
 
-      response.put("success", true);
-      response.put("time", easterEgg.getTime());
-      response.put("message", easterEgg.getMessage());
-      response.put("collectedAt", collectedEgg.getCollectedAt());
+      if (!alreadyCollected) {
+        // 创建收集记录
+        CollectedEasterEgg collectedEgg = new CollectedEasterEgg(
+            easterEggId,
+            easterEgg.getTime(),
+            easterEgg.getLevelName(),
+            easterEgg.getMessage(),
+            System.currentTimeMillis());
+
+        // 保存到用户的收集列表中
+        userEggs.add(collectedEgg);
+
+        response.put("success", true);
+        response.put("time", easterEgg.getTime());
+        response.put("message", easterEgg.getMessage());
+        response.put("levelName", easterEgg.getLevelName());
+        response.put("collectedAt", System.currentTimeMillis());
+      } else {
+        response.put("success", false);
+        response.put("message", "彩蛋已收集过");
+      }
     } else {
       response.put("success", false);
       response.put("message", "这里什么也没有");
@@ -98,7 +113,7 @@ public class EasterController {
     System.out.println("用户 " + username + " 已收集彩蛋数量: " + collected.size());
 
     // 按时间排序（最新的在前）
-    collected.sort((a, b) -> Long.compare(b.getCollectedAt(), a.getCollectedAt()));
+    collected.sort((a, b) -> Long.compare(b.getTime(), a.getTime()));
 
     Map<String, Object> response = new HashMap<>();
     response.put("success", true);
@@ -110,7 +125,8 @@ public class EasterController {
   @Data
   @AllArgsConstructor
   private static class EasterEgg {
-    private String time;
+    private long time;
+    private String levelName;
     private String message;
   }
 
@@ -118,7 +134,8 @@ public class EasterController {
   @AllArgsConstructor
   private static class CollectedEasterEgg {
     private String easterEggId;
-    private String time;
+    private long time;
+    private String levelName;
     private String message;
     private long collectedAt;
   }

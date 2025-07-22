@@ -120,9 +120,14 @@
                   <span
                     class="inline-block w-3 h-3 bg-green-500 rounded-full mr-2"
                   ></span>
-                  <span class="text-blue-400 font-medium">{{
-                    egg.easterEggId
-                  }}</span>
+                  <div class="flex flex-col">
+                    <span class="text-blue-400 font-medium">{{
+                      egg.easterEggId
+                    }}</span>
+                    <span class="text-purple-400 text-sm"
+                      >关卡: {{ egg.levelName }}</span
+                    >
+                  </div>
                 </div>
                 <div class="text-right">
                   <span class="text-yellow-400 font-semibold">{{
@@ -183,6 +188,7 @@ import { getEasterEgg } from "@/services/api";
 interface CollectedEasterEgg {
   easterEggId: string;
   time: string;
+  levelName: string;
   message: string;
   collectedAt: number;
 }
@@ -240,6 +246,7 @@ const unlockEasterEgg = async () => {
       const newEgg: CollectedEasterEgg = {
         easterEggId: inputId.value.trim(),
         time: response.time || "",
+        levelName: response.levelName || "",
         message: response.message || "",
         collectedAt: response.collectedAt || Date.now(),
       };

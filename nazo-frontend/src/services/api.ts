@@ -48,6 +48,7 @@ export interface EasterEggResponse {
   success: boolean;
   message: string;
   time?: string;
+  levelName?: string;
   collectedAt?: number;
 }
 
@@ -119,12 +120,15 @@ export const apiService = {
   // 获取彩蛋内容
   async getEasterEgg(easterEggId: string): Promise<EasterEggResponse> {
     try {
-      const response = await fetch(`${API_BASE_URL}/easter/${easterEggId}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await fetch(
+        `${API_BASE_URL}/easter/${easterEggId}?username=${getUsernameFromCookie()}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       return await response.json();
     } catch (error) {
