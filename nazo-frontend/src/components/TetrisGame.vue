@@ -78,7 +78,8 @@
               <p>← → 移动</p>
               <p>↓ 快速下降</p>
               <p>空格 旋转</p>
-              <p>P 暂停</p>
+              <p>P <span @click="handlePauseTextClick"
+                  class="cursor-pointer hover:text-gray-800 transition-colors">暂停</span></p>
             </div>
           </div>
 
@@ -88,9 +89,27 @@
             开始游戏
           </button>
 
-          <button v-if="gameRunning" @click="togglePause"
+          <button v-if="gameRunning" @click="handlePauseClick"
             class="w-full py-3 bg-orange-500 text-white rounded-md hover:bg-orange-600 transform hover:-translate-y-1 transition-all duration-300 font-bold uppercase tracking-wide shadow-lg hover:shadow-orange-500/40">
             {{ gamePaused ? "继续" : "暂停" }}
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 彩蛋弹窗 -->
+    <div v-if="showEasterEgg" class="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50"
+      @click.self="showEasterEgg = false">
+      <div class="bg-white rounded-2xl p-6 max-w-md w-full shadow-2xl mx-4">
+        <div class="text-center">
+          <div class="text-6xl mb-4">🎉</div>
+          <h3 class="text-2xl font-bold text-gray-800 mb-4">恭喜发现彩蛋！</h3>
+          <p class="text-gray-600 leading-relaxed mb-6">
+            {{ easterEggMessage }}
+          </p>
+          <button @click="showEasterEgg = false"
+            class="bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-200 transform hover:scale-105">
+            太棒了！
           </button>
         </div>
       </div>
@@ -100,6 +119,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from "vue";
+import { TETRIS_EASTER_EGG_UUID } from "@/constants/levels";
 
 // 模板引用
 const gameBoard = ref<HTMLCanvasElement | null>(null);
@@ -112,6 +132,11 @@ const lines = ref(0);
 const gameRunning = ref(false);
 const gamePaused = ref(false);
 const gameOver = ref(false);
+
+// 彩蛋相关状态
+const pauseTextClickCount = ref(0);
+const showEasterEgg = ref(false);
+const easterEggMessage = ref("");
 
 // 游戏配置
 const BOARD_WIDTH = 10;
@@ -547,6 +572,14 @@ const drawBlockAt = (
 
 // 键盘事件处理
 const handleKeyPress = (e: KeyboardEvent) => {
+  // P键暂停/继续功能应该总是可用
+  if (e.code === "KeyP") {
+    e.preventDefault();
+    handlePauseClick();
+    return;
+  }
+
+  // 其他键盘操作只在游戏运行且未暂停时有效
   if (!gameRunning.value || gamePaused.value) return;
 
   switch (e.code) {
@@ -566,10 +599,26 @@ const handleKeyPress = (e: KeyboardEvent) => {
       e.preventDefault();
       rotatePiece();
       break;
-    case "KeyP":
-      e.preventDefault();
-      togglePause();
-      break;
+  }
+};
+
+// 暂停按钮点击功能（不再包含彩蛋逻辑）
+const handlePauseClick = () => {
+  // 只有在游戏运行时才允许暂停/继续操作
+  if (!gameRunning.value) return;
+  togglePause(); // 执行暂停/继续功能
+};
+
+// 彩蛋功能：点击操作说明中的"暂停"文字
+const handlePauseTextClick = () => {
+  pauseTextClickCount.value++;
+  console.log('暂停文字点击次数:', pauseTextClickCount.value);
+
+  if (pauseTextClickCount.value === 3) {
+    easterEggMessage.value = TETRIS_EASTER_EGG_UUID;
+    console.log(TETRIS_EASTER_EGG_UUID);
+    showEasterEgg.value = true;
+    pauseTextClickCount.value = 0; // 重置计数
   }
 };
 

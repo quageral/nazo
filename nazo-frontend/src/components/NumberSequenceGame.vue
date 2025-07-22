@@ -69,11 +69,30 @@
             </div>
         </div>
     </div>
+
+    <!-- 彩蛋弹窗 -->
+    <div v-if="showEasterEgg" class="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50"
+        @click.self="showEasterEgg = false">
+        <div class="bg-white rounded-2xl p-6 max-w-md w-full shadow-2xl mx-4">
+            <div class="text-center">
+                <div class="text-6xl mb-4">🎉</div>
+                <h3 class="text-2xl font-bold text-gray-800 mb-4">恭喜发现彩蛋！</h3>
+                <p class="text-gray-600 leading-relaxed mb-6">
+                    {{ easterEggMessage }}
+                </p>
+                <button @click="showEasterEgg = false"
+                    class="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-200 transform hover:scale-105">
+                    太棒了！
+                </button>
+            </div>
+        </div>
+    </div>
 </template>
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from "vue";
-import { startGame, completeGame } from "@/services/api";
+import { startGame, completeGame, getEasterEgg } from "@/services/api";
+import { NUMBER_SEQUENCES_EASTER_EGG_UUID } from "@/constants/levels";
 
 interface Props {
     levelUuid: string;
@@ -93,6 +112,10 @@ const answered = ref(false);
 const gameCompleted = ref(false);
 const sessionId = ref("");
 const isSubmitting = ref(false);
+
+// 彩蛋相关状态
+const showEasterEgg = ref(false);
+const easterEggMessage = ref("");
 
 // Get username
 const username = ref(localStorage.getItem("nazo_user") || "");
@@ -313,6 +336,16 @@ const getOptionClasses = (optionIndex: number) => {
 };
 
 const handleGameComplete = async () => {
+    // 检查彩蛋条件：0分
+    const minPossibleScore = 0;
+
+    if (totalScore.value === minPossibleScore) {
+        // 触发彩蛋
+        easterEggMessage.value = NUMBER_SEQUENCES_EASTER_EGG_UUID;
+        console.log(NUMBER_SEQUENCES_EASTER_EGG_UUID);
+        showEasterEgg.value = true;
+    }
+
     if (!props.levelUuid || totalScore.value < 80) {
         return;
     }

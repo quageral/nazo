@@ -90,6 +90,24 @@
         </div>
       </div>
     </div>
+
+    <!-- 彩蛋弹窗 -->
+    <div v-if="showEasterEgg" class="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50"
+      @click.self="showEasterEgg = false">
+      <div class="bg-white rounded-2xl p-6 max-w-md w-full shadow-2xl mx-4">
+        <div class="text-center">
+          <div class="text-6xl mb-4">🎉</div>
+          <h3 class="text-2xl font-bold text-gray-800 mb-4">恭喜发现彩蛋！</h3>
+          <p class="text-gray-600 leading-relaxed mb-6">
+            {{ easterEggMessage }}
+          </p>
+          <button @click="showEasterEgg = false"
+            class="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-200 transform hover:scale-105">
+            太棒了！
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -100,7 +118,9 @@ import {
   guessWordle,
   startGame,
   completeGame,
+  getEasterEgg,
 } from "@/services/api";
+import { WORDLE_EASTER_EGG_UUID } from "@/constants/levels";
 
 interface Props {
   levelUuid: string;
@@ -124,6 +144,10 @@ const currentGuessCount = ref(0);
 const answer = ref("");
 const isSubmitting = ref(false);
 const messageText = ref(""); // 用于显示提示信息
+
+// 彩蛋相关状态
+const showEasterEgg = ref(false);
+const easterEggMessage = ref("");
 
 // 获取用户信息
 const username = ref(localStorage.getItem("nazo_user") || "");
@@ -224,6 +248,12 @@ const deleteLetter = () => {
 // 提交猜测
 const submitGuess = async () => {
   if (!canSubmitGuess.value) return;
+
+  // 检查彩蛋触发词
+  if (currentGuess.value.toLowerCase() === "ginow") {
+    await triggerEasterEgg();
+    return;
+  }
 
   isSubmitting.value = true;
   messageText.value = ""; // 清空之前的提示信息
@@ -385,5 +415,13 @@ const getKeyboardKeyClasses = (letter: string) => {
     default:
       return "bg-gray-200 hover:bg-gray-300 text-gray-800 border-gray-300";
   }
+};
+
+// 触发彩蛋
+const triggerEasterEgg = async () => {
+  easterEggMessage.value = WORDLE_EASTER_EGG_UUID;
+  console.log(WORDLE_EASTER_EGG_UUID);
+  showEasterEgg.value = true;
+  currentGuess.value = ""; // 清空输入
 };
 </script>

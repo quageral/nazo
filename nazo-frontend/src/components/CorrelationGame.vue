@@ -250,13 +250,32 @@
         </div>
       </div>
     </div>
+
+    <!-- 彩蛋弹窗 -->
+    <div v-if="showEasterEgg" class="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50"
+      @click.self="showEasterEgg = false">
+      <div class="bg-white rounded-2xl p-6 max-w-md w-full shadow-2xl mx-4">
+        <div class="text-center">
+          <div class="text-6xl mb-4">🎉</div>
+          <h3 class="text-2xl font-bold text-gray-800 mb-4">恭喜发现彩蛋！</h3>
+          <p class="text-gray-600 leading-relaxed mb-6">
+            {{ easterEggMessage }}
+          </p>
+          <button @click="showEasterEgg = false"
+            class="bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-200 transform hover:scale-105">
+            太棒了！
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted, computed, nextTick, watch } from "vue";
 import { useRouter, useRoute } from "vue-router";
-import { startGame, completeGame } from "@/services/api";
+import { startGame, completeGame, getEasterEgg } from "@/services/api";
+import { CORRELATION_EASTER_EGG_UUID } from "@/constants/levels";
 
 const router = useRouter();
 const route = useRoute();
@@ -310,6 +329,12 @@ const debugScore = ref(0);
 // 错误处理状态
 const showErrorModal = ref(false);
 const errorMessage = ref("");
+
+// 彩蛋相关状态
+const showEasterEgg = ref(false);
+const easterEggMessage = ref("");
+const easterEggGuesses = ref<number[]>([]);
+const easterEggDeaths = ref(0);
 
 const scatterPlot = ref<HTMLCanvasElement>();
 
@@ -474,6 +499,11 @@ function submitGuess() {
   totalError.value += difference;
   meanError.value = totalError.value / totalGuesses.value;
 
+  // 记录猜测值用于彩蛋检测
+  if (easterEggDeaths.value < 3) {
+    easterEggGuesses.value.push(guess);
+  }
+
   // 判断正确性（误差小于0.1算正确）
   const threshold = 0.1;
   if (difference <= threshold) {
@@ -491,9 +521,15 @@ function submitGuess() {
     streaks.value = 0;
     gameState.value = "wrong";
 
+    // 每次死亡时增加死亡计数
+    easterEggDeaths.value++;
+
     if (lives.value <= 0) {
       gameState.value = "gameOver";
       checkNewHighScore();
+
+      // 检查彩蛋条件
+      checkEasterEgg();
     }
   }
 
@@ -663,6 +699,19 @@ function closeErrorModal() {
 function showErrorMessage(message: string) {
   errorMessage.value = message;
   showErrorModal.value = true;
+}
+
+// 检查彩蛋条件
+async function checkEasterEgg() {
+  // 检查是否满足彩蛋条件：使用三条生命，分别输入1、1、0
+  if (easterEggDeaths.value === 3 && easterEggGuesses.value.length >= 3) {
+    const firstThreeGuesses = easterEggGuesses.value.slice(0, 3);
+    if (firstThreeGuesses[0] === 1 && firstThreeGuesses[1] === 1 && firstThreeGuesses[2] === 0) {
+      easterEggMessage.value = CORRELATION_EASTER_EGG_UUID;
+      console.log(CORRELATION_EASTER_EGG_UUID);
+      showEasterEgg.value = true;
+    }
+  }
 }
 </script>
 

@@ -20,12 +20,12 @@ public class Const {
   // 模拟关卡数据
   public static final Map<String, LevelInfo> levels = new LinkedHashMap<>();
   static {
-    levels.put(LEVEL_1_UUID, new LevelInfo("1", "俄罗斯方块", "达到600分即可通关！PS：游戏可以暂停", LEVEL_2_UUID));
+    levels.put(LEVEL_1_UUID, new LevelInfo("1", "俄罗斯方块", "达到600分即可通关！PS：还好可以暂停", LEVEL_2_UUID));
     levels.put(LEVEL_2_UUID, new LevelInfo("2", "数据相关系数", "观察散点图，猜测数据的相关系数，通关需要超过80分。\nPS: 怎么这么难！我要报警了", LEVEL_3_UUID));
-    levels.put(LEVEL_3_UUID, new LevelInfo("3", "扫雷游戏", "完全遵循经典扫雷规则，成功完成游戏即可通关！", LEVEL_4_UUID));
-    levels.put(LEVEL_4_UUID, new LevelInfo("4", "Wordle", "猜对单词即可通关！\nPS：这个我是真不会，靠 你 了！", LEVEL_5_UUID));
+    levels.put(LEVEL_3_UUID, new LevelInfo("3", "扫雷游戏", "这不是简简单单！PS：我测试的时候被雷晕了", LEVEL_4_UUID));
+    levels.put(LEVEL_4_UUID, new LevelInfo("4", "Wordle", "猜对单词即可通关！\nPS：这个是真不会，靠你了！", LEVEL_5_UUID));
     levels.put(LEVEL_5_UUID, new LevelInfo("5", "Color", "最终关为第10关。PS: 眼睛都看花了", LEVEL_6_UUID));
-    levels.put(LEVEL_6_UUID, new LevelInfo("6", "Number Sequences", "80分通关。PS：如果拿到满分会怎么样呢？", null));
+    levels.put(LEVEL_6_UUID, new LevelInfo("6", "Number Sequences", "80分通关。PS：0分也是一种水平", null));
 
     levels.put(PUZZLE_1_UUID, new LevelInfo("1", "谜题1", "谜题1描述", PUZZLE_2_UUID));
     levels.put(PUZZLE_2_UUID, new LevelInfo("2", "谜题2", "谜题2描述", PUZZLE_3_UUID));

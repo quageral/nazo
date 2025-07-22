@@ -19,8 +19,10 @@
               </div>
 
               <!-- 表情按钮 -->
-              <div @click="restartGame"
-                class="w-12 h-12 bg-gray-200 rounded-md shadow-md flex items-center justify-center cursor-pointer transition-all duration-150 hover:scale-105 active:scale-95">
+              <div @click="restartGame" @dragover="handleDragOver" @dragenter="handleDragEnter"
+                @dragleave="handleDragLeave" @drop="handleDrop"
+                class="w-12 h-12 bg-gray-200 rounded-md shadow-md flex items-center justify-center cursor-pointer transition-all duration-150 hover:scale-105 active:scale-95"
+                :class="{ 'bg-yellow-200 scale-110': isDropZoneActive }">
                 <span class="text-2xl">{{ faceEmoji }}</span>
               </div>
 
@@ -37,8 +39,18 @@
               <div v-for="row in ROWS" :key="row" class="contents">
                 <div v-for="col in COLS" :key="`${row - 1}-${col - 1}`" :class="getCellClasses(row - 1, col - 1)"
                   @click="handleLeftClick(row - 1, col - 1)" @contextmenu.prevent="handleRightClick(row - 1, col - 1)"
-                  @mousedown="handleMouseDown(row - 1, col - 1, $event)" @mouseup="handleMouseUp(row - 1, col - 1)">
+                  @mousedown="handleMouseDown(row - 1, col - 1, $event)" @mouseup="handleMouseUp(row - 1, col - 1)"
+                  class="relative">
                   {{ getCellContent(row - 1, col - 1) }}
+
+                  <!-- 可拖拽的地雷图标 - 只在被点击的地雷位置且游戏失败时显示 -->
+                  <div
+                    v-if="showDraggableMine && draggableMinePosition.row === row - 1 && draggableMinePosition.col === col - 1"
+                    class="absolute top-0 left-0 w-full h-full flex items-center justify-center cursor-grab hover:scale-110 transition-transform duration-200 z-10"
+                    :class="{ 'cursor-grabbing opacity-50': isDragging }" draggable="true" @dragstart="handleDragStart"
+                    @dragend="handleDragEnd">
+                    💣
+                  </div>
                 </div>
               </div>
             </div>
@@ -129,12 +141,31 @@
         </div>
       </div>
     </div>
+
+    <!-- 彩蛋弹窗 -->
+    <div v-if="showEasterEgg" class="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50"
+      @click.self="showEasterEgg = false">
+      <div class="bg-white rounded-2xl p-6 max-w-md w-full shadow-2xl mx-4">
+        <div class="text-center">
+          <div class="text-6xl mb-4">🎉</div>
+          <h3 class="text-2xl font-bold text-gray-800 mb-4">恭喜发现彩蛋！</h3>
+          <p class="text-gray-600 leading-relaxed mb-6">
+            {{ easterEggMessage }}
+          </p>
+          <button @click="showEasterEgg = false"
+            class="bg-gradient-to-r from-red-500 to-orange-600 hover:from-red-600 hover:to-orange-700 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-200 transform hover:scale-105">
+            太棒了！
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted, reactive } from "vue";
-import { startGame as startGameAPI, completeGame } from "@/services/api";
+import { startGame as startGameAPI, completeGame, getEasterEgg } from "@/services/api";
+import { MINESWEEPER_EASTER_EGG_UUID } from "@/constants/levels";
 
 interface Props {
   levelUuid: string;
@@ -166,8 +197,52 @@ const timerInterval = ref<number | null>(null);
 const sessionId = ref("");
 const isSubmitting = ref(false);
 
+// 彩蛋相关状态
+const showEasterEgg = ref(false);
+const easterEggMessage = ref("");
+const showDraggableMine = ref(false);
+const draggableMinePosition = ref({ row: -1, col: -1 });
+const isDragging = ref(false);
+const isDropZoneActive = ref(false);
+
 // 开发环境标识
 const isDevelopment = ref(import.meta.env.DEV);
+
+// 拖拽事件处理
+const handleDragStart = (event: DragEvent) => {
+  isDragging.value = true;
+  event.dataTransfer?.setData("text/plain", "mine-icon");
+};
+
+const handleDragEnd = () => {
+  isDragging.value = false;
+};
+
+const handleDragOver = (event: DragEvent) => {
+  event.preventDefault();
+  isDropZoneActive.value = true;
+};
+
+const handleDragEnter = () => {
+  isDropZoneActive.value = true;
+};
+
+const handleDragLeave = () => {
+  isDropZoneActive.value = false;
+};
+
+const handleDrop = async (event: DragEvent) => {
+  event.preventDefault();
+  isDropZoneActive.value = false;
+
+  const data = event.dataTransfer?.getData("text/plain");
+  if (data === "mine-icon") {
+    easterEggMessage.value = MINESWEEPER_EASTER_EGG_UUID;
+    console.log(MINESWEEPER_EASTER_EGG_UUID);
+    showEasterEgg.value = true;
+    showDraggableMine.value = false; // 隐藏可拖拽的地雷
+  }
+};
 
 // 双键操作状态
 const mouseDownButtons = ref(new Set<number>());
@@ -456,7 +531,10 @@ const openCell = (row: number, col: number) => {
   const value = gameBoard.value[row][col];
 
   if (value === -1) {
-    // 踩到地雷，游戏结束
+    // 踩到地雷，显示可拖拽的地雷图标
+    showDraggableMine.value = true;
+    draggableMinePosition.value = { row, col };
+    // 游戏结束
     endGame(false);
     return;
   }
@@ -537,6 +615,9 @@ const autoCompleteLevel = async () => {
 // 重新开始游戏
 const restartGame = async () => {
   initGame();
+  // 隐藏彩蛋相关元素
+  showDraggableMine.value = false;
+  showEasterEgg.value = false;
   await initializeGameSession();
 };
 
