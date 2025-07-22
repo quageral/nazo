@@ -47,6 +47,8 @@ export interface CompleteResponse {
 export interface EasterEggResponse {
   success: boolean;
   message: string;
+  time?: string;
+  collectedAt?: number;
 }
 
 // API请求函数

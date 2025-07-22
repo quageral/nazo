@@ -23,7 +23,7 @@ import java.io.IOException;
 
 @RestController
 @RequestMapping("/api")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = { "http://localhost:5173", "http://127.0.0.1:5173" })
 public class WordleController {
 
   private final Map<String, WordleSession> wordleSessions = new HashMap<>();

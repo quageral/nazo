@@ -3,6 +3,7 @@ import LoginView from "@/views/LoginView.vue";
 import LevelView from "@/views/LevelView.vue";
 import ErrorView from "@/views/ErrorView.vue";
 import CorrelationGameView from "@/views/CorrelationGameView.vue";
+import EasterEggView from "@/views/EasterEggView.vue";
 import { LEVEL_1_UUID } from "@/constants/levels";
 
 const router = createRouter({
@@ -29,6 +30,11 @@ const router = createRouter({
       component: CorrelationGameView,
     },
     {
+      path: "/easter",
+      name: "EasterEgg",
+      component: EasterEggView,
+    },
+    {
       path: "/error",
       name: "Error",
       component: ErrorView,
@@ -50,7 +56,7 @@ router.beforeEach((to, from, next) => {
     isLoggedIn: !!isLoggedIn,
   });
 
-  if (to.name !== "Login" && !isLoggedIn) {
+  if (to.name !== "Login" && to.name !== "EasterEgg" && !isLoggedIn) {
     // 未登录用户重定向到登录页
     console.log("未登录用户重定向到登录页");
     next({ name: "Login" });

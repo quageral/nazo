@@ -11,7 +11,7 @@ import lombok.AllArgsConstructor;
 
 @RestController
 @RequestMapping("/api")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = { "http://localhost:5173", "http://127.0.0.1:5173" })
 public class GameController {
 
   private static final String PASSWORD = "U1RBUlRUSEVHQU1F";
@@ -178,10 +178,15 @@ public class GameController {
           }
         }
         return gameScore >= 80; // 看图猜相关率要求得分超过80分
-      case Const.LEVEL_6_UUID: // Number Sequences游戏通关条件
+
       case Const.LEVEL_3_UUID:// 扫雷游戏通关条件
       case Const.LEVEL_4_UUID:// Wordle游戏通关条件
       case Const.LEVEL_5_UUID:// Color游戏通关条件
+      case Const.LEVEL_6_UUID: // Number Sequences游戏通关条件
+      case Const.LEVEL_7_UUID:// Friends游戏通关条件
+      case Const.LEVEL_8_UUID:// Minecraft游戏通关条件
+      case Const.LEVEL_9_UUID:// Cat游戏通关条件
+      case Const.LEVEL_10_UUID:// 地理知识问答游戏通关条件
         Object resultObj = request.getData().get("gameWon");
         boolean gameWon = false;
         if (resultObj instanceof Boolean) {
