@@ -1,8 +1,8 @@
 <template>
   <div class="h-full flex items-center justify-center p-4 bg-gradient-to-br from-green-50 to-emerald-100">
-    <div class="max-w-4xl w-full bg-white rounded-xl shadow-xl p-6 m-10">
+    <div class="max-w-4xl w-full bg-white rounded-xl shadow-xl p-6 m-5">
 
-      <div class="flex flex-col items-center mt-10 mb-10">
+      <div class="flex flex-col items-center mt-2 mb-2">
 
         <!-- 游戏网格 5x6 -->
         <div class="mb-8">
@@ -18,12 +18,12 @@
 
         <!-- 当前输入框 -->
         <div class="mb-6 w-full max-w-md">
-          <div class="flex gap-2 justify-center mb-20">
+          <div class="flex gap-2 justify-center">
             <input v-model="currentGuess" @keyup.enter="submitGuess" @input="handleInput"
               :disabled="gameState !== 'playing'" placeholder="输入5个字母" maxlength="5"
-              class="flex-1 px-4 py-3 border-2 border-gray-300 rounded-md text-center text-lg font-semibold uppercase focus:border-blue-500 focus:outline-none disabled:bg-gray-100" />
+              class="text-gray-400 flex-1 px-4 py-3 border-2 border-gray-300 rounded-md text-center text-lg font-semibold uppercase focus:border-blue-500 focus:outline-none disabled:bg-gray-100" />
             <button @click="submitGuess" :disabled="!canSubmitGuess"
-              class="px-6 py-3 bg-green-500 hover:bg-green-600 disabled:bg-gray-400 text-white rounded-md font-semibold transition-colors">
+              class="px-6 py-3 bg-green-500 hover:bg-green-600 disabled:bg-gray-400 text-white-400 rounded-md font-semibold transition-colors">
               提交
             </button>
           </div>
@@ -33,7 +33,7 @@
         <div class="w-full max-w-2xl">
           <div class="space-y-2">
             <!-- 第一行 -->
-            <div class="flex justify-center gap-1 mt-10 mb-10">
+            <div class="flex justify-center gap-1 mt-2 mb-2">
               <button v-for="letter in keyboardRows[0]" :key="letter" @click="addLetter(letter)"
                 :class="getKeyboardKeyClasses(letter)"
                 class="w-10 h-12 rounded font-semibold text-sm transition-all duration-200 hover:scale-105">
@@ -41,15 +41,15 @@
               </button>
             </div>
             <!-- 第二行 -->
-            <div class="flex justify-center gap-1 mt-10 mb-10">
+            <div class="flex justify-center gap-1 mt-2 mb-2">
               <button v-for="letter in keyboardRows[1]" :key="letter" @click="addLetter(letter)"
                 :class="getKeyboardKeyClasses(letter)"
-                class="w-10 h-12 rounded font-semibold text-sm transition-all duration-200 hover:scale-105 mt-10 mb-10">
+                class="w-10 h-12 rounded font-semibold text-sm transition-all duration-200 hover:scale-105 mt-2 mb-2">
                 {{ letter }}
               </button>
             </div>
             <!-- 第三行 -->
-            <div class="flex justify-center gap-1 mt-10 mb-10">
+            <div class="flex justify-center gap-1 mt-2 mb-2">
               <button @click="deleteLetter"
                 class="w-16 h-12 bg-gray-300 hover:bg-gray-400 text-gray-700 rounded font-semibold text-xs transition-all duration-200 hover:scale-105">
                 删除

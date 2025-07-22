@@ -44,6 +44,11 @@ export interface CompleteResponse {
   nextLevel?: string;
 }
 
+export interface EasterEggResponse {
+  success: boolean;
+  message: string;
+}
+
 // API请求函数
 export const apiService = {
   // 用户登录
@@ -102,6 +107,26 @@ export const apiService = {
       return await response.json();
     } catch (error) {
       console.error("完成关卡请求失败:", error);
+      return {
+        success: false,
+        message: "网络连接失败，请检查后端服务是否启动",
+      };
+    }
+  },
+
+  // 获取彩蛋内容
+  async getEasterEgg(easterEggId: string): Promise<EasterEggResponse> {
+    try {
+      const response = await fetch(`${API_BASE_URL}/easter/${easterEggId}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      return await response.json();
+    } catch (error) {
+      console.error("获取彩蛋失败:", error);
       return {
         success: false,
         message: "网络连接失败，请检查后端服务是否启动",
@@ -182,6 +207,7 @@ export const getLevel = apiService.getLevel;
 export const completeLevel = apiService.completeLevel;
 export const startGame = apiService.startGame;
 export const completeGame = apiService.completeGame;
+export const getEasterEgg = apiService.getEasterEgg;
 
 // Wordle game API functions
 export interface WordleStartRequest {

@@ -123,12 +123,14 @@ import CorrelationGame from "@/components/CorrelationGame.vue";
 import MinesweeperGame from "@/components/MinesweeperGame.vue";
 import WordleGame from "@/components/WordleGame.vue";
 import ColorGame from "@/components/ColorGame.vue";
+import NumberSequenceGame from "@/components/NumberSequenceGame.vue";
 import {
   LEVEL_1_UUID,
   LEVEL_2_UUID,
   LEVEL_3_UUID,
   LEVEL_4_UUID,
   LEVEL_5_UUID,
+  LEVEL_6_UUID,
 } from "@/constants/levels";
 
 interface Props {
@@ -222,6 +224,8 @@ const currentLevelComponent = computed(() => {
       return WordleGame;
     case LEVEL_5_UUID:
       return ColorGame;
+    case LEVEL_6_UUID:
+      return NumberSequenceGame;
     default:
       return null;
   }

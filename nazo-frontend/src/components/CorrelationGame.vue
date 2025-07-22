@@ -1,22 +1,13 @@
 <template>
   <div
-    class="min-h-screen bg-gradient-to-br from-indigo-500 via-purple-600 to-purple-800 flex items-center justify-center p-4"
-  >
-    <div
-      class="bg-white/95 rounded-2xl p-6 shadow-2xl backdrop-blur-lg max-w-6xl w-full"
-    >
+    class="min-h-screen bg-gradient-to-br from-indigo-500 via-purple-600 to-purple-800 flex items-center justify-center p-4">
+    <div class="bg-white/95 rounded-2xl p-6 shadow-2xl backdrop-blur-lg max-w-6xl w-full">
       <div class="flex flex-col lg:flex-row gap-8 items-start justify-center">
         <!-- 散点图区域 -->
         <div class="relative">
-          <div
-            class="bg-white rounded-md p-4 shadow-lg border-4 border-gray-300"
-          >
-            <canvas
-              ref="scatterPlot"
-              width="400"
-              height="400"
-              class="border border-gray-200 rounded bg-gray-50"
-            ></canvas>
+          <div class="bg-white rounded-md p-4 shadow-lg border-4 border-gray-300">
+            <canvas ref="scatterPlot" width="400" height="400"
+              class="border border-gray-200 rounded bg-gray-50"></canvas>
           </div>
         </div>
 
@@ -24,15 +15,11 @@
         <div class="min-w-[300px] space-y-4">
           <!-- 资源显示区 -->
           <div class="flex gap-4 mb-6">
-            <div
-              class="bg-white/80 p-3 rounded-md shadow-md flex items-center space-x-2"
-            >
+            <div class="bg-white/80 p-3 rounded-md shadow-md flex items-center space-x-2">
               <span class="text-2xl">❤️</span>
               <span class="text-xl font-bold text-red-600">{{ lives }}</span>
             </div>
-            <div
-              class="bg-white/80 p-3 rounded-md shadow-md flex items-center space-x-2"
-            >
+            <div class="bg-white/80 p-3 rounded-md shadow-md flex items-center space-x-2">
               <span class="text-2xl">💰</span>
               <span class="text-xl font-bold text-yellow-600">{{ coins }}</span>
             </div>
@@ -40,9 +27,7 @@
 
           <!-- 连击和平均误差 -->
           <div class="bg-white/80 p-4 rounded-md shadow-md">
-            <h3
-              class="text-sm font-bold text-gray-600 mb-2 uppercase tracking-wide"
-            >
+            <h3 class="text-sm font-bold text-gray-600 mb-2 uppercase tracking-wide">
               STREAKS
             </h3>
             <div class="text-2xl font-bold text-gray-800 text-center">
@@ -51,9 +36,7 @@
           </div>
 
           <div class="bg-white/80 p-4 rounded-md shadow-md">
-            <h3
-              class="text-sm font-bold text-gray-600 mb-2 uppercase tracking-wide"
-            >
+            <h3 class="text-sm font-bold text-gray-600 mb-2 uppercase tracking-wide">
               SCORE
             </h3>
             <div class="text-2xl font-bold text-gray-800 text-center">
@@ -62,9 +45,7 @@
           </div>
 
           <div class="bg-white/80 p-4 rounded-md shadow-md">
-            <h3
-              class="text-sm font-bold text-gray-600 mb-2 uppercase tracking-wide"
-            >
+            <h3 class="text-sm font-bold text-gray-600 mb-2 uppercase tracking-wide">
               MEAN ERROR
             </h3>
             <div class="text-2xl font-bold text-gray-800 text-center">
@@ -83,37 +64,25 @@
                 Enter a value between 0 and 1
               </p>
               <div class="space-y-3">
-                <input
-                  v-model="guessInput"
-                  type="number"
-                  step="0.001"
-                  min="0"
-                  max="1"
-                  placeholder="0.000"
-                  class="w-full px-6 py-6 text-4xl border-4 border-gray-300 rounded-xl focus:border-blue-500 focus:outline-none text-center font-bold"
-                  @keyup.enter="submitGuess"
-                />
-                <button
-                  @click="submitGuess"
-                  :disabled="!isValidGuess"
-                  class="w-full py-3 bg-blue-500 text-white rounded-md hover:bg-blue-600 disabled:bg-gray-400 disabled:cursor-not-allowed transform hover:-translate-y-1 transition-all duration-300 font-bold uppercase tracking-wide shadow-lg"
-                >
+                <input v-model="guessInput" type="number" step="0.001" min="0" max="1" placeholder="0.000"
+                  class="w-full px-6 py-6 text-4xl border-4 border-gray-300 text-blue-400 placeholder:text-gray-400 rounded-xl focus:border-blue-500 focus:outline-none text-center font-bold"
+                  @keyup.enter="submitGuess" />
+                <button @click="submitGuess" :disabled="!isValidGuess"
+                  class="w-full py-3 bg-blue-500 text-white rounded-md hover:bg-blue-600 disabled:bg-gray-400 disabled:cursor-not-allowed transform hover:-translate-y-1 transition-all duration-300 font-bold uppercase tracking-wide shadow-lg">
                   SUBMIT GUESS
                 </button>
               </div>
             </div>
 
             <!-- 猜对状态 -->
-            <div
-              v-else-if="gameState === 'correct'"
-              class="space-y-4 text-center"
-            >
+            <div v-else-if="gameState === 'correct'" class="space-y-4 text-center">
               <h3 class="text-xl font-bold text-green-600">CORRECT! 🎉</h3>
-              <div class="space-y-2 text-sm">
-                <p><strong>TRUE R:</strong> {{ trueR.toFixed(3) }}</p>
-                <p><strong>GUESSED R:</strong> {{ lastGuess.toFixed(3) }}</p>
-                <p>
-                  <strong>DIFFERENCE:</strong>
+              <div class="space-y-2 text-sm text-gray-800">
+                <p class="font-semibold"><strong class="text-gray-900">TRUE R:</strong> {{ trueR.toFixed(3) }}</p>
+                <p class="font-semibold"><strong class="text-gray-900">GUESSED R:</strong> {{ lastGuess.toFixed(3) }}
+                </p>
+                <p class="font-semibold">
+                  <strong class="text-gray-900">DIFFERENCE:</strong>
                   {{ Math.abs(trueR - lastGuess).toFixed(3) }}
                 </p>
               </div>
@@ -121,66 +90,54 @@
                 <span class="text-red-500">❤️+1</span>
                 <span class="text-yellow-500 ml-2">💰+{{ lastReward }}</span>
               </div>
-              <button
-                @click="nextRound"
-                class="w-full py-3 bg-green-500 text-white rounded-md hover:bg-green-600 transform hover:-translate-y-1 transition-all duration-300 font-bold uppercase tracking-wide shadow-lg"
-              >
+              <button @click="nextRound"
+                class="w-full py-3 bg-green-500 text-white rounded-md hover:bg-green-600 transform hover:-translate-y-1 transition-all duration-300 font-bold uppercase tracking-wide shadow-lg">
                 NEXT
               </button>
             </div>
 
             <!-- 猜错状态 -->
-            <div
-              v-else-if="gameState === 'wrong'"
-              class="space-y-4 text-center"
-            >
+            <div v-else-if="gameState === 'wrong'" class="space-y-4 text-center">
               <h3 class="text-xl font-bold text-red-600">WRONG! 😢</h3>
-              <div class="space-y-2 text-sm">
-                <p><strong>TRUE R:</strong> {{ trueR.toFixed(3) }}</p>
-                <p><strong>GUESSED R:</strong> {{ lastGuess.toFixed(3) }}</p>
-                <p>
-                  <strong>DIFFERENCE:</strong>
+              <div class="space-y-2 text-sm text-gray-800">
+                <p class="font-semibold"><strong class="text-gray-900">TRUE R:</strong> {{ trueR.toFixed(3) }}</p>
+                <p class="font-semibold"><strong class="text-gray-900">GUESSED R:</strong> {{ lastGuess.toFixed(3) }}
+                </p>
+                <p class="font-semibold">
+                  <strong class="text-gray-900">DIFFERENCE:</strong>
                   {{ Math.abs(trueR - lastGuess).toFixed(3) }}
                 </p>
               </div>
               <div class="text-lg">
                 <span class="text-red-500">❤️-1</span>
               </div>
-              <button
-                @click="nextRound"
-                class="w-full py-3 bg-orange-500 text-white rounded-md hover:bg-orange-600 transform hover:-translate-y-1 transition-all duration-300 font-bold uppercase tracking-wide shadow-lg"
-              >
+              <button @click="nextRound"
+                class="w-full py-3 bg-orange-500 text-white rounded-md hover:bg-orange-600 transform hover:-translate-y-1 transition-all duration-300 font-bold uppercase tracking-wide shadow-lg">
                 NEXT
               </button>
             </div>
 
             <!-- 游戏结束状态 -->
-            <div
-              v-else-if="gameState === 'gameOver'"
-              class="space-y-4 text-center"
-            >
+            <div v-else-if="gameState === 'gameOver'" class="space-y-4 text-center">
               <h2 class="text-2xl font-bold text-red-600">GAME OVER</h2>
               <div class="space-y-2">
-                <p class="text-lg"><strong>SCORE:</strong> {{ score }}</p>
-                <p class="text-lg"><strong>BEST:</strong> {{ bestScore }}</p>
-                <p
-                  v-if="isNewHighScore"
-                  class="text-xl font-bold text-yellow-600 animate-pulse"
-                >
+                <p class="text-lg font-semibold text-gray-800"><strong class="text-gray-900">SCORE:</strong> {{ score }}
+                </p>
+                <p class="text-lg font-semibold text-gray-800"><strong class="text-gray-900">BEST:</strong> {{ bestScore
+                }}</p>
+                <p v-if="isNewHighScore" class="text-xl font-bold text-yellow-600 animate-pulse">
                   NEW HIGHSCORE! 🏆
                 </p>
               </div>
-              <button
-                @click="playAgain"
-                class="w-full py-3 bg-purple-500 text-white rounded-md hover:bg-purple-600 transform hover:-translate-y-1 transition-all duration-300 font-bold uppercase tracking-wide shadow-lg"
-              >
+              <button @click="playAgain"
+                class="w-full py-3 bg-purple-500 text-white rounded-md hover:bg-purple-600 transform hover:-translate-y-1 transition-all duration-300 font-bold uppercase tracking-wide shadow-lg">
                 PLAY AGAIN
               </button>
             </div>
           </div>
 
           <!-- 调试面板 (仅开发环境) -->
-          <div
+          <!--<div
             v-if="isDevelopment"
             class="bg-white/80 p-4 rounded-md shadow-md border-2 border-red-500/30"
           >
@@ -191,9 +148,9 @@
               <span>调试面板</span>
             </h3>
 
-            <div class="space-y-3">
-              <!-- 快速设置分数按钮 -->
-              <div class="grid grid-cols-2 gap-2">
+            <div class="space-y-3">-->
+          <!-- 快速设置分数按钮 -->
+          <!--<div class="grid grid-cols-2 gap-2">
                 <button
                   @click="setScore(10)"
                   class="px-3 py-2 bg-yellow-600 hover:bg-yellow-700 text-white rounded text-sm"
@@ -218,10 +175,10 @@
                 >
                   100分
                 </button>
-              </div>
+              </div>-->
 
-              <!-- 直接输入分数 -->
-              <div class="flex space-x-2">
+          <!-- 直接输入分数 -->
+          <!--<div class="flex space-x-2">
                 <input
                   v-model.number="debugScore"
                   type="number"
@@ -234,10 +191,10 @@
                 >
                   设置
                 </button>
-              </div>
+              </div>-->
 
-              <!-- 生命值控制 -->
-              <div class="grid grid-cols-3 gap-2">
+          <!-- 生命值控制 -->
+          <!--<div class="grid grid-cols-3 gap-2">
                 <button
                   @click="setLives(1)"
                   class="px-3 py-2 bg-red-600 hover:bg-red-700 text-white rounded text-sm"
@@ -256,43 +213,38 @@
                 >
                   3❤️
                 </button>
-              </div>
+              </div>-->
 
-              <!-- 测试功能 -->
-              <button
+          <!-- 测试功能 -->
+          <!--<button
                 @click="testGameComplete"
                 class="w-full px-3 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded text-sm"
               >
                 测试通关检测
-              </button>
+              </button>-->
 
-              <!-- 游戏状态重置 -->
-              <button
+          <!-- 游戏状态重置 -->
+          <!--<button
                 @click="resetGame"
                 class="w-full px-3 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded text-sm"
               >
                 重置游戏状态
               </button>
             </div>
-          </div>
+          </div>-->
         </div>
       </div>
     </div>
 
     <!-- 错误弹窗 -->
-    <div
-      v-if="showErrorModal"
-      class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 backdrop-blur-sm"
-    >
+    <div v-if="showErrorModal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 backdrop-blur-sm">
       <div class="bg-white rounded-2xl p-6 shadow-2xl max-w-md w-full mx-4">
         <div class="text-center">
           <div class="text-6xl mb-4">⚠️</div>
           <h2 class="text-2xl font-bold text-red-600 mb-4">请求失败</h2>
           <p class="text-gray-600 mb-6">{{ errorMessage }}</p>
-          <button
-            @click="closeErrorModal"
-            class="px-6 py-3 bg-red-500 text-white rounded-md hover:bg-red-600 transform hover:-translate-y-1 transition-all duration-300 font-bold uppercase tracking-wide shadow-lg"
-          >
+          <button @click="closeErrorModal"
+            class="px-6 py-3 bg-red-500 text-white rounded-md hover:bg-red-600 transform hover:-translate-y-1 transition-all duration-300 font-bold uppercase tracking-wide shadow-lg">
             确定
           </button>
         </div>
@@ -681,8 +633,7 @@ function setLives(newLives: number) {
 function testGameComplete() {
   if (isDevelopment.value) {
     console.log(
-      `当前分数: ${score.value}, 通关条件: ${COMPLETION_THRESHOLD}, 是否通关: ${
-        score.value >= COMPLETION_THRESHOLD
+      `当前分数: ${score.value}, 通关条件: ${COMPLETION_THRESHOLD}, 是否通关: ${score.value >= COMPLETION_THRESHOLD
       }`
     );
     if (score.value >= COMPLETION_THRESHOLD) {
@@ -721,10 +672,12 @@ function showErrorMessage(message: string) {
 }
 
 @keyframes pulse {
+
   0%,
   100% {
     opacity: 1;
   }
+
   50% {
     opacity: 0.5;
   }

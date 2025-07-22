@@ -70,9 +70,8 @@
         </div>
 
         <!-- 测试账号信息 -->
-        <div class="mt-10 p-6 bg-yellow-500/10 border-2 border-yellow-500/30 rounded-xl backdrop-blur-sm relative">
-          <h3 class="text-lg font-semibold mb-3 flex items-center space-x-2 absolute z-0" style="color: transparent">
-
+        <div class=" rounded-xl relative">
+          <h3 class="text-xs flex items-center" style="color: transparent">
             <span class="text-xs">U1RBUlRUSEVHQU1F</span>
           </h3>
         </div>

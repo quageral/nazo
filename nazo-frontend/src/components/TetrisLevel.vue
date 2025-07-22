@@ -144,50 +144,50 @@
           </div>
 
           <!-- 调试面板 (仅开发环境) -->
-          <div v-if="isDevelopment" class="glass-card p-6 border-2 border-red-500/30">
-            <h3 class="text-lg font-bold text-red-300 mb-4 flex items-center space-x-2">
-              <span>🐛</span>
-              <span>调试面板</span>
-            </h3>
+          <!-- <div v-if="isDevelopment" class="glass-card p-6 border-2 border-red-500/30"> -->
+          <!-- <h3 class="text-lg font-bold text-red-300 mb-4 flex items-center space-x-2"> -->
+          <!-- <span>🐛</span> -->
+          <!-- <span>调试面板</span> -->
+          <!-- </h3> -->
 
-            <div class="space-y-3">
-              <!-- 快速设置分数按钮 -->
-              <div class="grid grid-cols-2 gap-2">
-                <button @click="setScore(100)"
-                  class="px-3 py-2 bg-yellow-600 hover:bg-yellow-700 text-white rounded text-sm">
-                  100分
-                </button>
-                <button @click="setScore(500)"
-                  class="px-3 py-2 bg-yellow-600 hover:bg-yellow-700 text-white rounded text-sm">
-                  500分
-                </button>
-                <button @click="setScore(600)"
-                  class="px-3 py-2 bg-green-600 hover:bg-green-700 text-white rounded text-sm">
-                  600分(通关)
-                </button>
-                <button @click="setScore(1000)"
-                  class="px-3 py-2 bg-green-600 hover:bg-green-700 text-white rounded text-sm">
-                  1000分
-                </button>
-              </div>
+          <!-- <div class="space-y-3"> -->
+          <!-- 快速设置分数按钮 -->
+          <!-- <div class="grid grid-cols-2 gap-2"> -->
+          <!-- <button @click="setScore(100)"
+                    class="px-3 py-2 bg-yellow-600 hover:bg-yellow-700 text-white rounded text-sm">
+                    100分
+                  </button>
+                  <button @click="setScore(500)"
+                    class="px-3 py-2 bg-yellow-600 hover:bg-yellow-700 text-white rounded text-sm">
+                    500分
+                  </button>
+                  <button @click="setScore(600)"
+                    class="px-3 py-2 bg-green-600 hover:bg-green-700 text-white rounded text-sm">
+                    600分(通关)
+                  </button>
+                  <button @click="setScore(1000)"
+                    class="px-3 py-2 bg-green-600 hover:bg-green-700 text-white rounded text-sm">
+                    1000分
+                  </button> -->
+          <!-- </div> -->
 
-              <!-- 直接输入分数 -->
-              <div class="flex space-x-2">
-                <input v-model.number="debugScore" type="number" placeholder="输入分数"
-                  class="flex-1 px-3 py-2 bg-gray-700 border border-gray-600 rounded text-white text-sm" />
-                <button @click="setScore(debugScore)"
-                  class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded text-sm">
-                  设置
-                </button>
-              </div>
+          <!-- 直接输入分数 
+                <div class="flex space-x-2">
+                  <input v-model.number="debugScore" type="number" placeholder="输入分数"
+                    class="flex-1 px-3 py-2 bg-gray-700 border border-gray-600 rounded text-white text-sm" />
+                  <button @click="setScore(debugScore)"
+                    class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded text-sm">
+                    设置
+                  </button>
+                </div>-->
 
-              <!-- 测试通关 -->
-              <button @click="testWinCondition"
-                class="w-full px-3 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded text-sm">
-                测试通关检测
-              </button>
-            </div>
-          </div>
+          <!-- 测试通关 -->
+          <!-- <button @click="testWinCondition" -->
+          <!-- class="w-full px-3 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded text-sm"> -->
+          <!-- 测试通关检测 -->
+          <!-- </button> -->
+          <!-- </div> -->
+          <!-- </div> -->
         </div>
       </div>
     </div>

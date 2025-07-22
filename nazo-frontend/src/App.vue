@@ -7,22 +7,8 @@
 </template>
 
 <style>
-/* 全局样式 */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  background: #0f0f23;
-  color: #333;
-}
-
+/* 确保Tailwind样式正常工作 */
 #app {
   min-height: 100vh;
 }
 </style>
-
-

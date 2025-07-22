@@ -1,7 +1,5 @@
 <template>
-  <div
-    class="h-full flex items-center justify-center p-4 bg-gradient-to-br from-blue-50 to-indigo-100"
-  >
+  <div class="h-full flex items-center justify-center p-4 bg-gradient-to-br from-blue-50 to-indigo-100">
     <div class="max-w-6xl w-full bg-white rounded-xl shadow-xl p-6">
       <h1 class="text-3xl font-bold text-center mb-6 text-gray-800">
         扫雷游戏
@@ -14,26 +12,20 @@
             <!-- 游戏状态栏 -->
             <div class="flex justify-between items-center mb-4 px-2">
               <!-- 剩余地雷计数器 -->
-              <div
-                class="w-20 h-12 bg-gray-800 rounded-md shadow-inner flex items-center justify-center"
-              >
+              <div class="w-20 h-12 bg-gray-800 rounded-md shadow-inner flex items-center justify-center">
                 <span class="text-2xl font-mono text-red-500 px-2">{{
                   formattedMineCount
                 }}</span>
               </div>
 
               <!-- 表情按钮 -->
-              <div
-                @click="restartGame"
-                class="w-12 h-12 bg-gray-200 rounded-md shadow-md flex items-center justify-center cursor-pointer transition-all duration-150 hover:scale-105 active:scale-95"
-              >
+              <div @click="restartGame"
+                class="w-12 h-12 bg-gray-200 rounded-md shadow-md flex items-center justify-center cursor-pointer transition-all duration-150 hover:scale-105 active:scale-95">
                 <span class="text-2xl">{{ faceEmoji }}</span>
               </div>
 
               <!-- 计时器 -->
-              <div
-                class="w-20 h-12 bg-gray-800 rounded-md shadow-inner flex items-center justify-center"
-              >
+              <div class="w-20 h-12 bg-gray-800 rounded-md shadow-inner flex items-center justify-center">
                 <span class="text-2xl font-mono text-red-500 px-2">{{
                   formattedTime
                 }}</span>
@@ -41,20 +33,11 @@
             </div>
 
             <!-- 游戏面板 -->
-            <div
-              class="grid gap-px bg-gray-400 p-2 rounded overflow-auto max-h-120"
-              :style="gridStyle"
-            >
+            <div class="grid gap-px bg-gray-400 p-2 rounded overflow-auto max-h-120" :style="gridStyle">
               <div v-for="row in ROWS" :key="row" class="contents">
-                <div
-                  v-for="col in COLS"
-                  :key="`${row - 1}-${col - 1}`"
-                  :class="getCellClasses(row - 1, col - 1)"
-                  @click="handleLeftClick(row - 1, col - 1)"
-                  @contextmenu.prevent="handleRightClick(row - 1, col - 1)"
-                  @mousedown="handleMouseDown(row - 1, col - 1, $event)"
-                  @mouseup="handleMouseUp(row - 1, col - 1)"
-                >
+                <div v-for="col in COLS" :key="`${row - 1}-${col - 1}`" :class="getCellClasses(row - 1, col - 1)"
+                  @click="handleLeftClick(row - 1, col - 1)" @contextmenu.prevent="handleRightClick(row - 1, col - 1)"
+                  @mousedown="handleMouseDown(row - 1, col - 1, $event)" @mouseup="handleMouseUp(row - 1, col - 1)">
                   {{ getCellContent(row - 1, col - 1) }}
                 </div>
               </div>
@@ -74,7 +57,7 @@
           <div class="grid grid-cols-2 md:grid-cols-5 gap-4 text-center">
             <div class="flex flex-col">
               <span class="text-gray-600 text-sm">难度</span>
-              <span class="font-medium">专家 (30×16, 99雷)</span>
+              <span class="text-gray-600 font-medium">专家 (30×16, 99雷)</span>
             </div>
 
             <div class="flex flex-col">
@@ -84,34 +67,30 @@
 
             <div class="flex flex-col">
               <span class="text-gray-600 text-sm">本局用时</span>
-              <span class="font-medium">{{ formattedCurrentTime }}</span>
+              <span class="text-gray-600 font-medium">{{ formattedCurrentTime }}</span>
             </div>
 
             <div class="flex flex-col">
               <span class="text-gray-600 text-sm">已标记地雷</span>
-              <span class="font-medium">{{ flagCount }}/99</span>
+              <span class="text-gray-600 font-medium">{{ flagCount }}/99</span>
             </div>
 
             <div class="flex flex-col">
               <span class="text-gray-600 text-sm">已打开格子</span>
-              <span class="font-medium"
-                >{{ openedCount }}/{{ totalSafeCells }}</span
-              >
+              <span class="text-gray-600 font-medium">{{ openedCount }}/{{ totalSafeCells }}</span>
             </div>
           </div>
 
           <div class="flex justify-center mt-4">
-            <button
-              @click="restartGame"
-              class="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md transition-colors duration-200 flex items-center justify-center gap-2"
-            >
+            <button @click="restartGame"
+              class="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md transition-colors duration-200 flex items-center justify-center gap-2">
               <span>🔄</span>
               <span>重新开始</span>
             </button>
           </div>
 
           <!-- 调试面板 (仅开发环境) -->
-          <div
+          <!-- <div
             v-if="isDevelopment"
             class="mt-6 p-4 bg-yellow-50 rounded-md border border-yellow-200"
           >
@@ -146,7 +125,7 @@
                 测试通关检测
               </button>
             </div>
-          </div>
+          </div> -->
         </div>
       </div>
     </div>
@@ -577,9 +556,21 @@ const getCellClasses = (row: number, col: number) => {
     classes.push("bg-gray-100");
     if (gameBoard.value[row][col] === -1) {
       classes.push("bg-red-300"); // 踩到的地雷
+    } else {
+      // 为数字添加不同的颜色
+      const value = gameBoard.value[row][col];
+      if (value === 1) classes.push("text-blue-600");
+      else if (value === 2) classes.push("text-green-600");
+      else if (value === 3) classes.push("text-red-600");
+      else if (value === 4) classes.push("text-purple-600");
+      else if (value === 5) classes.push("text-yellow-600");
+      else if (value === 6) classes.push("text-pink-600");
+      else if (value === 7) classes.push("text-black");
+      else if (value === 8) classes.push("text-gray-800");
+      else classes.push("text-gray-800"); // 默认深色
     }
   } else {
-    classes.push("bg-gray-300 hover:bg-gray-200");
+    classes.push("bg-gray-300 hover:bg-gray-200 text-gray-800");
     if (flags.value.has(position)) {
       classes.push("bg-orange-200");
     }
