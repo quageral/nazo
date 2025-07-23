@@ -1,7 +1,5 @@
 <template>
-  <div
-    class="h-full flex items-center justify-center p-8 bg-gradient-to-br from-green-50 to-blue-100"
-  >
+  <div class="h-full flex items-center justify-center p-8 bg-gradient-to-br from-green-50 to-blue-100">
     <div class="max-w-4xl w-full bg-white rounded-xl shadow-xl p-12 m-10">
       <div class="flex flex-col items-center py-12">
         <!-- Game Area -->
@@ -16,46 +14,30 @@
                 题目 {{ currentQuestionIndex + 1 }} / {{ questions.length }}
               </p>
               <div class="w-full bg-gray-200 rounded-full h-2 mt-8">
-                <div
-                  class="bg-green-500 h-2 rounded-full transition-all duration-300"
-                  :style="{
-                    width:
-                      ((currentQuestionIndex + 1) / questions.length) * 100 +
-                      '%',
-                  }"
-                ></div>
+                <div class="bg-green-500 h-2 rounded-full transition-all duration-300" :style="{
+                  width:
+                    ((currentQuestionIndex + 1) / questions.length) * 100 +
+                    '%',
+                }"></div>
               </div>
             </div>
 
             <!-- Current Question -->
-            <div
-              v-if="currentQuestion"
-              class="questionWrapper bg-gray-50 p-12 rounded-lg mt-12"
-            >
-              <div
-                class="question text-xl font-semibold text-gray-800 mb-12 text-center leading-relaxed"
-                v-html="currentQuestion.question"
-              ></div>
+            <div v-if="currentQuestion" class="questionWrapper bg-gray-50 p-12 rounded-lg mt-12">
+              <div class="question text-xl font-semibold text-gray-800 mb-12 text-center leading-relaxed"
+                v-html="currentQuestion.question"></div>
 
               <!-- Answer Options -->
               <div class="space-y-6">
-                <button
-                  v-for="(option, index) in currentQuestion.options"
-                  :key="index"
-                  @click="selectAnswer(index)"
+                <button v-for="(option, index) in currentQuestion.options" :key="index" @click="selectAnswer(index)"
                   :class="getOptionClasses(index)"
                   class="answer w-full px-8 py-6 rounded-md font-semibold text-lg transition-all duration-200 hover:scale-105 flex justify-between items-center"
-                  :disabled="answered"
-                >
+                  :disabled="answered">
                   <span>{{ getOptionLabel(index) }}. {{ option.text }}</span>
-                  <span
-                    v-if="answered"
-                    class="text-2xl font-bold"
-                    :class="{
-                      'text-green-600': index === currentQuestion.correctIndex,
-                      'text-red-600': index !== currentQuestion.correctIndex,
-                    }"
-                  >
+                  <span v-if="answered" class="text-2xl font-bold" :class="{
+                    'text-green-600': index === currentQuestion.correctIndex,
+                    'text-red-600': index !== currentQuestion.correctIndex,
+                  }">
                     {{ index === currentQuestion.correctIndex ? "✓" : "✗" }}
                   </span>
                 </button>
@@ -77,21 +59,15 @@
 
             <!-- Result Actions -->
             <div class="space-y-8">
-              <div
-                v-if="correctAnswers >= 18"
-                class="text-green-600 font-bold text-2xl mb-10"
-              >
+              <div v-if="correctAnswers >= 18" class="text-green-600 font-bold text-2xl mb-10">
                 🎉 恭喜通关！答对了{{ correctAnswers }}题！
               </div>
               <div v-else class="text-orange-600 font-bold text-2xl mb-10">
                 😅 需要答对至少18题才能通关（当前答对{{ correctAnswers }}题）
               </div>
 
-              <button
-                v-if="correctAnswers < 18"
-                @click="restartGame"
-                class="px-10 py-6 bg-green-500 hover:bg-green-600 text-white rounded-md font-semibold transition-colors text-2xl mt-8"
-              >
+              <button v-if="correctAnswers < 18" @click="restartGame"
+                class="px-10 py-6 bg-green-500 hover:bg-green-600 text-white rounded-md font-semibold transition-colors text-2xl mt-8">
                 重新挑战
               </button>
             </div>
@@ -102,22 +78,17 @@
   </div>
 
   <!-- 彩蛋弹窗 -->
-  <div
-    v-if="showEasterEgg"
-    class="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50"
-    @click.self="showEasterEgg = false"
-  >
+  <div v-if="showEasterEgg" class="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50"
+    @click.self="showEasterEgg = false">
     <div class="bg-white rounded-2xl p-6 max-w-md w-full shadow-2xl mx-4">
       <div class="text-center">
-        <div class="text-6xl mb-4">🎉</div>
-        <h3 class="text-2xl font-bold text-gray-800 mb-4">恭喜发现彩蛋！</h3>
+        <div class="text-6xl mb-4">🥚</div>
+        <h3 class="text-2xl font-bold text-gray-800 mb-4">恭喜发现彩蛋！请保存彩蛋码</h3>
         <p class="text-gray-600 leading-relaxed mb-6">
           {{ easterEggMessage }}
         </p>
-        <button
-          @click="showEasterEgg = false"
-          class="bg-gradient-to-r from-green-500 to-blue-600 hover:from-green-600 hover:to-blue-700 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-200 transform hover:scale-105"
-        >
+        <button @click="showEasterEgg = false"
+          class="bg-gradient-to-r from-green-500 to-blue-600 hover:from-green-600 hover:to-blue-700 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-200 transform hover:scale-105">
           太棒了！
         </button>
       </div>
@@ -153,6 +124,7 @@ const isSubmitting = ref(false);
 // 彩蛋相关状态
 const showEasterEgg = ref(false);
 const easterEggMessage = ref("");
+const hasRestarted = ref(false); // 新增：追踪是否已重新开始过游戏
 
 // Get username
 const username = ref(localStorage.getItem("nazo_user") || "");
@@ -243,7 +215,7 @@ const questions = ref([
     correctIndex: 1,
   },
   {
-    question: "当爬行者被闪电击中时会发生什么？",
+    question: "当爬行者Creeper被闪电击中时会发生什么？",
     options: [
       { text: "它会带电，爆炸威力更大", value: 4 },
       { text: "它会带电，并在爆炸时用闪电击中你", value: 0 },
@@ -575,6 +547,7 @@ const selectAnswer = (optionIndex: number) => {
 };
 
 const restartGame = () => {
+  hasRestarted.value = true; // 标记已重新开始过游戏
   currentQuestionIndex.value = 0;
   answers.value = [];
   answered.value = false;
@@ -608,9 +581,15 @@ const getOptionClasses = (optionIndex: number) => {
 };
 
 const handleGameComplete = async () => {
-  // 检查彩蛋条件：答对所有30题
+  // 检查彩蛋条件：如果用户重新开始过但仍未达到18题，则触发彩蛋
+  if (hasRestarted.value && correctAnswers.value < 18) {
+    easterEggMessage.value = MINECRAFT_EASTER_EGG_UUID;
+    console.log(MINECRAFT_EASTER_EGG_UUID);
+    showEasterEgg.value = true;
+  }
+
+  // 检查满分彩蛋条件（保留原有逻辑）
   if (correctAnswers.value === questions.value.length) {
-    // 触发彩蛋
     easterEggMessage.value = MINECRAFT_EASTER_EGG_UUID;
     console.log(MINECRAFT_EASTER_EGG_UUID);
     showEasterEgg.value = true;

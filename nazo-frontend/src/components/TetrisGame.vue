@@ -79,7 +79,11 @@
               <p>↓ 快速下降</p>
               <p>空格 旋转</p>
               <p>P <span @click="handlePauseTextClick"
-                  class="cursor-pointer hover:text-gray-800 transition-colors">暂停</span></p>
+                  class="cursor-pointer hover:text-gray-800 hover:bg-gray-200 px-1 py-0.5 rounded transition-all duration-200 select-none"
+                  :class="{ 'bg-yellow-200 text-yellow-800': pauseTextClickCount > 0 }" title="点击3次触发彩蛋">暂停</span></p>
+              <p v-if="pauseTextClickCount > 0" class="text-xs text-yellow-600">
+                彩蛋进度: {{ pauseTextClickCount }}/3
+              </p>
             </div>
           </div>
 
@@ -93,6 +97,12 @@
             class="w-full py-3 bg-orange-500 text-white rounded-md hover:bg-orange-600 transform hover:-translate-y-1 transition-all duration-300 font-bold uppercase tracking-wide shadow-lg hover:shadow-orange-500/40">
             {{ gamePaused ? "继续" : "暂停" }}
           </button>
+
+          <!-- 调试按钮 - 仅在开发环境显示 -->
+          <button v-if="import.meta.env.DEV" @click="testEasterEgg"
+            class="w-full py-2 bg-purple-500 text-white rounded-md hover:bg-purple-600 text-sm">
+            测试彩蛋
+          </button>
         </div>
       </div>
     </div>
@@ -102,8 +112,8 @@
       @click.self="showEasterEgg = false">
       <div class="bg-white rounded-2xl p-6 max-w-md w-full shadow-2xl mx-4">
         <div class="text-center">
-          <div class="text-6xl mb-4">🎉</div>
-          <h3 class="text-2xl font-bold text-gray-800 mb-4">恭喜发现彩蛋！</h3>
+          <div class="text-6xl mb-4">🥚</div>
+          <h3 class="text-2xl font-bold text-gray-800 mb-4">恭喜发现彩蛋！请保存彩蛋码</h3>
           <p class="text-gray-600 leading-relaxed mb-6">
             {{ easterEggMessage }}
           </p>
@@ -613,13 +623,30 @@ const handlePauseClick = () => {
 const handlePauseTextClick = () => {
   pauseTextClickCount.value++;
   console.log('暂停文字点击次数:', pauseTextClickCount.value);
+  console.log('TETRIS_EASTER_EGG_UUID:', TETRIS_EASTER_EGG_UUID);
+
+  // 增加视觉反馈
+  if (pauseTextClickCount.value < 3) {
+    console.log(`还需要点击 ${3 - pauseTextClickCount.value} 次`);
+  }
 
   if (pauseTextClickCount.value === 3) {
-    easterEggMessage.value = TETRIS_EASTER_EGG_UUID;
-    console.log(TETRIS_EASTER_EGG_UUID);
-    showEasterEgg.value = true;
-    pauseTextClickCount.value = 0; // 重置计数
+    try {
+      easterEggMessage.value = TETRIS_EASTER_EGG_UUID;
+      console.log('彩蛋触发成功！彩蛋码:', TETRIS_EASTER_EGG_UUID);
+      showEasterEgg.value = true;
+      pauseTextClickCount.value = 0; // 重置计数
+    } catch (error) {
+      console.error('彩蛋触发失败:', error);
+    }
   }
+};
+
+// 测试彩蛋功能
+const testEasterEgg = () => {
+  easterEggMessage.value = TETRIS_EASTER_EGG_UUID;
+  showEasterEgg.value = true;
+  console.log('彩蛋触发成功！彩蛋码:', TETRIS_EASTER_EGG_UUID);
 };
 
 // 组件挂载时初始化

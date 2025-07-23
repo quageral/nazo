@@ -53,6 +53,41 @@
                 </div>
               </div>
             </div>
+
+            <!-- 彩蛋弹窗 -->
+            <div v-if="easterEggTriggered"
+              class="absolute inset-0 flex items-center justify-center bg-black/90 rounded-2xl backdrop-blur-sm z-20">
+              <div class="game-card text-center max-w-lg">
+                <div class="text-8xl mb-6 animate-bounce">🎊</div>
+                <h2
+                  class="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-pink-400 via-purple-400 to-blue-400 mb-6 animate-pulse">
+                  恭喜发现彩蛋！
+                </h2>
+
+                <div class="space-y-4 mb-8">
+                  <p class="text-xl text-yellow-300 animate-pulse">
+                    🎉 你是真正的俄罗斯方块大师！
+                  </p>
+                  <p class="text-lg text-gray-300">
+                    连续暂停/继续 {{ pauseClickCount }} 次的毅力令人敬佩！
+                  </p>
+                  <div
+                    class="bg-gradient-to-r from-purple-500/20 to-pink-500/20 p-4 rounded-xl border border-purple-400/30">
+                    <p class="text-purple-200 text-sm">
+                      "真正的游戏大师不仅会玩游戏，还会探索游戏的每一个角落。"
+                    </p>
+                  </div>
+                </div>
+
+                <div class="space-y-4">
+                  <button @click="closeEasterEgg"
+                    class="w-full game-button bg-gradient-to-r from-purple-500 to-pink-600 text-white flex items-center justify-center space-x-3">
+                    <span>✨</span>
+                    <span>太棒了！继续游戏</span>
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -219,6 +254,11 @@ const gameRunning = ref(false);
 const gamePaused = ref(false);
 const gameOver = ref(false);
 const isSubmitting = ref(false);
+
+// 彩蛋相关状态
+const easterEggTriggered = ref(false);
+const pauseClickCount = ref(0);
+const easterEggClickHistory = ref<number[]>([]);
 
 // 调试相关变量
 const isDevelopment = ref(import.meta.env.DEV);
@@ -418,6 +458,9 @@ const startGame = async () => {
   gameRunning.value = true;
   gamePaused.value = false;
   gameOver.value = false;
+  easterEggTriggered.value = false;
+  pauseClickCount.value = 0;
+  easterEggClickHistory.value = [];
   board = createBoard();
   score.value = 0;
   dropInterval = 1000;
@@ -439,7 +482,39 @@ const startGame = async () => {
 // 暂停/继续游戏
 const togglePause = () => {
   if (!gameRunning.value) return;
+
+  // 记录点击时间戳
+  const now = Date.now();
+  easterEggClickHistory.value.push(now);
+
+  // 只保留最近10秒内的点击记录
+  easterEggClickHistory.value = easterEggClickHistory.value.filter(
+    timestamp => now - timestamp <= 10000
+  );
+
+  // 检查是否连续快速点击了10次
+  if (easterEggClickHistory.value.length >= 10) {
+    pauseClickCount.value = easterEggClickHistory.value.length;
+    triggerEasterEgg();
+    return;
+  }
+
   gamePaused.value = !gamePaused.value;
+};
+
+// 触发彩蛋
+const triggerEasterEgg = () => {
+  easterEggTriggered.value = true;
+  gamePaused.value = true; // 暂停游戏显示彩蛋
+};
+
+// 关闭彩蛋
+const closeEasterEgg = () => {
+  easterEggTriggered.value = false;
+  gamePaused.value = false; // 恢复游戏
+  // 重置点击记录
+  easterEggClickHistory.value = [];
+  pauseClickCount.value = 0;
 };
 
 // 重新开始游戏
@@ -532,7 +607,7 @@ const testWinCondition = () => {
 
 // 游戏更新循环
 const update = () => {
-  if (!gameRunning.value || gamePaused.value) return;
+  if (!gameRunning.value || gamePaused.value || easterEggTriggered.value) return;
 
   dropTimer += 50;
   if (dropTimer >= dropInterval) {
@@ -780,7 +855,7 @@ const drawBlockAt = (
 
 // 键盘事件处理
 const handleKeyPress = (e: KeyboardEvent) => {
-  if (!gameRunning.value || gamePaused.value) return;
+  if (!gameRunning.value || gamePaused.value || easterEggTriggered.value) return;
 
   switch (e.code) {
     case "ArrowLeft":

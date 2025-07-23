@@ -1,7 +1,5 @@
 <template>
-  <div
-    class="min-h-screen bg-gradient-game-dark flex items-center justify-center p-8"
-  >
+  <div class="min-h-screen bg-gradient-game-dark flex items-center justify-center p-8">
     <div class="w-full max-w-2xl">
       <div class="game-card text-center">
         <!-- 错误图标 -->
@@ -22,26 +20,21 @@
 
         <!-- 操作按钮 -->
         <div class="space-y-4">
-          <button
-            @click="goToLogin"
-            class="w-full game-button bg-gradient-game text-white flex items-center justify-center space-x-3"
-          >
+          <button @click="goToLogin"
+            class="w-full game-button bg-gradient-game text-white flex items-center justify-center space-x-3">
             <span class="text-xl">🏠</span>
             <span>返回登录页</span>
           </button>
-          <button
-            @click="goBack"
-            class="w-full game-button bg-gradient-to-r from-gray-600 to-gray-700 text-white flex items-center justify-center space-x-3"
-          ></button>
+          <button @click="goBack"
+            class="w-full game-button bg-gradient-to-r from-gray-600 to-gray-700 text-white flex items-center justify-center space-x-3">
+            <span class="text-xl">🔙</span>
+            <span>返回上一页</span>
+          </button>
         </div>
 
         <!-- 提示信息 -->
-        <div
-          class="mt-10 p-6 bg-blue-500/10 border-2 border-blue-500/30 rounded-xl backdrop-blur-sm"
-        >
-          <h3
-            class="text-lg font-semibold text-blue-300 mb-3 flex items-center justify-center space-x-2"
-          >
+        <div class="mt-10 p-6 bg-blue-500/10 border-2 border-blue-500/30 rounded-xl backdrop-blur-sm">
+          <h3 class="text-lg font-semibold text-blue-300 mb-3 flex items-center justify-center space-x-2">
             <span>💡</span>
             <span>提示</span>
           </h3>

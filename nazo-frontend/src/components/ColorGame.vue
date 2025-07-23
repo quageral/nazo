@@ -165,8 +165,8 @@
       @click.self="showEasterEgg = false">
       <div class="bg-white rounded-2xl p-6 max-w-md w-full shadow-2xl mx-4">
         <div class="text-center">
-          <div class="text-6xl mb-4">🎉</div>
-          <h3 class="text-2xl font-bold text-gray-800 mb-4">恭喜发现彩蛋！</h3>
+          <div class="text-6xl mb-4">🥚</div>
+          <h3 class="text-2xl font-bold text-gray-800 mb-4">恭喜发现彩蛋！请保存彩蛋码</h3>
           <p class="text-gray-600 leading-relaxed mb-6">
             {{ easterEggMessage }}
           </p>

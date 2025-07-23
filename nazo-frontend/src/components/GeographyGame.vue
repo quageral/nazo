@@ -1,7 +1,5 @@
 <template>
-  <div
-    class="h-full flex items-center justify-center p-8 bg-gradient-to-br from-blue-50 to-green-100"
-  >
+  <div class="h-full flex items-center justify-center p-8 bg-gradient-to-br from-blue-50 to-green-100">
     <div class="max-w-4xl w-full bg-white rounded-xl shadow-xl p-12 m-10">
       <div class="flex flex-col items-center py-12">
         <!-- Game Area -->
@@ -16,57 +14,31 @@
                 题目 {{ currentQuestionIndex + 1 }} / {{ questions.length }}
               </p>
               <div class="w-full bg-gray-200 rounded-full h-2 mt-8">
-                <div
-                  class="bg-blue-500 h-2 rounded-full transition-all duration-300"
-                  :style="{
-                    width:
-                      ((currentQuestionIndex + 1) / questions.length) * 100 +
-                      '%',
-                  }"
-                ></div>
+                <div class="bg-blue-500 h-2 rounded-full transition-all duration-300" :style="{
+                  width:
+                    ((currentQuestionIndex + 1) / questions.length) * 100 +
+                    '%',
+                }"></div>
               </div>
             </div>
 
             <!-- Current Question -->
-            <div
-              v-if="currentQuestion"
-              class="questionWrapper bg-gray-50 p-12 rounded-lg mt-12"
-            >
-              <div
-                class="question text-xl font-semibold text-gray-800 mb-12 text-center leading-relaxed"
-                v-html="currentQuestion.question"
-              ></div>
+            <div v-if="currentQuestion" class="questionWrapper bg-gray-50 p-12 rounded-lg mt-12">
+              <div class="question text-xl font-semibold text-gray-800 mb-12 text-center leading-relaxed"
+                v-html="currentQuestion.question"></div>
 
               <!-- Options -->
               <div class="space-y-6">
-                <button
-                  v-for="(option, index) in currentQuestion.options"
-                  :key="index"
-                  @click="selectAnswer(index)"
-                  :disabled="answered"
-                  :class="getOptionClasses(index)"
-                  class="w-full p-6 text-left text-lg rounded-xl border-2 transition-all duration-300 relative"
-                >
-                  <span class="font-bold mr-4"
-                    >{{ getOptionLabel(index) }}.</span
-                  >
+                <button v-for="(option, index) in currentQuestion.options" :key="index" @click="selectAnswer(index)"
+                  :disabled="answered" :class="getOptionClasses(index)"
+                  class="w-full p-6 text-left text-lg rounded-xl border-2 transition-all duration-300 relative">
+                  <span class="font-bold mr-4">{{ getOptionLabel(index) }}.</span>
                   <span>{{ option.text }}</span>
 
                   <!-- Answer Feedback -->
-                  <div
-                    v-if="answered"
-                    class="absolute right-4 top-1/2 transform -translate-y-1/2 text-2xl"
-                  >
-                    <span
-                      v-if="index === currentQuestion.correctIndex"
-                      class="text-green-600"
-                      >✓</span
-                    >
-                    <span
-                      v-else-if="index === answers[currentQuestionIndex]"
-                      class="text-red-600"
-                      >✗</span
-                    >
+                  <div v-if="answered" class="absolute right-4 top-1/2 transform -translate-y-1/2 text-2xl">
+                    <span v-if="index === currentQuestion.correctIndex" class="text-green-600">✓</span>
+                    <span v-else-if="index === answers[currentQuestionIndex]" class="text-red-600">✗</span>
                   </div>
                 </button>
               </div>
@@ -92,21 +64,15 @@
 
             <!-- Result Actions -->
             <div class="space-y-8">
-              <div
-                v-if="correctAnswers >= 16"
-                class="text-green-600 font-bold text-2xl mb-10"
-              >
+              <div v-if="correctAnswers >= 16" class="text-green-600 font-bold text-2xl mb-10">
                 🎉 恭喜通关！答对了{{ correctAnswers }}题！
               </div>
               <div v-else class="text-orange-600 font-bold text-2xl mb-10">
                 😅 需要答对至少16题才能通关（当前答对{{ correctAnswers }}题）
               </div>
 
-              <button
-                v-if="correctAnswers < 16"
-                @click="restartGame"
-                class="px-10 py-6 bg-blue-500 hover:bg-blue-600 text-white rounded-md font-semibold transition-colors text-2xl mt-8"
-              >
+              <button v-if="correctAnswers < 16" @click="restartGame"
+                class="px-10 py-6 bg-blue-500 hover:bg-blue-600 text-white rounded-md font-semibold transition-colors text-2xl mt-8">
                 重新挑战
               </button>
             </div>
@@ -117,22 +83,17 @@
   </div>
 
   <!-- 彩蛋弹窗 -->
-  <div
-    v-if="showEasterEgg"
-    class="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50"
-    @click.self="showEasterEgg = false"
-  >
+  <div v-if="showEasterEgg" class="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50"
+    @click.self="showEasterEgg = false">
     <div class="bg-white rounded-2xl p-6 max-w-md w-full shadow-2xl mx-4">
       <div class="text-center">
-        <div class="text-6xl mb-4">🎉</div>
-        <h3 class="text-2xl font-bold text-gray-800 mb-4">恭喜发现彩蛋！</h3>
+        <div class="text-6xl mb-4">🥚</div>
+        <h3 class="text-2xl font-bold text-gray-800 mb-4">恭喜发现彩蛋！请保存彩蛋码</h3>
         <p class="text-gray-600 leading-relaxed mb-6">
           {{ easterEggMessage }}
         </p>
-        <button
-          @click="showEasterEgg = false"
-          class="bg-gradient-to-r from-blue-500 to-green-600 hover:from-blue-600 hover:to-green-700 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-200 transform hover:scale-105"
-        >
+        <button @click="showEasterEgg = false"
+          class="bg-gradient-to-r from-blue-500 to-green-600 hover:from-blue-600 hover:to-green-700 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-200 transform hover:scale-105">
           太棒了！
         </button>
       </div>

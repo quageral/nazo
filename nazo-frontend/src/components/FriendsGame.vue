@@ -1,7 +1,5 @@
 <template>
-  <div
-    class="h-full flex items-center justify-center p-8 bg-gradient-to-br from-orange-50 to-pink-100"
-  >
+  <div class="h-full flex items-center justify-center p-8 bg-gradient-to-br from-orange-50 to-pink-100">
     <div class="max-w-4xl w-full bg-white rounded-xl shadow-xl p-12 m-10">
       <div class="flex flex-col items-center py-12">
         <!-- Game Area -->
@@ -9,54 +7,38 @@
           <!-- Question Display Area -->
           <div v-if="!gameCompleted" class="mb-16">
             <div class="text-center mb-12">
-              <h2 class="text-3xl font-bold text-gray-800 mb-8">
-                🏠 Friends 🏠
+              <h2 v-if="!gameCompleted || !isEditingTitle" class="text-3xl font-bold text-gray-800 mb-8">
+                🏠 {{ titleText }} 🏠
               </h2>
               <p class="text-lg text-gray-600 mb-10">
                 题目 {{ currentQuestionIndex + 1 }} / {{ questions.length }}
               </p>
               <div class="w-full bg-gray-200 rounded-full h-2 mt-8">
-                <div
-                  class="bg-orange-500 h-2 rounded-full transition-all duration-300"
-                  :style="{
-                    width:
-                      ((currentQuestionIndex + 1) / questions.length) * 100 +
-                      '%',
-                  }"
-                ></div>
+                <div class="bg-orange-500 h-2 rounded-full transition-all duration-300" :style="{
+                  width:
+                    ((currentQuestionIndex + 1) / questions.length) * 100 +
+                    '%',
+                }"></div>
               </div>
             </div>
 
             <!-- Current Question -->
-            <div
-              v-if="currentQuestion"
-              class="questionWrapper bg-gray-50 p-12 rounded-lg mt-12"
-            >
-              <div
-                class="question text-xl font-semibold text-gray-800 mb-12 text-center leading-relaxed"
-                v-html="currentQuestion.question"
-              ></div>
+            <div v-if="currentQuestion" class="questionWrapper bg-gray-50 p-12 rounded-lg mt-12">
+              <div class="question text-xl font-semibold text-gray-800 mb-12 text-center leading-relaxed"
+                v-html="currentQuestion.question"></div>
 
               <!-- Answer Options -->
               <div class="space-y-6">
-                <button
-                  v-for="(option, index) in currentQuestion.options"
-                  :key="index"
-                  @click="selectAnswer(index)"
+                <button v-for="(option, index) in currentQuestion.options" :key="index" @click="selectAnswer(index)"
                   :class="getOptionClasses(index)"
                   class="answer w-full px-8 py-6 rounded-md font-semibold text-lg transition-all duration-200 hover:scale-105 flex justify-between items-center"
-                  :disabled="answered"
-                >
+                  :disabled="answered">
                   <span>{{ getOptionLabel(index) }}. {{ option.text }}</span>
-                  <span
-                    v-if="answered"
-                    class="text-2xl font-bold"
-                    :class="{
-                      'text-green-600': index === currentQuestion.correctIndex,
-                      'text-red-600': index !== currentQuestion.correctIndex,
-                    }"
-                  >
-                    {{ index === currentQuestion.correctIndex ? "✔" : "❌" }}
+                  <span v-if="answered" class="text-2xl font-bold" :class="{
+                    'text-green-600': index === currentQuestion.correctIndex,
+                    'text-red-600': index !== currentQuestion.correctIndex,
+                  }">
+                    {{ index === currentQuestion.correctIndex ? "✓" : "✗" }}
                   </span>
                 </button>
               </div>
@@ -66,6 +48,15 @@
           <!-- Game Completed - Show Results -->
           <div v-if="gameCompleted" class="text-center">
             <div class="mb-16">
+              <!-- 可编辑的标题（彩蛋功能） -->
+              <div class="text-center mb-8">
+                <div class="text-3xl font-bold text-gray-800">
+                  🏠 <input v-model="titleText" @input="handleTitleInput"
+                    class="bg-transparent border-transparent outline-none text-center w-auto min-w-0 px-0 py-0 m-0"
+                    style="color: inherit; font-family: inherit; font-size: inherit; font-weight: inherit; line-height: inherit; letter-spacing: inherit; text-align: center; background: transparent !important; border: none !important; outline: none !important; box-shadow: none !important;"
+                    :style="{ width: titleText.length * 0.6 + 'em' }" /> 🏠
+                </div>
+              </div>
               <h2 class="text-3xl font-bold text-gray-800 mb-10">游戏完成！</h2>
               <div class="text-6xl font-bold mb-10" :class="scoreColor">
                 {{ totalScore }} 分
@@ -77,21 +68,15 @@
 
             <!-- Result Actions -->
             <div class="space-y-8">
-              <div
-                v-if="correctAnswers >= 25"
-                class="text-green-600 font-bold text-2xl mb-10"
-              >
+              <div v-if="correctAnswers >= 25" class="text-green-600 font-bold text-2xl mb-10">
                 🎉 恭喜通关！答对了{{ correctAnswers }}题！
               </div>
               <div v-else class="text-orange-600 font-bold text-2xl mb-10">
                 😅 需要答对至少25题才能通关（当前答对{{ correctAnswers }}题）
               </div>
 
-              <button
-                v-if="correctAnswers < 25"
-                @click="restartGame"
-                class="px-10 py-6 bg-purple-500 hover:bg-purple-600 text-white rounded-md font-semibold transition-colors text-2xl mt-8"
-              >
+              <button v-if="correctAnswers < 25" @click="restartGame"
+                class="px-10 py-6 bg-purple-500 hover:bg-purple-600 text-white rounded-md font-semibold transition-colors text-2xl mt-8">
                 重新挑战
               </button>
             </div>
@@ -102,22 +87,17 @@
   </div>
 
   <!-- 彩蛋弹窗 -->
-  <div
-    v-if="showEasterEgg"
-    class="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50"
-    @click.self="showEasterEgg = false"
-  >
+  <div v-if="showEasterEgg" class="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50"
+    @click.self="showEasterEgg = false">
     <div class="bg-white rounded-2xl p-6 max-w-md w-full shadow-2xl mx-4">
       <div class="text-center">
-        <div class="text-6xl mb-4">🎉</div>
-        <h3 class="text-2xl font-bold text-gray-800 mb-4">恭喜发现彩蛋！</h3>
+        <div class="text-6xl mb-4">🥚</div>
+        <h3 class="text-2xl font-bold text-gray-800 mb-4">恭喜发现彩蛋！请保存彩蛋码</h3>
         <p class="text-gray-600 leading-relaxed mb-6">
           {{ easterEggMessage }}
         </p>
-        <button
-          @click="showEasterEgg = false"
-          class="bg-gradient-to-r from-orange-500 to-pink-600 hover:from-orange-600 hover:to-pink-700 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-200 transform hover:scale-105"
-        >
+        <button @click="showEasterEgg = false"
+          class="bg-gradient-to-r from-orange-500 to-pink-600 hover:from-orange-600 hover:to-pink-700 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-200 transform hover:scale-105">
           太棒了！
         </button>
       </div>
@@ -153,6 +133,10 @@ const isSubmitting = ref(false);
 // 彩蛋相关状态
 const showEasterEgg = ref(false);
 const easterEggMessage = ref("");
+
+// 新增：标题编辑彩蛋相关状态
+const titleText = ref("Friends");
+const isEditingTitle = ref(false);
 
 // Get username
 const username = ref(localStorage.getItem("nazo_user") || "");
@@ -651,6 +635,8 @@ const restartGame = () => {
   answers.value = [];
   answered.value = false;
   gameCompleted.value = false;
+  titleText.value = "Friends"; // 重置标题
+  isEditingTitle.value = false; // 重置编辑状态
   initializeGame();
 };
 
@@ -679,7 +665,23 @@ const getOptionClasses = (optionIndex: number) => {
   }
 };
 
+// 标题编辑相关函数
+const handleTitleInput = (event: Event) => {
+  const target = event.target as HTMLInputElement;
+  titleText.value = target.value;
+
+  // 检查是否输入了"Family"或者“Framily”
+  if (titleText.value.toLowerCase() === "family" || titleText.value.toLowerCase() === "framily") {
+    easterEggMessage.value = FRIENDS_EASTER_EGG_UUID;
+    console.log(FRIENDS_EASTER_EGG_UUID);
+    showEasterEgg.value = true;
+  }
+};
+
 const handleGameComplete = async () => {
+  // 游戏完成后启用标题编辑功能
+  isEditingTitle.value = true;
+
   // 检查彩蛋条件：答对所有35题
   if (correctAnswers.value === questions.value.length) {
     // 触发彩蛋

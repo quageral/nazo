@@ -1,7 +1,5 @@
 <template>
-  <div
-    class="h-full flex items-center justify-center p-8 bg-gradient-to-br from-orange-50 to-pink-100"
-  >
+  <div class="h-full flex items-center justify-center p-8 bg-gradient-to-br from-orange-50 to-pink-100">
     <div class="max-w-4xl w-full bg-white rounded-xl shadow-xl p-12 m-10">
       <div class="flex flex-col items-center py-12">
         <!-- Game Area -->
@@ -14,58 +12,39 @@
                 题目 {{ currentQuestionIndex + 1 }} / {{ questions.length }}
               </p>
               <div class="w-full bg-gray-200 rounded-full h-2 mt-8">
-                <div
-                  class="bg-orange-500 h-2 rounded-full transition-all duration-300"
-                  :style="{
-                    width:
-                      ((currentQuestionIndex + 1) / questions.length) * 100 +
-                      '%',
-                  }"
-                ></div>
+                <div class="bg-orange-500 h-2 rounded-full transition-all duration-300" :style="{
+                  width:
+                    ((currentQuestionIndex + 1) / questions.length) * 100 +
+                    '%',
+                }"></div>
               </div>
             </div>
 
             <!-- Current Question -->
-            <div
-              v-if="currentQuestion"
-              class="questionWrapper bg-gray-50 p-12 rounded-lg mt-12"
-            >
+            <div v-if="currentQuestion" class="questionWrapper bg-gray-50 p-12 rounded-lg mt-12">
               <!-- Question with Image Area -->
-              <div
-                class="question text-xl font-semibold text-gray-800 mb-12 text-center leading-relaxed"
-              >
+              <div class="question text-xl font-semibold text-gray-800 mb-12 text-center leading-relaxed">
                 <p class="mb-6">{{ currentQuestion.question }}</p>
                 <!-- Image Display Area -->
                 <div class="flex justify-center mb-8">
-                  <img
-                    :src="currentQuestion.imageUrl"
-                    :alt="'猫咪图片 ' + (currentQuestionIndex + 1)"
-                    class="max-w-md max-h-80 object-contain rounded-lg shadow-lg"
-                    loading="lazy"
-                  />
+                  <img :src="currentQuestion.imageUrl" :alt="'猫咪图片 ' + (currentQuestionIndex + 1)"
+                    class="max-w-md max-h-80 object-contain rounded-lg shadow-lg" loading="lazy"
+                    @mouseenter="handleQuestion8ImageMouseEnter" @mouseleave="handleQuestion8ImageMouseLeave" />
                 </div>
               </div>
 
               <!-- Answer Options -->
               <div class="space-y-6">
-                <button
-                  v-for="(option, index) in currentQuestion.options"
-                  :key="index"
-                  @click="selectAnswer(index)"
+                <button v-for="(option, index) in currentQuestion.options" :key="index" @click="selectAnswer(index)"
                   :class="getOptionClasses(index)"
                   class="answer w-full px-8 py-6 rounded-md font-semibold text-lg transition-all duration-200 hover:scale-105 flex justify-between items-center"
-                  :disabled="answered"
-                >
+                  :disabled="answered">
                   <span>{{ getOptionLabel(index) }}. {{ option.text }}</span>
-                  <span
-                    v-if="answered"
-                    class="text-2xl font-bold"
-                    :class="{
-                      'text-green-600': index === currentQuestion.correctIndex,
-                      'text-red-600': index !== currentQuestion.correctIndex,
-                    }"
-                  >
-                    {{ index === currentQuestion.correctIndex ? "✔" : "❌" }}
+                  <span v-if="answered" class="text-2xl font-bold" :class="{
+                    'text-green-600': index === currentQuestion.correctIndex,
+                    'text-red-600': index !== currentQuestion.correctIndex,
+                  }">
+                    {{ index === currentQuestion.correctIndex ? "✓" : "✗" }}
                   </span>
                 </button>
               </div>
@@ -86,21 +65,15 @@
 
             <!-- Result Actions -->
             <div class="space-y-8">
-              <div
-                v-if="correctAnswers >= 10"
-                class="text-green-600 font-bold text-2xl mb-10"
-              >
+              <div v-if="correctAnswers >= 10" class="text-green-600 font-bold text-2xl mb-10">
                 🎉 恭喜通关！答对了{{ correctAnswers }}题！
               </div>
               <div v-else class="text-orange-600 font-bold text-2xl mb-10">
                 😅 需要答对至少10题才能通关（当前答对{{ correctAnswers }}题）
               </div>
 
-              <button
-                v-if="correctAnswers < 10"
-                @click="restartGame"
-                class="px-10 py-6 bg-purple-500 hover:bg-purple-600 text-white rounded-md font-semibold transition-colors text-2xl mt-8"
-              >
+              <button v-if="correctAnswers < 10" @click="restartGame"
+                class="px-10 py-6 bg-purple-500 hover:bg-purple-600 text-white rounded-md font-semibold transition-colors text-2xl mt-8">
                 重新挑战
               </button>
             </div>
@@ -111,22 +84,17 @@
   </div>
 
   <!-- 彩蛋弹窗 -->
-  <div
-    v-if="showEasterEgg"
-    class="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50"
-    @click.self="showEasterEgg = false"
-  >
+  <div v-if="showEasterEgg" class="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50"
+    @click.self="showEasterEgg = false">
     <div class="bg-white rounded-2xl p-6 max-w-md w-full shadow-2xl mx-4">
       <div class="text-center">
-        <div class="text-6xl mb-4">🎉</div>
-        <h3 class="text-2xl font-bold text-gray-800 mb-4">恭喜发现彩蛋！</h3>
+        <div class="text-6xl mb-4">🥚</div>
+        <h3 class="text-2xl font-bold text-gray-800 mb-4">恭喜发现彩蛋！请保存彩蛋码</h3>
         <p class="text-gray-600 leading-relaxed mb-6">
           {{ easterEggMessage }}
         </p>
-        <button
-          @click="showEasterEgg = false"
-          class="bg-gradient-to-r from-orange-500 to-pink-600 hover:from-orange-600 hover:to-pink-700 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-200 transform hover:scale-105"
-        >
+        <button @click="showEasterEgg = false"
+          class="bg-gradient-to-r from-orange-500 to-pink-600 hover:from-orange-600 hover:to-pink-700 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-200 transform hover:scale-105">
           太棒了！
         </button>
       </div>
@@ -162,6 +130,10 @@ const isSubmitting = ref(false);
 // 彩蛋相关状态
 const showEasterEgg = ref(false);
 const easterEggMessage = ref("");
+
+// 新增：第8题图片悬停彩蛋相关状态
+const question8HoverTimer = ref<number | null>(null);
+const isHoveringQuestion8Image = ref(false);
 
 // Get username
 const username = ref(localStorage.getItem("nazo_user") || "");
@@ -206,7 +178,7 @@ const questions = ref([
       { text: "橘猫", value: 6 },
       { text: "暹罗猫", value: 0 },
     ],
-    correctIndex: 0, // Both 中华田园猫 and 橘猫 have value 6, choose first one
+    correctIndex: 0,
   },
   {
     question: "请问下图中的猫咪属于哪个品种？",
@@ -372,9 +344,35 @@ onMounted(async () => {
   window.addEventListener("beforeunload", handleBeforeUnload);
 });
 
+// 第8题图片悬停事件处理
+const handleQuestion8ImageMouseEnter = () => {
+  if (currentQuestionIndex.value === 7) { // 第8题的索引是7
+    isHoveringQuestion8Image.value = true;
+    question8HoverTimer.value = setTimeout(() => {
+      if (isHoveringQuestion8Image.value) {
+        easterEggMessage.value = CAT_EASTER_EGG_UUID;
+        console.log(CAT_EASTER_EGG_UUID);
+        showEasterEgg.value = true;
+      }
+    }, 3000); // 3秒后触发彩蛋
+  }
+};
+
+const handleQuestion8ImageMouseLeave = () => {
+  isHoveringQuestion8Image.value = false;
+  if (question8HoverTimer.value) {
+    clearTimeout(question8HoverTimer.value);
+    question8HoverTimer.value = null;
+  }
+};
+
 // Cleanup on unmount
 onUnmounted(() => {
   window.removeEventListener("beforeunload", handleBeforeUnload);
+  // 清理悬停计时器
+  if (question8HoverTimer.value) {
+    clearTimeout(question8HoverTimer.value);
+  }
 });
 
 // Vue Router navigation guard
