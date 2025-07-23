@@ -196,6 +196,9 @@ public class GameController {
         }
         return gameWon;
 
+      case Const.CONGRATULATIONS_UUID:// 恭喜通关页面，直接返回true
+        return true;
+
       default:
         return false;
     }

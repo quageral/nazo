@@ -1,7 +1,7 @@
 <template>
-  <div class="min-h-screen bg-gradient-game-dark">
-    <!-- 顶部关卡信息栏 -->
-    <header class="glass-card border-b-0 rounded-none shadow-2xl">
+  <div class="min-h-screen" :class="props.uuid === CONGRATULATIONS_UUID ? '' : 'bg-gradient-game-dark'">
+    <!-- 顶部关卡信息栏 - 不在恭喜页面显示 -->
+    <header v-if="props.uuid !== CONGRATULATIONS_UUID" class="glass-card border-b-0 rounded-none shadow-2xl">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 lg:py-6">
         <!-- 移动端垂直布局，桌面端水平布局 -->
         <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 lg:gap-6">
@@ -42,9 +42,13 @@
       </div>
     </header>
 
-    <!-- 主游戏区域 - 使用80%的页面空间 -->
-    <main class="p-8 flex items-center justify-center">
-      <div class="max-w-7xl w-full h-[calc(100vh-200px)] flex items-center justify-center">
+    <!-- 主游戏区域 - 恭喜页面全屏显示 -->
+    <main :class="props.uuid === CONGRATULATIONS_UUID ? '' : 'p-8 flex items-center justify-center'">
+      <div v-if="props.uuid === CONGRATULATIONS_UUID" class="w-full h-screen">
+        <!-- 恭喜页面全屏显示 -->
+        <component :is="currentLevelComponent" :level-uuid="uuid" @game-complete="handleGameComplete" />
+      </div>
+      <div v-else class="max-w-7xl w-full h-[calc(100vh-200px)] flex items-center justify-center">
         <!-- 根据关卡类型加载不同组件 -->
         <component :is="currentLevelComponent" :level-uuid="uuid" @game-complete="handleGameComplete"
           class="w-full max-w-9xl" />
@@ -65,7 +69,7 @@
           </button>
         </div>
         <p class="text-gray-600 leading-relaxed text-sm sm:text-base">
-          {{ levelInfo?.description || "暂无提示信息" }}
+          {{ levelInfo?.hint || "暂无提示信息" }}
         </p>
         <div class="mt-6 flex justify-end">
           <button @click="showHint = false"
@@ -147,6 +151,8 @@ import FriendsGame from "@/components/FriendsGame.vue";
 import MinecraftQuizGame from "@/components/MinecraftQuizGame.vue";
 import CatGame from "@/components/CatGame.vue";
 import GeographyGame from "@/components/GeographyGame.vue";
+import GenericPuzzle from "@/components/GenericPuzzle.vue";
+import CongratulationsView from "@/views/CongratulationsView.vue";
 
 import {
   LEVEL_1_UUID,
@@ -159,6 +165,11 @@ import {
   LEVEL_8_UUID,
   LEVEL_9_UUID,
   LEVEL_10_UUID,
+  PUZZLE_1_UUID,
+  PUZZLE_2_UUID,
+  PUZZLE_3_UUID,
+  PUZZLE_4_UUID,
+  CONGRATULATIONS_UUID,
 } from "@/constants/levels";
 
 interface Props {
@@ -280,6 +291,13 @@ const currentLevelComponent = computed(() => {
       return CatGame;
     case LEVEL_10_UUID:
       return GeographyGame;
+    case PUZZLE_1_UUID:
+    case PUZZLE_2_UUID:
+    case PUZZLE_3_UUID:
+    case PUZZLE_4_UUID:
+      return GenericPuzzle;
+    case CONGRATULATIONS_UUID:
+      return CongratulationsView;
     default:
       return null;
   }

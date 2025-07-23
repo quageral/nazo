@@ -28,7 +28,7 @@ export interface LoginResponse {
 export interface LevelInfo {
   id: string;
   name: string;
-  description: string;
+  hint: string;
   nextLevelUuid: string;
 }
 
@@ -42,6 +42,12 @@ export interface CompleteResponse {
   success: boolean;
   message: string;
   nextLevel?: string;
+}
+
+export interface PuzzleResponse {
+  success: boolean;
+  puzzle: string;
+  message?: string;
 }
 
 export interface EasterEggResponse {
@@ -140,6 +146,48 @@ export const apiService = {
     }
   },
 
+  // 获取谜题内容
+  async getPuzzle(uuid: string): Promise<PuzzleResponse> {
+    try {
+      const response = await fetch(`${API_BASE_URL}/puzzle/${uuid}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      return await response.json();
+    } catch (error) {
+      console.error("获取谜题内容失败:", error);
+      return {
+        success: false,
+        puzzle: "",
+        message: "网络连接失败，请检查后端服务是否启动",
+      };
+    }
+  },
+
+  // 完成谜题
+  async completePuzzle(uuid: string, answer: string): Promise<CompleteResponse> {
+    try {
+      const response = await fetch(`${API_BASE_URL}/puzzle/${uuid}/complete`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ answer }),
+      });
+
+      return await response.json();
+    } catch (error) {
+      console.error("完成谜题请求失败:", error);
+      return {
+        success: false,
+        message: "网络连接失败，请检查后端服务是否启动",
+      };
+    }
+  },
+
   // 开始游戏
   async startGame(
     levelUuid: string
@@ -211,6 +259,8 @@ export const apiService = {
 export const login = apiService.login;
 export const getLevel = apiService.getLevel;
 export const completeLevel = apiService.completeLevel;
+export const getPuzzle = apiService.getPuzzle;
+export const completePuzzle = apiService.completePuzzle;
 export const startGame = apiService.startGame;
 export const completeGame = apiService.completeGame;
 export const getEasterEgg = apiService.getEasterEgg;

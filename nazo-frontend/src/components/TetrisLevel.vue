@@ -55,35 +55,18 @@
             </div>
 
             <!-- 彩蛋弹窗 -->
-            <div v-if="easterEggTriggered"
-              class="absolute inset-0 flex items-center justify-center bg-black/90 rounded-2xl backdrop-blur-sm z-20">
-              <div class="game-card text-center max-w-lg">
-                <div class="text-8xl mb-6 animate-bounce">🎊</div>
-                <h2
-                  class="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-pink-400 via-purple-400 to-blue-400 mb-6 animate-pulse">
-                  恭喜发现彩蛋！
-                </h2>
-
-                <div class="space-y-4 mb-8">
-                  <p class="text-xl text-yellow-300 animate-pulse">
-                    🎉 你是真正的俄罗斯方块大师！
+            <div v-if="easterEggTriggered" class="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50"
+              @click.self="closeEasterEgg">
+              <div class="bg-white rounded-2xl p-6 max-w-md w-full shadow-2xl mx-4">
+                <div class="text-center">
+                  <div class="text-6xl mb-4">🥚</div>
+                  <h3 class="text-2xl font-bold text-gray-800 mb-4">恭喜发现彩蛋！请保存彩蛋码</h3>
+                  <p class="text-gray-600 leading-relaxed mb-6">
+                    {{ easterEggMessage }}
                   </p>
-                  <p class="text-lg text-gray-300">
-                    连续暂停/继续 {{ pauseClickCount }} 次的毅力令人敬佩！
-                  </p>
-                  <div
-                    class="bg-gradient-to-r from-purple-500/20 to-pink-500/20 p-4 rounded-xl border border-purple-400/30">
-                    <p class="text-purple-200 text-sm">
-                      "真正的游戏大师不仅会玩游戏，还会探索游戏的每一个角落。"
-                    </p>
-                  </div>
-                </div>
-
-                <div class="space-y-4">
                   <button @click="closeEasterEgg"
-                    class="w-full game-button bg-gradient-to-r from-purple-500 to-pink-600 text-white flex items-center justify-center space-x-3">
-                    <span>✨</span>
-                    <span>太棒了！继续游戏</span>
+                    class="bg-gradient-to-r from-purple-500 to-pink-600 hover:from-purple-600 hover:to-pink-700 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-200 transform hover:scale-105">
+                    太棒了！
                   </button>
                 </div>
               </div>
@@ -232,6 +215,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted, watch } from "vue";
 import { completeGame, startGame as startGameAPI } from "../services/api";
+import { TETRIS_EASTER_EGG_UUID } from "../constants/levels";
 
 interface Props {
   levelUuid: string;
@@ -401,6 +385,9 @@ const colors: { [key: string]: string } = {
   L: "#ff8000",
 };
 
+// 彩蛋消息
+const easterEggMessage = ref("恭喜发现彩蛋！请保存彩蛋码");
+
 // 监听得分变化，自动提交通关
 watch(score, (newScore) => {
   if (newScore >= winCondition && gameRunning.value && !isSubmitting.value) {
@@ -459,6 +446,7 @@ const startGame = async () => {
   gamePaused.value = false;
   gameOver.value = false;
   easterEggTriggered.value = false;
+  easterEggMessage.value = "";
   pauseClickCount.value = 0;
   easterEggClickHistory.value = [];
   board = createBoard();
@@ -505,7 +493,9 @@ const togglePause = () => {
 // 触发彩蛋
 const triggerEasterEgg = () => {
   easterEggTriggered.value = true;
+  easterEggMessage.value = TETRIS_EASTER_EGG_UUID;
   gamePaused.value = true; // 暂停游戏显示彩蛋
+  console.log(TETRIS_EASTER_EGG_UUID);
 };
 
 // 关闭彩蛋

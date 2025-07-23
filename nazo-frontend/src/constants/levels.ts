@@ -12,6 +12,17 @@ export const LEVEL_UUIDS = {
   LEVEL_10_UUID: "geography-level-10",
 } as const;
 
+// Puzzle UUID constants - must match backend Const.java
+export const PUZZLE_UUIDS = {
+  PUZZLE_1_UUID: "puzzle-1",
+  PUZZLE_2_UUID: "puzzle-2",
+  PUZZLE_3_UUID: "puzzle-3",
+  PUZZLE_4_UUID: "puzzle-4",
+} as const;
+
+// Congratulations UUID constant
+export const CONGRATULATIONS_UUID = "congratulations-final";
+
 // Export individual constants for convenience
 export const {
   LEVEL_1_UUID,
@@ -25,6 +36,13 @@ export const {
   LEVEL_9_UUID,
   LEVEL_10_UUID,
 } = LEVEL_UUIDS;
+
+export const {
+  PUZZLE_1_UUID,
+  PUZZLE_2_UUID,
+  PUZZLE_3_UUID,
+  PUZZLE_4_UUID,
+} = PUZZLE_UUIDS;
 
 export const EASTER_EGG_UUIDS = {
   COLOR_EASTER_EGG_UUID: "color-easter-egg",

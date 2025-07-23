@@ -14,9 +14,9 @@ public class LevelInfo {
   private final String id;
   // 关卡名称
   private final String name;
-  // 在游戏关中，description是描述和彩蛋提示
-  // 在谜题关中，description是谜题描述
-  private final String description;
+  // 在游戏关中，hint是描述和彩蛋提示
+  // 在谜题关中，hint是谜题提示
+  private final String hint;
   // 下一关卡的uuid
   private final String nextLevelUuid;
 
