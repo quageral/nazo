@@ -33,7 +33,7 @@ public class EasterController {
 
         easterEggs.put("friends-easter-egg", new EasterEgg(2023, "friends", "这一关是2023年。十季到现在我还是只看了七季。。。"));
         easterEggs.put("minecraft-easter-egg", new EasterEgg(2014, "minecraft", "这一关是2014年。梦回MineCraft时间！"));
-        easterEggs.put("cat-easter-egg", new EasterEgg(9999, "cat", "其实这里没有彩蛋，但是可以看看猫咪的图片，毕竟猫咪是人类的好朋友。"));
+        easterEggs.put("cat-easter-egg", new EasterEgg(2022, "cat", "这一关是2022年，学校里好多猫(>^ω^<)(>^ω^<)(>^ω^<)"));
         easterEggs.put("geography-easter-egg",
                 new EasterEgg(2017, "geography", "这一关是2017年。文理分班！这不得拿满分？如果现在新高考，我估计会选地理"));
 
