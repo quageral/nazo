@@ -38,13 +38,13 @@ public class EasterController {
                 new EasterEgg(2017, "geography", "这一关是2017年。文理分班！这不得拿满分？如果现在新高考，我估计会选地理"));
 
         easterEggs.put("puzzle-1-easter-egg",
-                new EasterEgg(2025, "chicken", "这一关是2015年。winner winner chicken dinner! 梦回荒野行动"));
+                new EasterEgg(2015, "chicken", "这一关是2015年。winner winner chicken dinner! 梦回荒野行动"));
         easterEggs.put("puzzle-2-easter-egg",
-                new EasterEgg(2025, "trollface", "这一关是2008年。虽然暴走大事件13年才出，但是，荆轲刺秦王，两条毛腿肩上扛！"));
+                new EasterEgg(2008, "trollface", "这一关是2008年。虽然暴走大事件13年才出，但是，荆轲刺秦王，两条毛腿肩上扛！"));
         easterEggs.put("puzzle-3-easter-egg",
-                new EasterEgg(2025, "duck", "这一关是2013年。门前大桥下，游过一群鸭。快来快来数一数，24678。所以为什么我会记得这首诗？"));
+                new EasterEgg(2013, "duck", "这一关是2013年。门前大桥下，游过一群鸭。快来快来数一数，24678。所以为什么我会记得这首诗？"));
         easterEggs.put("puzzle-4-easter-egg", new EasterEgg(2012, "life", "这一关是2012年。开始思考人生的意义！思考宇宙的目的和世界的答案！"));
-        easterEggs.put("puzzle-5-easter-egg", new EasterEgg(2025, "puzzle-5", "这一关是2025年。谜题5"));
+
     }
 
     // 辅助函数：从cookie或请求头获取用户名
