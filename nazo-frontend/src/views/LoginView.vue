@@ -44,7 +44,7 @@
             </label>
             <input id="password" v-model="loginForm.password" type="password" required
               class="w-full px-6 py-4 text-lg bg-white/10 border-2 border-white/20 rounded-xl text-white placeholder-gray-400 focus:border-primary focus:ring-4 focus:ring-primary/30 focus:outline-none transition-all duration-300 backdrop-blur-sm"
-              placeholder="提示：Ctrl-A" />
+              placeholder="提示：Command-A" />
           </div>
 
           <button type="submit" :disabled="isLoading"

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.Cookie;
+import com.nazo.model.Const;
 
 @RestController
 @RequestMapping("/api")
@@ -16,7 +17,7 @@ import jakarta.servlet.http.Cookie;
 public class EasterController {
 
     private static final Map<String, EasterEgg> easterEggs = new HashMap<>();
-    // 用户已收集的彩蛋存储 (实际项目中应使用数据库)
+    // 用户已收集的彩蛋存储
     private static final Map<String, List<CollectedEasterEgg>> userCollectedEggs = new HashMap<>();
 
     static {
@@ -25,9 +26,9 @@ public class EasterController {
         easterEggs.put("minesweeper-easter-egg",
                 new EasterEgg(2021, "minesweeper", "这一关是2021年？大学期间摸鱼总是玩扫雷，无可置疑的摸鱼首选。神中神！（虽然我现在还没有通关过一次高级。。。）"));
         easterEggs.put("tetris-easter-egg",
-                new EasterEgg(2004, "tetris", "这一关是2004年。3岁就开始玩俄罗斯方块？？？（只是因为刚好这是俄罗斯方块20周年。。。）"));
+                new EasterEgg(2024, "tetris", "这一关是2024年。这一年发生的事可太多了。（并且这一年是俄罗斯方块40周年。😂）"));
         easterEggs.put("number-sequences-easter-egg",
-                new EasterEgg(2007, "number-sequences", "这一关是2007年。上小学了，要好好学数学。这样以后在高中，才可以和袁老师一起waaan数学"));
+                new EasterEgg(2016, "number-sequences", "这一关是2016年。要好好学数学，这样以后才可以和袁长林一起waaan数学"));
         easterEggs.put("correlation-easter-egg",
                 new EasterEgg(2019, "correlation", "这一关是2019年。学经济的同学，需要培养较高的数据敏感性（???）"));
 
@@ -35,15 +36,18 @@ public class EasterController {
         easterEggs.put("minecraft-easter-egg", new EasterEgg(2014, "minecraft", "这一关是2014年。梦回MineCraft时间！"));
         easterEggs.put("cat-easter-egg", new EasterEgg(2022, "cat", "这一关是2022年，学校里好多猫(>^ω^<)(>^ω^<)(>^ω^<)"));
         easterEggs.put("geography-easter-egg",
-                new EasterEgg(2017, "geography", "这一关是2017年。文理分班！这不得拿满分？如果现在新高考，我估计会选地理"));
+                new EasterEgg(2017, "geography", "这一关是2017年。文理分班！如果现在新高考，我估计会选地理"));
 
-        easterEggs.put("puzzle-1-easter-egg",
-                new EasterEgg(2015, "chicken", "这一关是2015年。winner winner chicken dinner! 梦回荒野行动"));
-        easterEggs.put("puzzle-2-easter-egg",
-                new EasterEgg(2008, "trollface", "这一关是2008年。虽然暴走大事件13年才出，但是，荆轲刺秦王，两条毛腿肩上扛！"));
-        easterEggs.put("puzzle-3-easter-egg",
+        easterEggs.put("chicken-easter-egg",
+                new EasterEgg(2015, "chicken", "这一关是2015年。winner winner, chicken dinner! 梦回荒野行动"));
+        easterEggs.put("trollface-easter-egg",
+                new EasterEgg(2025, "trollface", "这一关是2025年。距离第一期暴走大事件已经过去12年了。荆轲刺秦王，两条毛腿肩上扛！"));
+        easterEggs.put("duck-easter-egg",
                 new EasterEgg(2013, "duck", "这一关是2013年。门前大桥下，游过一群鸭。快来快来数一数，24678。所以为什么我会记得这首诗？"));
-        easterEggs.put("puzzle-4-easter-egg", new EasterEgg(2012, "life", "这一关是2012年。开始思考人生的意义！思考宇宙的目的和世界的答案！"));
+        easterEggs.put("life-easter-egg", new EasterEgg(2012, "life", "这一关是2012年。开始思考人生的意义！思考宇宙的目的和世界的答案！"));
+        easterEggs.put("brainfuck-easter-egg", new EasterEgg(2022, "brainfuck",
+                "这一年是2022年。AI元年，实在是记忆犹新，我的毕设要是没有gpt估计完成不了hhh。那一年从copilot开始，3年不到，AI真是日新月异。（本次网站前端代码也得感谢cursor和Claude-4-sonnet）"));
+        easterEggs.put("kfcrazythursdayv50", new EasterEgg(2018, "v50", "这一年是2018年。是kfc疯狂星期四元年。恭喜找到最终彩蛋！"));
 
     }
 

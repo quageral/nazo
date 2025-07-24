@@ -27,6 +27,8 @@ public class PuzzleController {
                 "<h3>Duck</h3>");
         puzzles.put(Const.PUZZLE_4_UUID,
                 "<h3>The Answer to the Ultimate Question of Life, The Universe, and Everything =</h3>");
+        puzzles.put(Const.PUZZLE_5_UUID,
+                "+++++[>+++++++++++++<-]>.>++++++++[>+++++++++<-]>+.");
 
     }
 
@@ -80,7 +82,9 @@ public class PuzzleController {
             case Const.PUZZLE_3_UUID:
                 return trimmedAnswer.contains("门前大桥下");
             case Const.PUZZLE_4_UUID:
-                return "42".equals(trimmedAnswer);
+                return "42".equals(trimmedAnswer) || "fourtytwo".equals(trimmedAnswer);
+            case Const.PUZZLE_5_UUID:
+                return "ai".equals(trimmedAnswer) || "AI".equals(trimmedAnswer);
             default:
                 return false;
         }

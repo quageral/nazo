@@ -1,69 +1,37 @@
 <template>
   <div class="min-h-screen bg-black relative overflow-hidden">
     <!-- Main Content -->
-    <div
-      class="relative z-10 flex flex-col items-center justify-center min-h-screen px-4"
-    >
+    <div class="relative z-10 flex flex-col items-center justify-center min-h-screen px-4">
       <!-- Header -->
       <div class="text-center mb-8">
         <div class="flex items-center justify-center mb-4">
-          <img
-            src="https://geektyper.com/ASSETS/logos/shield.png"
-            alt="SHIELD Logo"
-            width="200"
-            height="200"
-            class="mr-3"
-          />
+          <img src="https://geektyper.com/ASSETS/logos/shield.png" alt="SHIELD Logo" width="200" height="200"
+            class="mr-3" />
         </div>
         <p class="text-gray-400">输入彩蛋ID以解锁隐藏消息</p>
+        <p class="text-gray-500 text-sm mt-2">所有的无PS提示的关卡都可以Command-A</p>
       </div>
 
       <!-- Input Section -->
       <div class="w-full max-w-md mb-8">
-        <div
-          class="bg-gray-900 bg-opacity-80 backdrop-blur-sm rounded-lg p-6 border border-gray-700"
-        >
+        <div class="bg-gray-900 bg-opacity-80 backdrop-blur-sm rounded-lg p-6 border border-gray-700">
           <div class="mb-4">
-            <label
-              for="easterEggId"
-              class="block text-white text-sm font-medium mb-2"
-            >
+            <label for="easterEggId" class="block text-white text-sm font-medium mb-2">
               彩蛋 ID
             </label>
-            <input
-              id="easterEggId"
-              v-model="inputId"
-              type="text"
-              placeholder="请输入彩蛋ID..."
+            <input id="easterEggId" v-model="inputId" type="text" placeholder="请输入彩蛋ID..."
               class="w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              @keyup.enter="unlockEasterEgg"
-            />
+              @keyup.enter="unlockEasterEgg" />
           </div>
-          <button
-            @click="unlockEasterEgg"
-            :disabled="isLoading || !inputId.trim()"
-            class="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white font-medium py-3 px-4 rounded-lg transition-colors duration-200"
-          >
+          <button @click="unlockEasterEgg" :disabled="isLoading || !inputId.trim()"
+            class="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white font-medium py-3 px-4 rounded-lg transition-colors duration-200">
             <span v-if="isLoading" class="flex items-center justify-center">
-              <svg
-                class="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-              >
-                <circle
-                  class="opacity-25"
-                  cx="12"
-                  cy="12"
-                  r="10"
-                  stroke="currentColor"
-                  stroke-width="4"
-                ></circle>
-                <path
-                  class="opacity-75"
-                  fill="currentColor"
-                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                ></path>
+              <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none"
+                viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                </path>
               </svg>
               解锁中...
             </span>
@@ -74,33 +42,21 @@
 
       <!-- Messages List -->
       <div class="w-full max-w-2xl">
-        <div
-          class="bg-gray-900 bg-opacity-80 backdrop-blur-sm rounded-lg p-6 border border-gray-700"
-        >
+        <div class="bg-gray-900 bg-opacity-80 backdrop-blur-sm rounded-lg p-6 border border-gray-700">
           <h2 class="text-xl font-semibold text-white mb-4 flex items-center">
             <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
               <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
             </svg>
             已收集的彩蛋
-            <span class="ml-2 text-sm text-gray-400"
-              >({{ easterEggs.length }})</span
-            >
+            <span class="ml-2 text-sm text-gray-400">({{ easterEggs.length }})</span>
           </h2>
 
           <div v-if="easterEggs.length === 0" class="text-center py-8">
             <div class="text-gray-500 mb-2">
-              <svg
-                class="w-16 h-16 mx-auto mb-4 opacity-50"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-4m-12 0H4m8 6v-6"
-                ></path>
+              <svg class="w-16 h-16 mx-auto mb-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-4m-12 0H4m8 6v-6">
+                </path>
               </svg>
             </div>
             <p class="text-gray-400">还没有收集到任何彩蛋</p>
@@ -110,23 +66,16 @@
           </div>
 
           <div v-else class="space-y-4">
-            <div
-              v-for="egg in easterEggs"
-              :key="egg.easterEggId + '_' + egg.collectedAt"
-              class="bg-gray-800 bg-opacity-60 rounded-lg p-4 border border-gray-600 transform transition-all duration-300 hover:scale-105"
-            >
+            <div v-for="egg in easterEggs" :key="egg.easterEggId + '_' + egg.collectedAt"
+              class="bg-gray-800 bg-opacity-60 rounded-lg p-4 border border-gray-600 transform transition-all duration-300 hover:scale-105">
               <div class="flex justify-between items-start mb-2">
                 <div class="flex items-center">
-                  <span
-                    class="inline-block w-3 h-3 bg-green-500 rounded-full mr-2"
-                  ></span>
+                  <span class="inline-block w-3 h-3 bg-green-500 rounded-full mr-2"></span>
                   <div class="flex flex-col">
                     <span class="text-blue-400 font-medium">{{
                       egg.easterEggId
                     }}</span>
-                    <span class="text-purple-400 text-sm"
-                      >关卡: {{ egg.levelName }}</span
-                    >
+                    <span class="text-purple-400 text-sm">关卡: {{ egg.levelName }}</span>
                   </div>
                 </div>
                 <div class="text-right">
@@ -145,38 +94,36 @@
       </div>
 
       <!-- Error Message -->
-      <div
-        v-if="errorMessage"
-        class="fixed top-4 right-4 bg-red-600 text-white px-6 py-3 rounded-lg shadow-lg border border-red-700 z-50"
-      >
+      <div v-if="errorMessage"
+        class="fixed top-4 right-4 bg-red-600 text-white px-6 py-3 rounded-lg shadow-lg border border-red-700 z-50">
         <div class="flex items-center">
           <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
-            <path
-              fill-rule="evenodd"
+            <path fill-rule="evenodd"
               d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
-              clip-rule="evenodd"
-            ></path>
+              clip-rule="evenodd"></path>
           </svg>
           {{ errorMessage }}
         </div>
       </div>
 
       <!-- Success Message -->
-      <div
-        v-if="successMessage"
-        class="fixed top-4 right-4 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg border border-green-700 z-50"
-      >
+      <div v-if="successMessage"
+        class="fixed top-4 right-4 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg border border-green-700 z-50">
         <div class="flex items-center">
           <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
-            <path
-              fill-rule="evenodd"
+            <path fill-rule="evenodd"
               d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-              clip-rule="evenodd"
-            ></path>
+              clip-rule="evenodd"></path>
           </svg>
           {{ successMessage }}
         </div>
       </div>
+    </div>
+
+    <!-- 隐藏消息 -->
+    <div
+      class="absolute bottom-4 right-4 text-transparent text-xs opacity-5 pointer-events-none select-none max-w-xs text-right">
+      只要提示里有PS的关卡就有隐藏彩蛋，非关卡页面也可以Command-A
     </div>
   </div>
 </template>
@@ -333,6 +280,7 @@ onMounted(() => {
     opacity: 0;
     transform: translateY(30px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);

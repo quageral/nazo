@@ -96,7 +96,7 @@ export const apiService = {
       console.error("获取关卡信息失败:", error);
       return {
         success: false,
-        level: { id: "", name: "", description: "", nextLevelUuid: "" },
+        level: { id: "", name: "", hint: "", nextLevelUuid: "" },
         message: "网络连接失败，请检查后端服务是否启动",
       };
     }

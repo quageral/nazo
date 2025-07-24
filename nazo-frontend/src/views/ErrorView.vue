@@ -12,23 +12,22 @@
         <!-- 错误描述 -->
         <div class="glass-card p-8 mb-8">
           <p class="text-xl text-gray-300 leading-relaxed">
-            🔍 抱歉，您访问的关卡不存在或已失效<br />
-            🔗 请检查关卡链接是否正确<br />
-            🎮 或者重新登录开始游戏
+            🔍 抱歉，您访问的关卡不存在<br />
+            🔗 请检查链接是否正确
           </p>
         </div>
 
         <!-- 操作按钮 -->
         <div class="space-y-4">
-          <button @click="goToLogin"
-            class="w-full game-button bg-gradient-game text-white flex items-center justify-center space-x-3">
-            <span class="text-xl">🏠</span>
-            <span>返回登录页</span>
-          </button>
           <button @click="goBack"
             class="w-full game-button bg-gradient-to-r from-gray-600 to-gray-700 text-white flex items-center justify-center space-x-3">
             <span class="text-xl">🔙</span>
             <span>返回上一页</span>
+          </button>
+          <button @click="goToLogin"
+            class="w-full game-button bg-gradient-game text-white flex items-center justify-center space-x-3">
+            <span class="text-xl">🏠</span>
+            <span>返回登录页</span>
           </button>
         </div>
 
@@ -43,6 +42,11 @@
           </p>
         </div>
       </div>
+    </div>
+
+    <!-- 隐藏消息 -->
+    <div class="absolute bottom-4 left-4 text-transparent text-xs opacity-5 pointer-events-none select-none">
+      惊了，你是怎么找到这儿的？
     </div>
   </div>
 </template>
