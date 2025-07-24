@@ -18,7 +18,12 @@ public class NazoApplication {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/api/**")
-                        .allowedOriginPatterns("43.138.133.3") // 允许所有域名，生产环境建议配置具体域名
+                        .allowedOriginPatterns(
+                                "http://localhost:*", // 本地开发环境
+                                "http://127.0.0.1:*", // 本地开发环境
+                                "http://43.138.133.3:*", // 您的服务器IP，所有端口
+                                "https://43.138.133.3:*" // 如果使用HTTPS
+                )
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
                         .allowCredentials(true)
