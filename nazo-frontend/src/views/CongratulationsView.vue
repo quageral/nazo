@@ -77,8 +77,8 @@
         <div class="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-black/20 to-transparent"></div>
 
         <!-- 隐藏消息 -->
-        <div class="absolute bottom-4 left-4 text-transparent text-xs opacity-5 pointer-events-none select-none">
-            将第24个符号合在一起加上50，就能得到新彩蛋
+        <div class="fixed bottom-4 right-4 text-transparent text-xs opacity-30 font-mono">
+            2018 = all_egg(第24位字符) + 50
         </div>
     </div>
 </template>

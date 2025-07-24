@@ -45,7 +45,7 @@
     </div>
 
     <!-- 隐藏消息 -->
-    <div class="absolute bottom-4 left-4 text-transparent text-xs opacity-5 pointer-events-none select-none">
+    <div class="fixed bottom-4 left-4 text-transparent text-xs opacity-5">
       惊了，你是怎么找到这儿的？
     </div>
   </div>

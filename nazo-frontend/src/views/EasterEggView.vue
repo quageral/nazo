@@ -74,14 +74,14 @@
                   <div class="flex flex-col">
                     <span class="text-blue-400 font-medium">{{
                       egg.easterEggId
-                      }}</span>
+                    }}</span>
                     <span class="text-purple-400 text-sm">关卡: {{ egg.levelName }}</span>
                   </div>
                 </div>
                 <div class="text-right">
                   <span class="text-yellow-400 font-semibold">{{
                     egg.time
-                    }}</span>
+                  }}</span>
                   <div class="text-gray-500 text-xs mt-1">
                     {{ formatCollectedTime(egg.collectedAt) }}
                   </div>
@@ -121,9 +121,8 @@
     </div>
 
     <!-- 隐藏消息 -->
-    <div
-      class="absolute bottom-4 right-4 text-transparent text-xs opacity-5 pointer-events-none select-none max-w-xs text-right">
-      只要提示里有PS的关卡就有隐藏彩蛋，非关卡页面也可以Command-A
+    <div class="fixed bottom-4 right-4 text-transparent text-xs opacity-30 font-mono">
+      有两个信息可以给你：只要提示里有PS的关卡就有隐藏彩蛋。所有的非关卡页面也可以Command-A
     </div>
   </div>
 </template>
@@ -132,8 +131,23 @@
 import { ref, onMounted } from "vue";
 import { getEasterEgg } from "@/services/api";
 
-// Import API_BASE_URL from api service
-const API_BASE_URL = "http://43.138.133.3:8080/api";
+// 动态确定API基础URL
+function getApiBaseUrl(): string {
+  // 如果是开发环境（localhost或127.0.0.1）
+  if (window.location.hostname === 'localhost' ||
+    window.location.hostname === '127.0.0.1' ||
+    window.location.hostname === '0.0.0.0') {
+    return "http://localhost:8080/api";
+  }
+
+  // 生产环境：使用当前域名和协议
+  const protocol = window.location.protocol;
+  const hostname = window.location.hostname;
+  // 假设后端在8080端口，如果您的部署配置不同，请修改此处
+  return `${protocol}//${hostname}:8080/api`;
+}
+
+const API_BASE_URL = getApiBaseUrl();
 
 interface CollectedEasterEgg {
   easterEggId: string;
@@ -220,6 +234,7 @@ const loadCollectedEasterEggs = async () => {
   try {
     // 从 localStorage 获取用户名
     const username = localStorage.getItem("nazo_user") || "";
+    console.log("Loading collected easter eggs for user:", username);
 
     const response = await fetch(
       `${API_BASE_URL}/easter/collected?username=${encodeURIComponent(
@@ -234,8 +249,12 @@ const loadCollectedEasterEggs = async () => {
       }
     );
 
+    console.log("Response status:", response.status, response.statusText);
+
     if (!response.ok) {
       console.error("HTTP 错误:", response.status, response.statusText);
+      const errorText = await response.text();
+      console.error("Error response body:", errorText);
       return;
     }
 
@@ -244,6 +263,8 @@ const loadCollectedEasterEggs = async () => {
 
     if (data.success && data.eggs) {
       easterEggs.value = data.eggs;
+    } else {
+      console.log("No eggs found or success=false:", data);
     }
   } catch (error) {
     console.error("加载已收集彩蛋失败:", error);

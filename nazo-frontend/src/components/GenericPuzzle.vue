@@ -1,5 +1,5 @@
 <template>
-    <div class="min-h-screen bg-gradient-game-dark flex items-center justify-center p-4 relative">
+    <div class="h-full bg-gradient-game-dark flex items-center justify-center p-4 relative">
         <div class="glass-card max-w-2xl w-full">
 
 
@@ -56,8 +56,7 @@
         </div>
 
         <!-- 彩蛋码 - 右下角透明文本 -->
-        <div v-if="easterEggCode"
-            class="fixed bottom-4 right-4 text-transparent   text-xs opacity-30 font-mono select-none pointer-events-none">
+        <div v-if="easterEggCode" class="fixed bottom-4 right-4 text-transparent text-xs opacity-30 font-mono">
             {{ easterEggCode }}
         </div>
     </div>
