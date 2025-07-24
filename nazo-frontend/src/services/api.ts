@@ -1,5 +1,5 @@
 // API服务模块 - 与Java后端通信
-const API_BASE_URL = "http://43.138.133.3:8080/api";
+const API_BASE_URL = "http://localhost:8080/api";
 
 // 辅助函数：从cookie获取用户名
 function getUsernameFromCookie(): string {
