@@ -70,8 +70,6 @@ mvn spring-boot:run
 java -jar target/nazo-tetris-1.0.0.jar
 ```
 
-后端服务运行在: `http://localhost:8080`
-
 ### 2. 启动前端服务
 
 ```bash

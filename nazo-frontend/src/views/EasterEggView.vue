@@ -74,14 +74,14 @@
                   <div class="flex flex-col">
                     <span class="text-blue-400 font-medium">{{
                       egg.easterEggId
-                    }}</span>
+                      }}</span>
                     <span class="text-purple-400 text-sm">关卡: {{ egg.levelName }}</span>
                   </div>
                 </div>
                 <div class="text-right">
                   <span class="text-yellow-400 font-semibold">{{
                     egg.time
-                  }}</span>
+                    }}</span>
                   <div class="text-gray-500 text-xs mt-1">
                     {{ formatCollectedTime(egg.collectedAt) }}
                   </div>
@@ -131,6 +131,9 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
 import { getEasterEgg } from "@/services/api";
+
+// Import API_BASE_URL from api service
+const API_BASE_URL = "http://43.138.133.3:8080/api";
 
 interface CollectedEasterEgg {
   easterEggId: string;
@@ -219,7 +222,7 @@ const loadCollectedEasterEggs = async () => {
     const username = localStorage.getItem("nazo_user") || "";
 
     const response = await fetch(
-      `http://localhost:8080/api/easter/collected?username=${encodeURIComponent(
+      `${API_BASE_URL}/easter/collected?username=${encodeURIComponent(
         username
       )}`,
       {
