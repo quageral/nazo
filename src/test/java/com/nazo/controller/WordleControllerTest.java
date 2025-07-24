@@ -280,7 +280,7 @@ public class WordleControllerTest {
   @DisplayName("跨域支持 - CORS预检请求")
   void corsSupport() throws Exception {
     mockMvc.perform(post("/api/wordle/start")
-        .header("Origin", "http://localhost:3000")
+        .header("Origin", "http://localhost:5173")
         .contentType(MediaType.APPLICATION_JSON)
         .content(objectMapper.writeValueAsString(startRequest)))
         .andExpect(status().isOk());

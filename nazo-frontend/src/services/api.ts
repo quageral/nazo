@@ -1,5 +1,21 @@
 // API服务模块 - 与Java后端通信
-const API_BASE_URL = "http://43.138.133.3:8080/api";
+// 动态确定API基础URL
+function getApiBaseUrl(): string {
+  // 如果是开发环境（localhost或127.0.0.1）
+  if (window.location.hostname === 'localhost' ||
+    window.location.hostname === '127.0.0.1' ||
+    window.location.hostname === '0.0.0.0') {
+    return "http://localhost:8080/api";
+  }
+
+  // 生产环境：使用当前域名和协议
+  const protocol = window.location.protocol;
+  const hostname = window.location.hostname;
+  // 假设后端在8080端口，如果您的部署配置不同，请修改此处
+  return `${protocol}//${hostname}:8080/api`;
+}
+
+const API_BASE_URL = getApiBaseUrl();
 
 // 辅助函数：从cookie获取用户名
 function getUsernameFromCookie(): string {
