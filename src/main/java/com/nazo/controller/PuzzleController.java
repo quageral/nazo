@@ -24,7 +24,11 @@ public class PuzzleController {
         puzzles.put(Const.PUZZLE_2_UUID,
                 "/src/assets/Troll-Face-Meme-PNG.webp");
         puzzles.put(Const.PUZZLE_3_UUID,
-                "<h3>Duck</h3>");
+                "<h3>DuckQuarkQuarkQuarkQuarkQuarkDuckQuark</h3>" +
+                        "<h3>DuckQuarkQuarkQuarkDuckDuckQuarkDuck</h3>" +
+                        "<h3>DuckDuckDuckQuarkDuckDuckQuarkDuckQuark</h3>" +
+                        "<h3>DuckDuckDuckDuckQuarkDuckDuckQuarkDuck</h3>" +
+                        "<h3>QuarkDuckDuckDuckDuckDuckDuckDuckDuck</h3>");
         puzzles.put(Const.PUZZLE_4_UUID,
                 "<h3>The Answer to the Ultimate Question of Life, The Universe, and Everything =</h3>");
         puzzles.put(Const.PUZZLE_5_UUID,

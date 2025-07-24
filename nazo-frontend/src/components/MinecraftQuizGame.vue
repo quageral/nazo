@@ -543,7 +543,7 @@ const selectAnswer = (optionIndex: number) => {
       gameCompleted.value = true;
       handleGameComplete();
     }
-  }, 1500);
+  }, 500);
 };
 
 const restartGame = () => {

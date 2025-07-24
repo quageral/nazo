@@ -1,5 +1,5 @@
 <template>
-    <div class="min-h-screen bg-gradient-game-dark flex items-center justify-center p-4">
+    <div class="min-h-screen bg-gradient-game-dark flex items-center justify-center p-4 relative">
         <div class="glass-card max-w-2xl w-full">
 
 
@@ -54,14 +54,26 @@
                 </div>
             </div>
         </div>
+
+        <!-- 彩蛋码 - 右下角透明文本 -->
+        <div v-if="easterEggCode"
+            class="fixed bottom-4 right-4 text-transparent   text-xs opacity-30 font-mono select-none pointer-events-none">
+            {{ easterEggCode }}
+        </div>
     </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, watch } from "vue";
+import { ref, onMounted, watch, computed } from "vue";
 import { getLevel, getPuzzle, completePuzzle } from "@/services/api";
 import type { LevelInfo } from "@/services/api";
-import { PUZZLE_1_UUID } from "@/constants/levels";
+import {
+    PUZZLE_1_UUID,
+    PUZZLE_2_UUID,
+    PUZZLE_3_UUID,
+    PUZZLE_4_UUID,
+    PUZZLE_5_UUID
+} from "@/constants/levels";
 
 interface Props {
     levelUuid: string;
@@ -82,6 +94,20 @@ const isLoading = ref(true);
 const isSubmitting = ref(false);
 const errorMessage = ref("");
 const submitError = ref("");
+
+// 彩蛋码映射
+const easterEggCodes = {
+    [PUZZLE_1_UUID]: "Y2hpY2tlbi1lYXN0ZXItZWda",
+    [PUZZLE_2_UUID]: "dHJvbGxmYWNlLWVhc3Rlci1ld2c",
+    [PUZZLE_3_UUID]: "ZHVjay1lYXN0ZXItZWdnw2vc",
+    [PUZZLE_4_UUID]: "bGlmZS1lYXN0ZXItZWdnMTIf",
+    [PUZZLE_5_UUID]: "YnJhaW5mdWNrLWVhc3Rlci1la2dhc2Q"
+};
+
+// 计算当前谜题的彩蛋码
+const easterEggCode = computed(() => {
+    return easterEggCodes[props.levelUuid as keyof typeof easterEggCodes] || null;
+});
 
 // 加载关卡信息
 const loadLevelInfo = async () => {

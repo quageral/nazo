@@ -1,27 +1,28 @@
 // Level UUID constants - must match backend Const.java
 export const LEVEL_UUIDS = {
-  LEVEL_1_UUID: "tetris-level-1",
-  LEVEL_2_UUID: "correlation-level-2",
-  LEVEL_3_UUID: "minesweeper-level-3",
-  LEVEL_4_UUID: "wordle-level-4",
-  LEVEL_5_UUID: "color-level-5",
-  LEVEL_6_UUID: "number-sequences-level-6",
-  LEVEL_7_UUID: "friends-level-7",
-  LEVEL_8_UUID: "minecraft-level-8",
-  LEVEL_9_UUID: "cat-level-9",
-  LEVEL_10_UUID: "geography-level-10",
+  LEVEL_1_UUID: "dGV0cmlzLWxldmVsLTF2Y3h2ZnI",
+  LEVEL_2_UUID: "bmp1LW5qdS1jb3JyZWxhdGlvbi1sZXZlbC0y",
+  LEVEL_3_UUID: "bWluZXN3ZWVwZXItbGV2ZWwtM2RzYWRzYQ",
+  LEVEL_4_UUID: "d29yZGxlLWxldmVsLTRkYWRhcw",
+  LEVEL_5_UUID: "Y29sb3ItbGV2ZWwtNWNkd3ZjZXY",
+  LEVEL_6_UUID: "bnVtYmVyLXNlcXVlbmNlcy1sZXZlbC02",
+  LEVEL_7_UUID: "ZnJpZW5kcy1sZXZlbC03",
+  LEVEL_8_UUID: "bWluZWNyYWZ0LWxldmVsLTg",
+  LEVEL_9_UUID: "Y2F0LWxldmVsLTl2ZmFj",
+  LEVEL_10_UUID: "Z2VvZ3JhcGh5LWxldmVsLTEw",
 } as const;
 
 // Puzzle UUID constants - must match backend Const.java
 export const PUZZLE_UUIDS = {
-  PUZZLE_1_UUID: "puzzle-1",
-  PUZZLE_2_UUID: "puzzle-2",
-  PUZZLE_3_UUID: "puzzle-3",
-  PUZZLE_4_UUID: "puzzle-4",
+  PUZZLE_1_UUID: "cHV6emxlLTFkYWNkdmU",
+  PUZZLE_2_UUID: "cHV6emxlLTJiZ3J2cg",
+  PUZZLE_3_UUID: "ZGVjZWNlcHV6emxlLTM",
+  PUZZLE_4_UUID: "dmZydmZycHV6emxlLTQ",
+  PUZZLE_5_UUID: "cHV6emxlLTViZ3RidGdidA",
 } as const;
 
 // Congratulations UUID constant
-export const CONGRATULATIONS_UUID = "congratulations-final";
+export const CONGRATULATIONS_UUID = "Y29uZ3JhdHVsYXRpb25zLWZpbmFs";
 
 // Export individual constants for convenience
 export const {
@@ -42,19 +43,21 @@ export const {
   PUZZLE_2_UUID,
   PUZZLE_3_UUID,
   PUZZLE_4_UUID,
+  PUZZLE_5_UUID,
 } = PUZZLE_UUIDS;
 
 export const EASTER_EGG_UUIDS = {
-  COLOR_EASTER_EGG_UUID: "color-easter-egg",
-  WORDLE_EASTER_EGG_UUID: "wordle-easter-egg",
-  MINESWEEPER_EASTER_EGG_UUID: "minesweeper-easter-egg",
-  TETRIS_EASTER_EGG_UUID: "tetris-easter-egg",
-  NUMBER_SEQUENCES_EASTER_EGG_UUID: "number-sequences-easter-egg",
-  CORRELATION_EASTER_EGG_UUID: "correlation-easter-egg",
-  FRIENDS_EASTER_EGG_UUID: "friends-easter-egg",
-  MINECRAFT_EASTER_EGG_UUID: "minecraft-easter-egg",
-  CAT_EASTER_EGG_UUID: "cat-easter-egg",
-  GEOGRAPHY_EASTER_EGG_UUID: "geography-easter-egg",
+  COLOR_EASTER_EGG_UUID: "Y29sb3ItZWFzdGVyLWVnZ3pkYzFx",
+  WORDLE_EASTER_EGG_UUID: "d29yZGxlLWVhc3Rlci1lZ2d6hGN6eGM",
+  MINESWEEPER_EASTER_EGG_UUID: "bWluZXN3ZWVwZXItZWFzdGVyuWVnZw",
+  TETRIS_EASTER_EGG_UUID: "dGV0cmlzLWVhc3Rlci1lZ2dis3RiZ3Q",
+  NUMBER_SEQUENCES_EASTER_EGG_UUID: "bnVtYmVyLXNlcXVlbmNlcy1zYXN0ZXItZWdn",
+  CORRELATION_EASTER_EGG_UUID: "Y29ycmVsYXRpb24tZWFzdGVttWVnZw",
+  FRIENDS_EASTER_EGG_UUID: "ZnJpZW5kcy1lYXN0ZXItZWdnrG9wbG9w",
+  MINECRAFT_EASTER_EGG_UUID: "bWluZWNyYWZ0LWVhc3Rlci1rZ2c",
+  CAT_EASTER_EGG_UUID: "Y2F0LWVhc3Rlci1lZ2djZGVuyHluaHk",
+  GEOGRAPHY_EASTER_EGG_UUID: "Z2VvZ3JhcGh5LWVhc3Rlci1yZ2d6eGM",
+
 } as const;
 
 export const {

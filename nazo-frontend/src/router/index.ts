@@ -4,7 +4,7 @@ import LevelView from "@/views/LevelView.vue";
 import ErrorView from "@/views/ErrorView.vue";
 import CorrelationGameView from "@/views/CorrelationGameView.vue";
 import EasterEggView from "@/views/EasterEggView.vue";
-import { LEVEL_1_UUID } from "@/constants/levels";
+import { LEVEL_9_UUID } from "@/constants/levels";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -62,8 +62,8 @@ router.beforeEach((to, from, next) => {
     next({ name: "Login" });
   } else if (to.name === "Login" && isLoggedIn) {
     // fixme: 已登录用户访问登录页时重定向到第一关
-    console.log("已登录用户重定向到第一关");
-    next(`/level/${LEVEL_1_UUID}`);
+    console.log("已登录用户重定向到第1关");
+    next(`/level/${LEVEL_9_UUID}`);
   } else {
     console.log("正常通过路由守卫");
     next();

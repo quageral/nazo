@@ -1,4 +1,4 @@
-实现一个扫雷游戏，成为项目中的第三关“LEVEL_3_UUID=minesweeper-level-3
+实现一个扫雷游戏，成为项目中的第三关“LEVEL_3_UUID=bWluZXN3ZWVwZXItbGV2ZWwtM2RzYWRzYQ
 游戏玩法：
 完全遵循经典扫雷规则，游戏面板由许多方格（格子）组成，方格中隐藏有地雷（mine）。
 一个格子中至多只有1颗地雷，胜利条件是打开所有安全格（非地雷，safe cell）。

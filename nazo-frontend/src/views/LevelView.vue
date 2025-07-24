@@ -169,6 +169,7 @@ import {
   PUZZLE_2_UUID,
   PUZZLE_3_UUID,
   PUZZLE_4_UUID,
+  PUZZLE_5_UUID,
   CONGRATULATIONS_UUID,
 } from "@/constants/levels";
 
@@ -295,6 +296,7 @@ const currentLevelComponent = computed(() => {
     case PUZZLE_2_UUID:
     case PUZZLE_3_UUID:
     case PUZZLE_4_UUID:
+    case PUZZLE_5_UUID:
       return GenericPuzzle;
     case CONGRATULATIONS_UUID:
       return CongratulationsView;
