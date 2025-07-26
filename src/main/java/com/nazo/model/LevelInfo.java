@@ -19,5 +19,7 @@ public class LevelInfo {
   private final String hint;
   // 下一关卡的uuid
   private final String nextLevelUuid;
+  // 上一关卡的uuid
+  private final String lastLevelUuid;
 
 }

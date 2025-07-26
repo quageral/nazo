@@ -80,6 +80,41 @@ public class GameController {
     return ResponseEntity.ok(response);
   }
 
+  @GetMapping("/level/last/{uuid}")
+  public ResponseEntity<Map<String, Object>> getLastLevel(@PathVariable String uuid) {
+    LevelInfo level = Const.levels.get(uuid);
+
+    if (level == null) {
+      Map<String, Object> response = new HashMap<>();
+      response.put("success", false);
+      response.put("message", "关卡不存在");
+      return ResponseEntity.notFound().build();
+    }
+
+    String lastLevelUuid = level.getLastLevelUuid();
+
+    if (lastLevelUuid == null) {
+      Map<String, Object> response = new HashMap<>();
+      response.put("success", false);
+      response.put("message", "没有上一关");
+      return ResponseEntity.badRequest().body(response);
+    }
+
+    LevelInfo lastLevel = Const.levels.get(lastLevelUuid);
+
+    if (lastLevel == null) {
+      Map<String, Object> response = new HashMap<>();
+      response.put("success", false);
+      response.put("message", "上一关信息不存在");
+      return ResponseEntity.notFound().build();
+    }
+
+    Map<String, Object> response = new HashMap<>();
+    response.put("success", true);
+    response.put("level", lastLevel);
+    return ResponseEntity.ok(response);
+  }
+
   @PostMapping("/game/start")
   public ResponseEntity<Map<String, Object>> startGame(@RequestBody Map<String, String> request) {
     String levelUuid = request.get("levelUuid");

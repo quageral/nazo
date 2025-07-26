@@ -1,19 +1,30 @@
 <template>
-  <div class="min-h-screen" :class="props.uuid === CONGRATULATIONS_UUID ? '' : 'bg-gradient-game-dark'">
+  <div
+    class="min-h-screen"
+    :class="props.uuid === CONGRATULATIONS_UUID ? '' : 'bg-gradient-game-dark'"
+  >
     <!-- 顶部关卡信息栏 - 不在恭喜页面显示 -->
-    <header v-if="props.uuid !== CONGRATULATIONS_UUID" class="glass-card border-b-0 rounded-none shadow-2xl">
+    <header
+      v-if="props.uuid !== CONGRATULATIONS_UUID"
+      class="glass-card border-b-0 rounded-none shadow-2xl"
+    >
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 lg:py-6">
         <!-- 移动端垂直布局，桌面端水平布局 -->
-        <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 lg:gap-6">
+        <div
+          class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 lg:gap-6"
+        >
           <!-- 左侧关卡信息 -->
           <div class="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6">
             <div class="flex items-center gap-3">
               <div
-                class="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-game rounded-full flex items-center justify-center text-white font-bold text-lg sm:text-xl">
+                class="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-game rounded-full flex items-center justify-center text-white font-bold text-lg sm:text-xl"
+              >
                 {{ levelInfo?.id }}
               </div>
               <div>
-                <h1 class="text-2xl sm:text-3xl font-bold text-white text-shadow-lg">
+                <h1
+                  class="text-2xl sm:text-3xl font-bold text-white text-shadow-lg"
+                >
                   第{{ levelInfo?.id }}关
                 </h1>
                 <p class="text-lg sm:text-xl text-gray-300 font-medium">
@@ -23,8 +34,10 @@
             </div>
 
             <!-- 用户名显示 -->
-            <div v-if="currentUser"
-              class="flex items-center gap-2 bg-white/10 px-3 py-2 rounded-md backdrop-blur-sm w-fit">
+            <div
+              v-if="currentUser"
+              class="flex items-center gap-2 bg-white/10 px-3 py-2 rounded-md backdrop-blur-sm w-fit"
+            >
               <span class="text-base sm:text-lg">👤</span>
               <span class="text-white font-medium text-sm sm:text-base">{{
                 currentUser
@@ -33,8 +46,10 @@
           </div>
 
           <!-- 右侧提示按钮 -->
-          <button @click="showHint = true"
-            class="game-button bg-yellow-500 hover:bg-yellow-600 text-white flex items-center justify-center gap-2 w-full sm:w-auto px-4 py-3 text-base sm:text-lg">
+          <button
+            @click="showHint = true"
+            class="game-button bg-yellow-500 hover:bg-yellow-600 text-white flex items-center justify-center gap-2 w-full sm:w-auto px-4 py-3 text-base sm:text-lg"
+          >
             <span class="text-lg sm:text-xl">💡</span>
             <span>获取提示</span>
           </button>
@@ -43,28 +58,96 @@
     </header>
 
     <!-- 主游戏区域 - 恭喜页面全屏显示 -->
-    <main :class="props.uuid === CONGRATULATIONS_UUID ? '' : 'p-8 flex items-center justify-center'">
+    <main
+      :class="
+        props.uuid === CONGRATULATIONS_UUID
+          ? ''
+          : 'p-8 flex items-center justify-center'
+      "
+    >
+      <!-- 上一关按钮 - 固定在左侧 -->
+      <button
+        v-if="props.uuid !== CONGRATULATIONS_UUID && levelInfo?.lastLevelUuid"
+        @click="goToPreviousLevel"
+        class="fixed left-4 top-1/2 transform -translate-y-1/2 z-30 bg-blue-500 hover:bg-blue-600 text-white p-3 rounded-full shadow-lg transition-colors"
+        title="上一关"
+      >
+        <svg
+          class="w-6 h-6"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M15 19l-7-7 7-7"
+          />
+        </svg>
+      </button>
+
+      <!-- 下一关按钮 - 固定在右侧 -->
+      <button
+        v-if="props.uuid !== CONGRATULATIONS_UUID && levelInfo?.nextLevelUuid"
+        @click="goToNextLevel"
+        class="fixed right-4 top-1/2 transform -translate-y-1/2 z-30 bg-green-500 hover:bg-green-600 text-white p-3 rounded-full shadow-lg transition-colors"
+        title="下一关"
+      >
+        <svg
+          class="w-6 h-6"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M9 5l7 7-7 7"
+          />
+        </svg>
+      </button>
+
       <div v-if="props.uuid === CONGRATULATIONS_UUID" class="w-full h-screen">
         <!-- 恭喜页面全屏显示 -->
-        <component :is="currentLevelComponent" :level-uuid="uuid" @game-complete="handleGameComplete" />
+        <component
+          :is="currentLevelComponent"
+          :level-uuid="uuid"
+          @game-complete="handleGameComplete"
+        />
       </div>
-      <div v-else class="max-w-7xl w-full h-[calc(100vh-200px)] flex items-center justify-center">
+      <div
+        v-else
+        class="max-w-7xl w-full h-[calc(100vh-200px)] flex items-center justify-center"
+      >
         <!-- 根据关卡类型加载不同组件 -->
-        <component :is="currentLevelComponent" :level-uuid="uuid" @game-complete="handleGameComplete"
-          class="w-full max-w-9xl" />
+        <component
+          :is="currentLevelComponent"
+          :level-uuid="uuid"
+          @game-complete="handleGameComplete"
+          class="w-full max-w-9xl"
+        />
       </div>
     </main>
 
     <!-- 提示弹窗 - 响应式设计 -->
-    <div v-if="showHint" class="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50"
-      @click.self="showHint = false">
-      <div class="bg-white rounded-2xl p-4 sm:p-6 max-w-sm sm:max-w-md lg:max-w-lg w-full shadow-2xl mx-4">
+    <div
+      v-if="showHint"
+      class="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50"
+      @click.self="showHint = false"
+    >
+      <div
+        class="bg-white rounded-2xl p-4 sm:p-6 max-w-sm sm:max-w-md lg:max-w-lg w-full shadow-2xl mx-4"
+      >
         <div class="flex items-center justify-between mb-4">
           <h3 class="text-lg sm:text-xl font-bold text-gray-800">
             💡 关卡提示
           </h3>
-          <button @click="showHint = false"
-            class="text-gray-500 hover:text-gray-700 text-xl sm:text-2xl p-1 hover:bg-gray-100 rounded-full transition-colors">
+          <button
+            @click="showHint = false"
+            class="text-gray-500 hover:text-gray-700 text-xl sm:text-2xl p-1 hover:bg-gray-100 rounded-full transition-colors"
+          >
             ×
           </button>
         </div>
@@ -72,8 +155,10 @@
           {{ levelInfo?.hint || "暂无提示信息" }}
         </p>
         <div class="mt-6 flex justify-end">
-          <button @click="showHint = false"
-            class="bg-purple-600 hover:bg-purple-700 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-md font-semibold text-sm sm:text-base transition-colors">
+          <button
+            @click="showHint = false"
+            class="bg-purple-600 hover:bg-purple-700 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-md font-semibold text-sm sm:text-base transition-colors"
+          >
             知道了
           </button>
         </div>
@@ -81,21 +166,35 @@
     </div>
 
     <!-- 通关成功弹窗 - 响应式设计 -->
-    <div v-if="showSuccessModal" class="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+    <div
+      v-if="showSuccessModal"
+      class="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50"
+    >
       <!-- 烟花效果 -->
       <div class="fireworks-container">
-        <div v-for="firework in fireworks" :key="firework.id" class="firework-burst"
-          :style="{ left: firework.x + '%', top: firework.y + '%' }">
-          <div v-for="particle in firework.particles" :key="particle.id" class="firework-particle" :style="{
-            backgroundColor: particle.color,
-            '--dx': particle.dx + 'px',
-            '--dy': particle.dy + 'px',
-            animationDelay: particle.delay + 's',
-          }"></div>
+        <div
+          v-for="firework in fireworks"
+          :key="firework.id"
+          class="firework-burst"
+          :style="{ left: firework.x + '%', top: firework.y + '%' }"
+        >
+          <div
+            v-for="particle in firework.particles"
+            :key="particle.id"
+            class="firework-particle"
+            :style="{
+              backgroundColor: particle.color,
+              '--dx': particle.dx + 'px',
+              '--dy': particle.dy + 'px',
+              animationDelay: particle.delay + 's',
+            }"
+          ></div>
         </div>
       </div>
 
-      <div class="bg-white rounded-2xl p-6 sm:p-8 max-w-sm sm:max-w-md w-full shadow-2xl text-center mx-4">
+      <div
+        class="bg-white rounded-2xl p-6 sm:p-8 max-w-sm sm:max-w-md w-full shadow-2xl text-center mx-4"
+      >
         <div class="text-4xl sm:text-6xl mb-4">🎉</div>
         <h3 class="text-xl sm:text-2xl font-bold text-gray-800 mb-2">
           恭喜通关！
@@ -106,19 +205,26 @@
 
         <!-- 显示下一关信息 -->
         <div v-if="nextLevelUuid" class="bg-gray-50 rounded-lg p-3 mb-4">
-          <p class="text-xs text-gray-500 mb-1">下一关地址（可记住下次直接访问）</p>
+          <p class="text-xs text-gray-500 mb-1">
+            下一关地址（可记住下次直接访问）
+          </p>
           <p class="text-sm text-gray-700 font-mono break-all">
             /level/{{ nextLevelUuid }}
           </p>
         </div>
 
         <div class="space-y-3">
-          <button v-if="nextLevelUuid" @click="goToNextLevel"
-            class="w-full bg-green-500 hover:bg-green-600 text-white py-3 sm:py-4 rounded-md font-semibold text-sm sm:text-base transition-colors">
+          <button
+            v-if="nextLevelUuid"
+            @click="goToNextLevel"
+            class="w-full bg-green-500 hover:bg-green-600 text-white py-3 sm:py-4 rounded-md font-semibold text-sm sm:text-base transition-colors"
+          >
             进入下一关
           </button>
-          <button @click="stayOnCurrentLevel"
-            class="w-full bg-gray-500 hover:bg-gray-600 text-white py-3 sm:py-4 rounded-md font-semibold text-sm sm:text-base transition-colors">
+          <button
+            @click="stayOnCurrentLevel"
+            class="w-full bg-gray-500 hover:bg-gray-600 text-white py-3 sm:py-4 rounded-md font-semibold text-sm sm:text-base transition-colors"
+          >
             暂时留下
           </button>
         </div>
@@ -126,10 +232,14 @@
     </div>
 
     <!-- 加载中状态 - 响应式设计 -->
-    <div v-if="isLoading" class="fixed inset-0 bg-black/50 flex items-center justify-center z-40 p-4">
+    <div
+      v-if="isLoading"
+      class="fixed inset-0 bg-black/50 flex items-center justify-center z-40 p-4"
+    >
       <div class="bg-white rounded-lg p-6 sm:p-8 text-center mx-4">
-        <div class="animate-spin rounded-full h-10 w-10 sm:h-12 sm:w-12 border-b-2 border-purple-600 mx-auto mb-4">
-        </div>
+        <div
+          class="animate-spin rounded-full h-10 w-10 sm:h-12 sm:w-12 border-b-2 border-purple-600 mx-auto mb-4"
+        ></div>
         <p class="text-gray-600 text-sm sm:text-base">加载中...</p>
       </div>
     </div>
@@ -139,7 +249,7 @@
 <script setup lang="ts">
 import { ref, computed, watch } from "vue";
 import { useRouter } from "vue-router";
-import { getLevel } from "@/services/api";
+import { getLevel, getLastLevel } from "@/services/api";
 import type { LevelInfo } from "@/services/api";
 import TetrisLevel from "@/components/TetrisLevel.vue";
 import CorrelationGame from "@/components/CorrelationGame.vue";
@@ -343,9 +453,30 @@ const goToNextLevel = () => {
   showSuccessModal.value = false; // 隐藏通关成功弹窗
   if (nextLevelUuid.value) {
     router.push(`/level/${nextLevelUuid.value}`);
+  } else if (levelInfo.value?.nextLevelUuid) {
+    // 从当前关卡信息中获取下一关
+    router.push(`/level/${levelInfo.value.nextLevelUuid}`);
   } else {
     // 没有下一关，返回登录页
     logout();
+  }
+};
+
+// 前往上一关
+const goToPreviousLevel = async () => {
+  if (!levelInfo.value?.lastLevelUuid) {
+    return;
+  }
+
+  try {
+    const response = await getLastLevel(props.uuid);
+    if (response.success && response.level) {
+      router.push(`/level/${levelInfo.value.lastLevelUuid}`);
+    } else {
+      console.error("无法获取上一关信息:", response.message);
+    }
+  } catch (error) {
+    console.error("获取上一关失败:", error);
   }
 };
 

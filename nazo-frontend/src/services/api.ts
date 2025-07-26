@@ -2,9 +2,11 @@
 // 动态确定API基础URL
 function getApiBaseUrl(): string {
   // 如果是开发环境（localhost或127.0.0.1）
-  if (window.location.hostname === 'localhost' ||
-    window.location.hostname === '127.0.0.1' ||
-    window.location.hostname === '0.0.0.0') {
+  if (
+    window.location.hostname === "localhost" ||
+    window.location.hostname === "127.0.0.1" ||
+    window.location.hostname === "0.0.0.0"
+  ) {
     return "http://localhost:8080/api";
   }
 
@@ -46,6 +48,7 @@ export interface LevelInfo {
   name: string;
   hint: string;
   nextLevelUuid: string;
+  lastLevelUuid: string;
 }
 
 export interface LevelResponse {
@@ -112,7 +115,40 @@ export const apiService = {
       console.error("获取关卡信息失败:", error);
       return {
         success: false,
-        level: { id: "", name: "", hint: "", nextLevelUuid: "" },
+        level: {
+          id: "",
+          name: "",
+          hint: "",
+          nextLevelUuid: "",
+          lastLevelUuid: "",
+        },
+        message: "网络连接失败，请检查后端服务是否启动",
+      };
+    }
+  },
+
+  // 获取上一关信息
+  async getLastLevel(uuid: string): Promise<LevelResponse> {
+    try {
+      const response = await fetch(`${API_BASE_URL}/level/last/${uuid}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      return await response.json();
+    } catch (error) {
+      console.error("获取上一关信息失败:", error);
+      return {
+        success: false,
+        level: {
+          id: "",
+          name: "",
+          hint: "",
+          nextLevelUuid: "",
+          lastLevelUuid: "",
+        },
         message: "网络连接失败，请检查后端服务是否启动",
       };
     }
@@ -184,7 +220,10 @@ export const apiService = {
   },
 
   // 完成谜题
-  async completePuzzle(uuid: string, answer: string): Promise<CompleteResponse> {
+  async completePuzzle(
+    uuid: string,
+    answer: string
+  ): Promise<CompleteResponse> {
     try {
       const response = await fetch(`${API_BASE_URL}/puzzle/${uuid}/complete`, {
         method: "POST",
@@ -274,6 +313,7 @@ export const apiService = {
 // 便捷函数导出
 export const login = apiService.login;
 export const getLevel = apiService.getLevel;
+export const getLastLevel = apiService.getLastLevel;
 export const completeLevel = apiService.completeLevel;
 export const getPuzzle = apiService.getPuzzle;
 export const completePuzzle = apiService.completePuzzle;
